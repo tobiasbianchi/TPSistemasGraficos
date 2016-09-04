@@ -1,0 +1,68 @@
+<!Doctype="HTML">
+<html>
+
+<head>
+    <meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type">
+    <meta content="ISO-8859-1" http-equiv="encoding">
+    <script id="shader-vs" type="x-shader/x-vertex">
+            // Los atributos son caracteristicas propias de cada vertice.
+            attribute vec3 aVertexPosition;
+            attribute vec3 aVertexColor;
+
+            // Los uniforms son caracter-sticas propias de una etapa de dibujado completa.
+            // Son comunes a todos los vertices involucrados en el dibujado.
+            uniform mat4 uMVMatrix;
+            uniform mat4 uPMatrix;
+
+            // Los varying son propiedades que toman valor para cada fragmento a partir
+            // de interpolar linealmente entre los valores que se les asigna en cada 
+            // v-rtice del pol-gono al cual pertenecen.
+            varying highp vec4 vColor;    
+ 
+            void main(void) {
+                // gl_Position es una variable "built-in" de GLSL que es usada para 
+                // almacenar la posici-n resultante del fragmento.
+                gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+                vColor = vec4(aVertexColor,1.0);
+            }
+        </script>
+
+    <!--Fragment shader
+
+        Cada pixel en un pol-gono se llama fragmento. El fragment shader se encarga de
+        establecer el color de cada pixel. En este caso, asignamos el color blanco a 
+        cada pixel.-->
+    <script id="shader-fs" type="x-shader/x-fragment">
+        varying highp vec4 vColor;
+
+        void main(void) {
+          // gl_FragColor es una variable "built-in" de GLSL que es usada para 
+          // almacenar el color resultante del fragmento.
+          gl_FragColor = vColor;
+        }
+    </script>
+    <script type="text/javascript" src="webgl/gl-matrix.js"></script>
+    <script type="text/javascript" src="globalVariables.js"></script>
+    <script type="text/javascript" src="inheritPrototype.js"></script>
+    <script type="text/javascript" src="objects3D/Object3D.js"></script>
+    <script type="text/javascript" src="objects3D/VertexGrid.js"></script>
+    <script type="text/javascript" src="tests/VertexGridTest.js"></script>
+    <script type="text/javascript" src="scene/Scene.js"></script>
+    <script type="text/javascript" src="webgl/initWebGL.js"></script>
+</head>
+
+<body>
+    <center>
+        <h1>Sistemas Gr-ficos - 66.71</h1>
+        <h2>WebGL - Grilla de v-rtices</h2>
+        <canvas id="my-canvas" width="900" height="500">
+            Your browser does not support the HTML5 canvas element.
+            </scanvas>
+
+    </center>
+    <script type="text/javascript">
+        initWebGL();
+    </script>
+</body>
+
+</html>
