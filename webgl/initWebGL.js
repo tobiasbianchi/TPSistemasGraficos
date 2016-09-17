@@ -31,24 +31,33 @@ function initShaders() {
     var vertexShader = getShader(gl, "shader-vs");
 
     // Creamos un programa de shaders de WebGL.
-    glProgram = gl.createProgram();
+    shaderProgram = gl.createProgram();
 
     // Asociamos cada shader compilado al programa.
-    gl.attachShader(glProgram, vertexShader);
-    gl.attachShader(glProgram, fragmentShader);
+    gl.attachShader(shaderProgram, vertexShader);
+    gl.attachShader(shaderProgram, fragmentShader);
 
     // Linkeamos los shaders para generar el programa ejecutable.
-    gl.linkProgram(glProgram);
+    gl.linkProgram(shaderProgram);
 
     // Chequeamos y reportamos si hubo alg�n error.
-    if (!gl.getProgramParameter(glProgram, gl.LINK_STATUS)) {
+    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
         alert("Unable to initialize the shader program: " +
-            gl.getProgramInfoLog(glProgram));
+            gl.getProgramInfoLog(shaderProgram));
         return null;
     }
 
-    // Le decimos a WebGL que de aqu� en adelante use el programa generado.
-    gl.useProgram(glProgram);
+    // Le decimos a WebGL que de aqui en adelante use el programa generado.
+    gl.useProgram(shaderProgram);
+
+    shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+    shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+    shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
+    //shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
+    //shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
+    //shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
+    //shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightPosition");
+    //shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
 }
 
 function makeShader(src, type) {
@@ -116,7 +125,7 @@ function setupBuffers() {
 var gl = null,
     t = 0,
     canvas = null,
-    glProgram = null,
+    shaderProgram = null,
     fragmentShader = null,
     vertexShader = null;
 
@@ -127,20 +136,12 @@ var pMatrix = mat4.create();
 
 function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    var u_proj_matrix = gl.getUniformLocation(glProgram, "uPMatrix");
-    
+    var u_proj_matrix = gl.getUniformLocation(shaderProgram, "uPMatrix");
+
     // Preparamos una matriz de perspectiva.
     mat4.perspective(pMatrix, 45, 640.0 / 480.0, 0.1, 100.0);
     gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 
-    var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
-    // Preparamos una matriz de modelo+vista.
-    mat4.identity(mvMatrix);
-    mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -5.0]);
-    mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
-    t = t + 0.01;
-
-    gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
     var identity = mat4.create();
     mat4.identity(identity);
     Scene.draw(identity);

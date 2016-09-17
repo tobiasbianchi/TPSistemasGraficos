@@ -1,4 +1,4 @@
-function VertexGrid(_rows, _cols) {
+function VertexGrid(_rows, _cols,formGenerator) {
     Object3D.call(this);
 
     var cols = _cols;
@@ -34,7 +34,7 @@ function VertexGrid(_rows, _cols) {
 
     this.createIndexBuffer = function () {
         this.indexBuffer = [];
-
+        
         var rowJump = 0;
         for (var row = 0; row < rows - 1; row++) {
             var rowData = calculateRowData(row);
@@ -105,18 +105,22 @@ function VertexGrid(_rows, _cols) {
     // indica dibujar tri-ngulos utilizando los 6 -ndices cargados en el indexBuffer.
     
     this.draw = function (matrix) {
-        var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
+        mat4.multiply(this.mMatrix, matrix, this.mMatrix);
+        this.setMatrixUniforms();
+
+        var vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
         gl.enableVertexAttribArray(vertexPositionAttribute);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+        
 
-        var vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
+        var vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
         gl.enableVertexAttribArray(vertexColorAttribute);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
         gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_indexBuffer);
-        //gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
         // Dibujamos.
         gl.drawElements(gl.TRIANGLE_STRIP, 2*cols*(rows - 1), gl.UNSIGNED_SHORT, 0);
     }

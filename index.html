@@ -13,7 +13,8 @@
             // Son comunes a todos los vertices involucrados en el dibujado.
             uniform mat4 uMVMatrix;
             uniform mat4 uPMatrix;
-
+            uniform mat3 uNMatrix;
+            
             // Los varying son propiedades que toman valor para cada fragmento a partir
             // de interpolar linealmente entre los valores que se les asigna en cada 
             // v-rtice del pol-gono al cual pertenecen.
@@ -46,7 +47,6 @@
     <script type="text/javascript" src="inheritPrototype.js"></script>
     <script type="text/javascript" src="objects3D/Object3D.js"></script>
     <script type="text/javascript" src="objects3D/VertexGrid.js"></script>
-    <script type="text/javascript" src="tests/VertexGridTest.js"></script>
     <script type="text/javascript" src="scene/Scene.js"></script>
     <script type="text/javascript" src="webgl/initWebGL.js"></script>
 </head>
