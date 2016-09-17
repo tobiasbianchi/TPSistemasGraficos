@@ -1,10 +1,10 @@
-function VertexGrid(_rows, _cols,formGenerator) {
+function VertexGrid(_rows, _cols, formGenerator) {
     Object3D.call(this);
 
     var cols = _cols;
     var rows = _rows;
     this.indexBuffer = null;
-
+    this.generator = formGenerator === undefined ? DefaultGenerator(_rows,_cols) : formGenerator(_rows,_cols);
     this.position_buffer = null;
     this.color_buffer = null;
 
@@ -48,6 +48,9 @@ function VertexGrid(_rows, _cols,formGenerator) {
 
     this.createUniformPlaneGrid = function () {
 
+        this.position_buffer = this.generator.position;
+        this.color_buffer = this.generator.color;
+        /*console.log(this.generator);
         this.position_buffer = [];
         this.color_buffer = [];
 
@@ -69,7 +72,7 @@ function VertexGrid(_rows, _cols,formGenerator) {
                 this.color_buffer.push(0.2);
                 this.color_buffer.push(1.0 / cols * j);
             };
-        };
+        };*/
         
     }
 
