@@ -28,6 +28,7 @@ function Object3D() {
             mat4.multiply(this.mMatrix, matrix, this.mMatrix);
             this.children[i].draw(this.mMatrix);
         }
+        mat4.identity(this.mMatrix);
     }
     
     this.removeChild = function () {

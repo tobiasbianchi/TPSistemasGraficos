@@ -1,4 +1,4 @@
-var TapaGenerator = (function (rows, cols) {
+var EsferaGenerator = (function (rows, cols) {
     /*  radio 1cm
         rows -> calidad borde plano yz
         cols -> calidad borde plan xz
@@ -13,10 +13,10 @@ var TapaGenerator = (function (rows, cols) {
     for (var i = 0.0; i < rows; i++) {
         var rotationFi = angleRotationFi * i;
         for (var j = 0.0; j < cols; j++) {
-            var pointRotation = angleRotation * j;
+            var pointRotation = angleRotationTita * j;
             position_buffer.push(radius * (Math.cos(rotationFi) * Math.cos(pointRotation)));
             position_buffer.push(radius * (Math.cos(rotationFi) * Math.sin(pointRotation)));
-            position_buffer.push(radius * sin(rotationFi));
+            position_buffer.push(radius * Math.sin(rotationFi));
 
             color_buffer.push(1.0 / rows * i);
             color_buffer.push(0.2);

@@ -139,7 +139,8 @@ function drawScene() {
     var u_proj_matrix = gl.getUniformLocation(shaderProgram, "uPMatrix");
 
     // Preparamos una matriz de perspectiva.
-    mat4.perspective(pMatrix, 45, 640.0 / 480.0, 0.1, 100.0);
+    //canvas.width / canvas.height
+    mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
     gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 
     var identity = mat4.create();
