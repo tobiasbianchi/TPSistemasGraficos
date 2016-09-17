@@ -1,24 +1,36 @@
 
-var TapaGenerator = (function(height,cols){
+var TapaGenerator = (function(rows,cols){
     /*  radio 1cm
-        height -> altura de la tapa
+        rows -> filas
         cols -> calidad borde
      */
+    var middle_buffers = TuboGenerator(rows - 2, cols);
+    
+    function tapaBuffer(height){
+        var tapaPositionBuffer = [];
+        var tapaColorBuffer = [];
+        for (var i = 0; i < cols; i++){
+            tapaPositionBuffer.push(0);
+            tapaPositionBuffer.push(height);
+            tapaPositionBuffer.push(0);
 
-    var position_buffer = [];
-    var color_buffer = [];
-    var angleRotation = 2 * Math.PI / (cols - 1);
-    var radius = 1.0;
+            tapaColorBuffer.push(1.0);
+            tapaColorBuffer.push(0.2);
+            tapaColorBuffer.push(1.0);
+        }
+        return {position: tapaPositionBuffer, color: tapaColorBuffer};
+    }
 
-    for (var j = 0.0; j < cols; j++) {
-            var pointRotation = angleRotation * j;
-            position_buffer.push(radius * (1 * Math.cos(pointRotation)));
-            position_buffer.push(height);
-            position_buffer.push(radius * (1 * -Math.sin(pointRotation)));
+    var topBuffer = tapaBuffer((rows - 3)/2);
+    var bottomBuffer = tapaBuffer(-(rows-2)/2);
 
-            color_buffer.push(1.0 / rows * i);
-            color_buffer.push(0.2);
-            color_buffer.push(1.0 / cols * j);
-        };
+    var position_buffer = bottomBuffer.position.concat(middle_buffers.position);
+    position_buffer = position_buffer.concat(topBuffer.position);
+
+    var color_buffer = bottomBuffer.color.concat(middle_buffers.position);
+    color_buffer = color_buffer.concat(topBuffer.color);;
+
+
     return {position: position_buffer, color: color_buffer};
 });
+

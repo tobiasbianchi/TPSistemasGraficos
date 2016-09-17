@@ -1,3 +1,4 @@
 function Cilindro(cms,definition) {
-    Tubo.call(this,cms,definition);
+    VertexGrid.call(this,cms,definition,TapaGenerator);
 }
+inheritPrototype(Cilindro, VertexGrid);
