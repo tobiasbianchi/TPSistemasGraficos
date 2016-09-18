@@ -108,9 +108,9 @@ function VertexGrid(_rows, _cols, formGenerator) {
     // indica dibujar tri-ngulos utilizando los 6 -ndices cargados en el indexBuffer.
     
     this.draw = function (matrix) {
-        mat4.multiply(this.mMatrix, matrix, this.mMatrix);
-        this.setMatrixUniforms();
-
+        mat4.multiply(matrix, matrix, this.mMatrix);
+        
+        this.setMatrixUniforms(matrix);
         var vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
         gl.enableVertexAttribArray(vertexPositionAttribute);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);

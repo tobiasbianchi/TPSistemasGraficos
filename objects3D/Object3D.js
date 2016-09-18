@@ -51,10 +51,10 @@ function Object3D() {
         mat4.scale(this.mMatrix, this.mMatrix,scale);
     }
 
-    this.setMatrixUniforms = function() {
+    this.setMatrixUniforms = function(mMatrix) {
         
         gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-        gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, this.mMatrix);
+        gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mMatrix);
         
         var normalMatrix = mat3.create();
         mat3.identity(normalMatrix);
