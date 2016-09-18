@@ -145,5 +145,8 @@ function drawScene() {
 
     var identity = mat4.create();
     mat4.identity(identity);
+    userInteraction.translate();
+    userInteraction.rotateCamera();
+    userInteraction.zoom();
     Scene.draw(identity);
 }
