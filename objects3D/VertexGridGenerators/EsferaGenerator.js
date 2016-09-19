@@ -1,5 +1,5 @@
 var EsferaGenerator = (function (rows, cols) {
-    /*  radio 1cm
+    /*  radio 0.5cm
         rows -> calidad borde plano yz
         cols -> calidad borde plan xz
      */
@@ -8,7 +8,7 @@ var EsferaGenerator = (function (rows, cols) {
     var color_buffer = [];
     var angleRotationTita = 2 * Math.PI / (cols - 1);
     var angleRotationFi = 2 * Math.PI / (rows - 1);
-    var radius = 1.0;
+    var radius = 0.5;
 
     for (var i = 0.0; i < rows; i++) {
         var rotationFi = angleRotationFi * i;
