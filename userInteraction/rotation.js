@@ -32,8 +32,8 @@ var userInteraction = userInteraction || {};
                 y : actualPosition.y - previousPosition.y
             }
              
-            rotationX += delta.x*factorVelocidad;
-            rotationY += delta.y*factorVelocidad;
+            rotationX = delta.x*factorVelocidad;
+            rotationY = delta.y*factorVelocidad;
             previousPosition.x = actualPosition.x;
             previousPosition.y = actualPosition.y;
         }

@@ -13,18 +13,19 @@ down arrow	40
 */
     document.addEventListener('keydown',function(e){
         if (e.keyCode == 37){
-            translation[X] -= widthFactor; 
+            translation[X] = -widthFactor; 
         }else if(e.keyCode == 38){
-            translation[Z] -= depthFactor;
+            translation[Z] = -depthFactor;
         }else if(e.keyCode == 39){
-            translation[X] += widthFactor;
+            translation[X] = widthFactor;
         }else if(e.keyCode == 40){
-            translation[Z] += depthFactor;
+            translation[Z] = depthFactor;
         }
     });
 
     function move(){
         Scene.translate(translation);
+        translation = [0,0,0];
     }
 
    userInteraction.translate = move;
