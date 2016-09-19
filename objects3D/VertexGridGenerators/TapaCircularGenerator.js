@@ -22,8 +22,8 @@ var TapaGenerator = (function(rows,cols){
         return {position: tapaPositionBuffer, color: tapaColorBuffer};
     }
 
-    var topBuffer = tapaBuffer((rows - 4)/2);
-    var bottomBuffer = tapaBuffer(-(rows-2)/2);
+    var topBuffer = tapaBuffer((rows - 3)/2);
+    var bottomBuffer = tapaBuffer(-(rows-3)/2);
     var position_buffer = bottomBuffer.position.concat(middle_buffers.position);
     position_buffer = position_buffer.concat(topBuffer.position);
 

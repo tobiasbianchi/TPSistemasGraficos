@@ -16,7 +16,7 @@ var TuboGenerator = (function(rows,cols){
             // Para cada v-rtice definimos su posici-n
             // como coordenada (x, y, z=0)
             position_buffer.push(radius * Math.cos(pointRotation));
-            position_buffer.push(i - rows/2);
+            position_buffer.push(i - (rows -1)/2);
             position_buffer.push(radius * -Math.sin(pointRotation));
             
             color_buffer.push(1.0 / rows * i);
