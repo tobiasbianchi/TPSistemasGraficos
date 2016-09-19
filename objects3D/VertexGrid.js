@@ -50,67 +50,31 @@ function VertexGrid(_rows, _cols, formGenerator) {
 
         this.position_buffer = this.generator.position;
         this.color_buffer = this.generator.color;
-        /*console.log(this.generator);
-        this.position_buffer = [];
-        this.color_buffer = [];
-
-        var angleRotation = 2*Math.PI / (cols - 1);
-        var radius = 1.0;
-
-        for (var i = 0.0; i < rows; i++) {
-            
-            for (var j = 0.0; j < cols; j++) {
-                var pointRotation = angleRotation*j;
-                // Para cada v-rtice definimos su posici-n
-                // como coordenada (x, y, z=0)
-                this.position_buffer.push(radius*(1*Math.cos(pointRotation)));
-                this.position_buffer.push((i - rows/2.0)/40.0 + 0.2);
-                this.position_buffer.push(radius*(1*-Math.sin(pointRotation)));
-
-                // Para cada v-rtice definimos su color
-                this.color_buffer.push(1.0 / rows * i);
-                this.color_buffer.push(0.2);
-                this.color_buffer.push(1.0 / cols * j);
-            };
-        };*/
         
     }
 
-    // Esta funci-n crea e incializa los buffers dentro del pipeline para luego
-    // utlizarlos a la hora de renderizar.
     this.setupWebGLBuffers = function () {
 
-        // 1. Creamos un buffer para las posicioens dentro del pipeline.
         this.webgl_position_buffer = gl.createBuffer();
-        // 2. Le decimos a WebGL que las siguientes operaciones que vamos a ser se aplican sobre el buffer que
-        // hemos creado.
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-        // 3. Cargamos datos de las posiciones en el buffer.
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
 
-        // Repetimos los pasos 1. 2. y 3. para la informaci-n del color
         this.webgl_color_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
 
-        // Repetimos los pasos 1. 2. y 3. para la informaci-n de los -ndices
         // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
         // Notar tambi-n que se usa un array de enteros en lugar de floats.
         this.webgl_indexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_indexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.indexBuffer), gl.STATIC_DRAW);
     }
-
-
-    // Esta funci-n es la que se encarga de configurar todo lo necesario
-    // para dibujar el VertexGrid.
-    // En el caso del ejemplo puede observarse que la -ltima l-nea del m-todo
-    // indica dibujar tri-ngulos utilizando los 6 -ndices cargados en el indexBuffer.
     
     this.draw = function (matrix) {
-        mat4.multiply(matrix, matrix, this.mMatrix);
+        var aux = mat4.create();
+        mat4.multiply(aux, matrix, this.mMatrix);
         
-        this.setMatrixUniforms(matrix);
+        this.setMatrixUniforms(aux);
         var vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
         gl.enableVertexAttribArray(vertexPositionAttribute);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
@@ -124,7 +88,6 @@ function VertexGrid(_rows, _cols, formGenerator) {
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_indexBuffer);
 
-        // Dibujamos.
         gl.drawElements(gl.TRIANGLE_STRIP, 2*cols*(rows - 1), gl.UNSIGNED_SHORT, 0);
     }
 
