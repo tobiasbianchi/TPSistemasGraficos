@@ -146,6 +146,7 @@ function drawScene() {
     userInteraction.translate();
     userInteraction.rotateCamera();
     userInteraction.zoom();
+    
     Scene.translate([0,0,-5]);
     Scene.draw(identity);
 }
