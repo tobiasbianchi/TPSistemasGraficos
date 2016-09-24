@@ -7,3 +7,8 @@ var YAxis = [0,1,0];
 var ZAxis = [0,0,1];
 
 var VISIBLE_AXIS = true;
+
+var BLUE = {r:0,g:0,b:1};
+var GREEN = {r:0,g:1,b:0};
+var RED = {r:1,g:0,b:0};
+ 

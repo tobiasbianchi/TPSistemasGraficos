@@ -18,19 +18,22 @@ function Colorer(){
 
 
 function SameColor(color){
+    Colorer.call(this);
     var SingleColor = color;
     this.pickColor = function(points){
         return SingleColor;
     }
 }
+inheritPrototype(SameColor, Colorer);
 
 
 function HeightColorer(colors,heightLimitsInOrder){
+    Colorer.call(this);
     var colorsPaint = colors ? colors:[{r:0,g:0,b:1}];
     var hLimits = heightLimitsInOrder ? heightLimitsInOrder: [];
 
     this.pickColor = function(points){
-        previousHeight = 0;
+        previousHeight = -50000;
         for (var i = 0; i < hLimits.length; i++){
             if (points[Y] < hLimits[i] && previousHeight < points[Y]){
                 break;
@@ -39,15 +42,5 @@ function HeightColorer(colors,heightLimitsInOrder){
         }
         return colorsPaint[i];
     }
-
-    this.make = function(points){
-        var colorArray = [];
-        for (var i = 0; i < points.length; i = i + 3){
-            var color = pickColor(points[i+Y]);
-            colorArray.push(color.r);
-            colorArray.push(color.g);
-            colorArray.push(color.b);
-        }
-        return colorArray;
-    }
 }
+inheritPrototype(HeightColorer, Colorer);

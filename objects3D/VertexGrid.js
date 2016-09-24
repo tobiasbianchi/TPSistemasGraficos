@@ -4,10 +4,10 @@ function VertexGrid(_rows, _cols, formGenerator) {
     var cols = _cols;
     var rows = _rows;
     this.indexBuffer = null;
-    this.generator = formGenerator === undefined ? DefaultGenerator(_rows,_cols) : formGenerator(_rows,_cols);
     this.position_buffer = null;
+    this.generator = formGenerator === undefined ? DefaultGenerator(_rows,_cols) : formGenerator(_rows,_cols);
     this.color_buffer = null;
-
+    this.colorGenerator = new HeightColorer([RED,GREEN,BLUE],[-0.2,0.2]);//new SameColor(BLUE);
     this.webgl_position_buffer = null;
     this.webgl_color_buffer = null;
     this.webgl_indexBuffer = null;
@@ -49,7 +49,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
     this.createUniformPlaneGrid = function () {
 
         this.position_buffer = this.generator.position;
-        this.color_buffer = this.generator.color;
+        this.color_buffer = this.colorGenerator.make(this.position_buffer);
         
     }
 
