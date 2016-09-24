@@ -18,20 +18,20 @@ function Object3D() {
 
     this.buildAxis = function () {
         var xaxisVertixs = [
-            0, 0.01, 0.01,
-            0, -0.01, -0.01,
-            2, 0, 0
+            0, 0.02, 0.02,
+            0, -0.02, -0.02,
+            1, 0, 0
         ]
         var yaxisVertixs = [
-            0.01, 0, 0.01,
-            0, 2, 0,
-            -0.01, 0, -0.01
+            0.02, 0, 0.02,
+            0, 1, 0,
+            -0.02, 0, -0.02
         ]
 
         var zaxisVertixs = [
             0.01, 0.01, 0,
-            0, 0, 2,
-            -0.01, -0.01, 0
+            0, 0, 1,
+            -0.02, -0.02, 0
         ]
         var xColor = [
             1,0,0,
@@ -122,6 +122,7 @@ function Object3D() {
             this.children[i].draw(aux);
             this.children[i].drawAxis(aux);
         }
+        mat4.identity(this.mMatrix);
     }
 
     this.removeChild = function () {

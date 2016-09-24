@@ -11,16 +11,15 @@ var userInteraction = userInteraction || {};
         var delta = 1;
 
         if (!zoomOut){
-            scale = delta*smallFactor + 1;
+            scale += delta*smallFactor + 1;
         }else {
-            scale = 1 - delta*smallFactor;
+            scale += 1 - delta*smallFactor;
         }
 
     })
     
     function actualizarZoom(){
         Scene.scale([scale,scale,scale]);
-        scale = 1;
     }
 
     userInteraction.zoom = actualizarZoom;

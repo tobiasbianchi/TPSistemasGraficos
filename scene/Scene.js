@@ -30,5 +30,4 @@ Scene.addChild(pentagono);
 Scene.addChild(cubo);
 Scene.addChild(Vertex);
 
-Scene.translate([0,0,-5]);
-Scene.rotate(5,XAxis);
+

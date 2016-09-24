@@ -25,6 +25,13 @@ var userInteraction = userInteraction || {};
         active = false;   
     })  
 
+    canvas.addEventListener('keyup',function(e){
+        if (e.keyCode == 82){
+            rotationX = 0;
+            rotationY = 0;
+        }
+    })
+
     function rotarCamara(){
          if (active) {
             delta = {
@@ -32,13 +39,18 @@ var userInteraction = userInteraction || {};
                 y : actualPosition.y - previousPosition.y
             }
              
-            rotationX = delta.x*factorVelocidad;
-            rotationY = delta.y*factorVelocidad;
+            rotationX += delta.x*factorVelocidad;
+            rotationY += delta.y*factorVelocidad;
             previousPosition.x = actualPosition.x;
             previousPosition.y = actualPosition.y;
         }
+        if (rotationX < 0 ){
+            rotationX =0;
+        }else if(rotationX > 180){
+            rotationX =180;
+        }
         Scene.rotate(rotationX, XAxis);
-        Scene.rotate(rotationY, ZAxis);
+        Scene.rotate(rotationY, YAxis);
     }
     userInteraction.rotateCamera = rotarCamara;
 })();

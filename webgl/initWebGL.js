@@ -138,8 +138,6 @@ function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     var u_proj_matrix = gl.getUniformLocation(shaderProgram, "uPMatrix");
 
-    // Preparamos una matriz de perspectiva.
-    //canvas.width / canvas.height
     mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
     gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 
@@ -148,5 +146,6 @@ function drawScene() {
     userInteraction.translate();
     userInteraction.rotateCamera();
     userInteraction.zoom();
+    Scene.translate([0,0,-5]);
     Scene.draw(identity);
 }
