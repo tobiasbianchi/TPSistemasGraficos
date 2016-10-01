@@ -1,7 +1,7 @@
-function Curva(puntosDeControl) {
+function Curve(controlPoints) {
     /*Todas las curvas son planas sobre el eje x,y*/
 
-    this.puntosDeControl = puntosDeControl;
+    this.controlPoints = controlPoints;
     this.basesFunctions = [];
     this.basesDerivatesFunctions = [];
     
@@ -9,7 +9,7 @@ function Curva(puntosDeControl) {
         var point = {x: 0, y:0, z: 0};
         for (var i = 0;i < functions.length; i++){
             var baseFunction = functions[i];
-            var punto = this.puntosDeControl[i];
+            var punto = this.controlPoints[i];
             point.x += baseFunction(u) * punto[X];
             point.y += baseFunction(u) * punto[Y] ;
         }
@@ -37,6 +37,6 @@ function Curva(puntosDeControl) {
     }
 
 }
-Curva.prototype.pointsInCurve=function(){ 
+Curve.prototype.pointsInCurve=function(){ 
 	return this.basesFunctions.length;
 }

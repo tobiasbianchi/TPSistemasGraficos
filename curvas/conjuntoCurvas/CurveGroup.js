@@ -1,4 +1,4 @@
-function conjuntoCurvas(){
+function CurveGroup(){
     this.curves = []; 
     
     var CURVE_INDEX = 'curveIndex';

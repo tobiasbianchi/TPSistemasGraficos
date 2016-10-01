@@ -1,5 +1,5 @@
-function CurvaBspline2(puntosDeControl) {
-    Curva.call(this, puntosDeControl);
+function CurveBspline2(controlPoints) {
+    Curve.call(this, controlPoints);
 
     var Base0, Base1, Base2;
     var Base0der, Base1der, Base2der;
@@ -16,4 +16,4 @@ function CurvaBspline2(puntosDeControl) {
     this.basesDerivatesFunctions = [Base0der,Base1der,Base2der];
 
 }
-inheritPrototype(CurvaBspline2, Curva);
+inheritPrototype(CurveBspline2, Curve);
