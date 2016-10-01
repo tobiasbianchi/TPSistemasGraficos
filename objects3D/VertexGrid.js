@@ -48,7 +48,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
 
     this.createUniformPlaneGrid = function () {
 
-        this.position_buffer = this.generator.position;
+        this.position_buffer = this.position_buffer || this.generator.position;
         this.color_buffer = this.colorGenerator.make(this.position_buffer);
         
     }

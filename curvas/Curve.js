@@ -16,6 +16,10 @@ function Curve(controlPoints) {
         return point;
     } 
 
+    this.totalCurves = function(){
+        return 1;
+    }
+
     this.getPointAt = function (u){
         return getPointWithSomeBase(u,this.basesFunctions);
     };
