@@ -23,8 +23,8 @@ down arrow	40
         }
     });
 
-    function move(){
-        Scene.translate(translation);
+    function move(camara){
+        mat4.translate(camara, camara, translation);
     }
 
    userInteraction.translate = move;

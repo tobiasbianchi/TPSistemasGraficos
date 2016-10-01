@@ -32,7 +32,7 @@ var userInteraction = userInteraction || {};
         }
     })
 
-    function rotarCamara(){
+    function rotarCamara(camara){
          if (active) {
             delta = {
                 x: actualPosition.x - previousPosition.x, 
@@ -49,8 +49,13 @@ var userInteraction = userInteraction || {};
         }else if(rotationX > 180){
             rotationX =180;
         }
-        Scene.rotate(rotationX, XAxis);
-        Scene.rotate(rotationY, YAxis);
+
+        function gradToRad(grados) {
+            return grados * Math.PI / 180;
+        }
+
+        mat4.rotate(camara, camara, gradToRad(rotationX), XAxis);
+        mat4.rotate(camara, camara, gradToRad(rotationY), YAxis);
     }
     userInteraction.rotateCamera = rotarCamara;
 })();

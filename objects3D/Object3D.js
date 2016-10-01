@@ -118,11 +118,11 @@ function Object3D() {
     this.draw = function (matrix) {
         var aux = mat4.create();
         mat4.multiply(aux, matrix, this.mMatrix);
+        console.log(aux);
         for (var i = 0; i < this.children.length; i++) {
             this.children[i].draw(aux);
             this.children[i].drawAxis(aux);
-        }
-        mat4.identity(this.mMatrix);
+        }        
     }
 
     this.removeChild = function () {

@@ -134,6 +134,7 @@ var Scene = Scene || new Object3D();
 var mvMatrix = mat4.create();
 var pMatrix = mat4.create();
 
+
 function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     var u_proj_matrix = gl.getUniformLocation(shaderProgram, "uPMatrix");
@@ -141,12 +142,14 @@ function drawScene() {
     mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
     gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 
-    var identity = mat4.create();
-    mat4.identity(identity);
-    userInteraction.translate();
-    userInteraction.rotateCamera();
-    userInteraction.zoom();
+    var camara = mat4.create();
+    mat4.identity(camara);
+    mat4.translate(camara, camara, [0,-2,-5]);
+
+    userInteraction.translate(camara);
+    userInteraction.rotateCamera(camara);
+    userInteraction.zoom(camara);
     
-    Scene.translate([0,0,-5]);
-    Scene.draw(identity);
+
+    Scene.draw(camara);
 }
