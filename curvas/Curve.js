@@ -5,7 +5,7 @@ function Curve(controlPoints) {
     this.basesFunctions = [];
     this.basesDerivatesFunctions = [];
     
-    var getPointWithSomeBase = function(u, functions) {
+    this.getPointWithSomeBase = function(u, functions) {
         var point = {x: 0, y:0, z: 0};
         for (var i = 0;i < functions.length; i++){
             var baseFunction = functions[i];
@@ -21,23 +21,28 @@ function Curve(controlPoints) {
     }
 
     this.getPointAt = function (u){
-        return getPointWithSomeBase(u,this.basesFunctions);
+        return this.getPointWithSomeBase(u,this.basesFunctions);
     };
 
     this.getDerivateAt = function (u){
-        return getPointWithSomeBase(u,this.basesDerivatesFunctions);
+        return this.getPointWithSomeBase(u,this.basesDerivatesFunctions);
     }
 
     this.getNormalAt = function (u) {
-        var point = getDerivateAt()
+        var derivate = this.getDerivateAt(u);
+        var derivateVec3 = vec3.fromValues(derivate.x,derivate.y,derivate.z);        
+        var point = this.getPointAt(u);
+        vec3.rotateZ(derivateVec3, derivateVec3 , [0,0,0] , Math.PI/2);
+        return {
+            x: derivateVec3[X], 
+            y: derivateVec3[Y], 
+            z: derivateVec3[Z]}
     }
 
     this.getBinormalAt = function (u){
         var tangent = this.getDerivateAt(u);
-		var normal = this.getNormalAt(u);
-		var binormal = [0,0,0];
-		vec3.cross(binormal,[tangent.x,tangent.y,tangent.z],[normal.x,normal.y,normal.y]);
-		return {x: binormal[X], y: binormal[Y], z: binormal[Z]};
+		var z = vec3.length([tangent.x,tangent.y,tangent.z]);
+		return {x: 0, y: 0, z: z};
     }
 
 }

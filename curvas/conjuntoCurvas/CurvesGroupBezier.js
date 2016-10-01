@@ -6,7 +6,7 @@ function CurvesGroupBezier(controlPoints,constructor) {
     for (var  i =0; i < amountCurves; i++){
         var pointsOfCurve = [];
         for (var j = 0; j < amountPoints; j++) {
-            pointosOfCurve.push(controlPoints[i*amountPoints+j]);
+            pointsOfCurve.push(controlPoints[i*amountPoints+j]);
         }
         this.curves.push(new constructor(pointsOfCurve));
     }

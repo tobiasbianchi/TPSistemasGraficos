@@ -1,5 +1,5 @@
 Scene = new Object3D();
-var Vertex = new VertexGrid(50,50);
+/*var Vertex = new VertexGrid(50,50);
 Vertex.scale([10,10,10]);
 //Vertex.translate([0,0,-5]);
 Vertex.rotate(90,[1,0,0]);
@@ -29,5 +29,9 @@ Scene.addChild(esfera);
 Scene.addChild(pentagono);
 Scene.addChild(cubo);
 Scene.addChild(Vertex);
+*/
+var curve = new CurvesGroupBspline([[-1,0],[-1,0],[1,0]],CurveBspline2);
 
+var pedazoTorre = new SuperficieBarrido(new Hache(),curve,5);
+Scene.addChild(pedazoTorre);
 
