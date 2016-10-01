@@ -27,8 +27,6 @@ function CurveGroup(){
 
     this.getPointAt = function(t) {
         var indexes = this.getIndexes(t);
-        console.log(this.curves[indexes.curveIndex]);
-        console.log(indexes.indexAtCurve);
         return this.curves[indexes.curveIndex].getPointAt(indexes.indexAtCurve);
     };
 

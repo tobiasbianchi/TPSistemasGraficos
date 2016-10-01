@@ -30,13 +30,13 @@ function Curve(controlPoints) {
 
     this.getNormalAt = function (u) {
         var derivate = this.getDerivateAt(u);
-        var derivateVec3 = vec3.fromValues(derivate.x,derivate.y,derivate.z);        
-        var point = this.getPointAt(u);
-        vec3.rotateZ(derivateVec3, derivateVec3 , [0,0,0] , Math.PI/2);
+        var angle = Math.PI /2;
+        var newX = derivate.x*Math.cos(angle) - derivate.y * Math.sin(angle);
+        var newY = derivate.x*Math.sin(angle) + derivate.y * Math.cos(angle);
         return {
-            x: derivateVec3[X], 
-            y: derivateVec3[Y], 
-            z: derivateVec3[Z]}
+            x: newX, 
+            y: newY, 
+            z: 0}
     }
 
     this.getBinormalAt = function (u){

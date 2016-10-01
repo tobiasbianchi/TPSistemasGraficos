@@ -1,8 +1,8 @@
-var SuperficieBarrido =(function (shape, curva, niveles) {
+var SuperficieBarrido =(function (shape, curve, niveles) {
     VertexGrid.call(this, niveles + 1, shape.definition());
     this.position_buffer = [];
 
-    var pasos = curva.totalCurves() / niveles;
+    var pasos = curve.totalCurves() / niveles;
 
     var BINORMAL_COLUM = 0;
     var NORMAL_COLUM = 1;
