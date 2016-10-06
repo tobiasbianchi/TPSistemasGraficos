@@ -75,16 +75,12 @@ function VertexGrid(_rows, _cols, formGenerator) {
         mat4.multiply(aux, matrix, this.mMatrix);
         
         this.setMatrixUniforms(aux);
-        var vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-        gl.enableVertexAttribArray(vertexPositionAttribute);
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-        gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
         
-
-        var vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
-        gl.enableVertexAttribArray(vertexColorAttribute);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+        
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-        gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_indexBuffer);
 

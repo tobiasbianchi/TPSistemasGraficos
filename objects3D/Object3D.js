@@ -86,15 +86,11 @@ function Object3D() {
             var position = buffers.position;
             var color = buffers.color;
             var index = buffers.index;
-            var vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-            gl.enableVertexAttribArray(vertexPositionAttribute);
             gl.bindBuffer(gl.ARRAY_BUFFER, position);
-            gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+            gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
-            var vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
-            gl.enableVertexAttribArray(vertexColorAttribute);
             gl.bindBuffer(gl.ARRAY_BUFFER, color);
-            gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+            gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
 
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, index);
 
