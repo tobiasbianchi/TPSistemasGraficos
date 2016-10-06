@@ -84,7 +84,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_indexBuffer);
 
-        gl.drawElements(gl.TRIANGLE_STRIP, 2*cols*(rows - 1), gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(gl.LINE_LOOP, 2*cols*(rows - 1), gl.UNSIGNED_SHORT, 0);
     }
 
     this.build = function() {
