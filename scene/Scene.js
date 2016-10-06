@@ -31,9 +31,14 @@ Scene.addChild(cubo);
 Scene.addChild(Vertex);
 */
 
+var esfera = new Esfera(30,30);
+esfera.translate([-2,0,0]);
+esfera.setColorer(new SameColor(BLUE));
+Scene.addChild(esfera);
+
 var curve = new CurvesGroupBezier([[1,0],[0,0],[-1,0]],CurveBezier2);
 
 var pedazoTorre = new SuperficieBarrido(new Hache(4),curve,15);
-pedazoTorre.scale([1,1,1])
+
 Scene.addChild(pedazoTorre);
 

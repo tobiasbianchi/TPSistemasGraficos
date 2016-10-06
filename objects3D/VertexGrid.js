@@ -7,7 +7,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
     this.position_buffer = null;
     this.generator = formGenerator === undefined ? DefaultGenerator(_rows,_cols) : formGenerator(_rows,_cols);
     this.color_buffer = null;
-    this.colorGenerator = new HeightColorer([RED,GREEN,BLUE],[-0.2,0.2]);//new SameColor(BLUE);
+    this.colorGenerator = new SameColor(RED);//new SameColor(BLUE);
     this.webgl_position_buffer = null;
     this.webgl_color_buffer = null;
     this.webgl_indexBuffer = null;
@@ -17,6 +17,10 @@ function VertexGrid(_rows, _cols, formGenerator) {
         return (num % 2 == 1);
     }
 
+    this.setColorer = function(colorer) {
+        this.colorGenerator = colorer;//new SameColor(BLUE);
+    }
+    
     var calculateRowData = function (rowIdx) {
         var data = {};
         var toggle = 1;
