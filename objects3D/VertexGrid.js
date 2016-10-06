@@ -11,6 +11,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
     this.webgl_position_buffer = null;
     this.webgl_color_buffer = null;
     this.webgl_indexBuffer = null;
+    this.webgl_normal_buffer = null;
 
     function isOdd(num) {
         return (num % 2 == 1);
@@ -63,11 +64,18 @@ function VertexGrid(_rows, _cols, formGenerator) {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
 
+        this.webgl_normal_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
+        
         // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
         // Notar tambi-n que se usa un array de enteros en lugar de floats.
         this.webgl_indexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_indexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.indexBuffer), gl.STATIC_DRAW);
+
+        
+        
     }
     
     this.draw = function (matrix) {
@@ -81,6 +89,9 @@ function VertexGrid(_rows, _cols, formGenerator) {
         
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+        gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_indexBuffer);
 

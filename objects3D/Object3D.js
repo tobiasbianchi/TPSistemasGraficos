@@ -66,10 +66,16 @@ function Object3D() {
             var webgl_indexBuffer = gl.createBuffer();
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, webgl_indexBuffer);
             gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexBuffer), gl.STATIC_DRAW);
+
+            var webgl_normal_buffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, webgl_normal_buffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(position_buffer), gl.STATIC_DRAW);
+
             buffers[axis_name] = {
                 index: webgl_indexBuffer,
                 color: webgl_color_buffer,
-                position: webgl_position_buffer
+                position: webgl_position_buffer,
+                normal: webgl_normal_buffer
             }
         }
         if (VISIBLE_AXIS == true){
@@ -86,11 +92,16 @@ function Object3D() {
             var position = buffers.position;
             var color = buffers.color;
             var index = buffers.index;
+            var normal = buffers.normal;
+
             gl.bindBuffer(gl.ARRAY_BUFFER, position);
             gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, color);
             gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, normal);
+            gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, index);
 

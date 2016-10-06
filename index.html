@@ -8,6 +8,7 @@
             // Los atributos son caracteristicas propias de cada vertice.
             attribute vec3 aVertexPosition;
             attribute vec3 aVertexColor;
+            attribute vec3 aVertexNormal;
 
             // Los uniforms son caracter-sticas propias de una etapa de dibujado completa.
             // Son comunes a todos los vertices involucrados en el dibujado.
@@ -35,6 +36,25 @@
                 // almacenar la posici-n resultante del fragmento.
                 vec4 pos_camera_view = uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
                 gl_Position = uPMatrix * pos_camera_view;
+                
+                vVertexColor = aVertexColor;
+                            
+                ////////////////////////////////////////////
+                // Calculos de la iluminaci�n
+                vec3 light_dir =  uLightPosition - vec3( pos_camera_view );
+                normalize(light_dir);
+                if (!uUseLighting) 
+                {
+                    vLightWeighting = vec3(1.0, 1.0, 1.0);
+                }
+                else 
+                {
+                    vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);
+                    float directionalLightWeighting = max(dot(transformedNormal, light_dir), 0.0);
+                    vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+                }
+                ////////////////////////////////////////////
+
                 vColor = vec4(aVertexColor,1.0);
             }
         </script>
@@ -45,12 +65,15 @@
         establecer el color de cada pixel. En este caso, asignamos el color blanco a 
         cada pixel.-->
     <script id="shader-fs" type="x-shader/x-fragment">
-        varying highp vec4 vColor;
+        precision mediump float;
+
+        varying vec3 vVertexColor;
+        varying vec3 vLightWeighting;
+
+        uniform sampler2D uSampler;
 
         void main(void) {
-          // gl_FragColor es una variable "built-in" de GLSL que es usada para 
-          // almacenar el color resultante del fragmento.
-          gl_FragColor = vColor;
+            gl_FragColor = vec4(vVertexColor.rgb * vLightWeighting, 1.0);
         }
     </script>
     <script type="text/javascript" src="webgl/gl-matrix.js"></script>
