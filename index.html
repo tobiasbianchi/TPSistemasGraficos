@@ -4,44 +4,132 @@
 <head>
     <meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type">
     <meta content="ISO-8859-1" http-equiv="encoding">
-    <script id="shader-vs" type="x-shader/x-vertex">
-            // Los atributos son caracteristicas propias de cada vertice.
-            attribute vec3 aVertexPosition;
-            attribute vec3 aVertexColor;
 
-            // Los uniforms son caracter-sticas propias de una etapa de dibujado completa.
-            // Son comunes a todos los vertices involucrados en el dibujado.
-            uniform mat4 uMVMatrix;
-            uniform mat4 uPMatrix;
-            uniform mat3 uNMatrix;
-            
-            // Los varying son propiedades que toman valor para cada fragmento a partir
-            // de interpolar linealmente entre los valores que se les asigna en cada 
-            // v-rtice del pol-gono al cual pertenecen.
-            varying highp vec4 vColor;    
- 
-            void main(void) {
-                // gl_Position es una variable "built-in" de GLSL que es usada para 
-                // almacenar la posici-n resultante del fragmento.
-                gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-                vColor = vec4(aVertexColor,1.0);
-            }
-        </script>
+    <script id="shader-fs-colored-obj" type="x-shader/x-fragment">
+    precision mediump float;
 
-    <!--Fragment shader
+    varying vec3 vVertexColor;
+    varying vec3 vLightWeighting;
 
-        Cada pixel en un pol-gono se llama fragmento. El fragment shader se encarga de
-        establecer el color de cada pixel. En este caso, asignamos el color blanco a 
-        cada pixel.-->
-    <script id="shader-fs" type="x-shader/x-fragment">
-        varying highp vec4 vColor;
+    uniform sampler2D uSampler;
 
-        void main(void) {
-          // gl_FragColor es una variable "built-in" de GLSL que es usada para 
-          // almacenar el color resultante del fragmento.
-          gl_FragColor = vColor;
-        }
+    void main(void) {
+        gl_FragColor = vec4(vVertexColor.rgb * vLightWeighting, 1.0);
+    }
     </script>
+
+    <script id="shader-vs-colored-obj" type="x-shader/x-vertex">
+    attribute vec3 aVertexPosition;
+    attribute vec3 aVertexNormal;
+    attribute vec3 aVertexColor;
+
+    uniform mat4 uViewMatrix;
+    uniform mat4 uModelMatrix;
+    uniform mat4 uPMatrix;
+    uniform mat3 uNMatrix;
+
+    uniform vec3 uAmbientColor;
+
+    uniform vec3 uLightPosition;
+    uniform vec3 uDirectionalColor;
+
+    uniform bool uUseLighting;
+
+    varying vec3 vVertexColor;
+    varying vec3 vLightWeighting;
+
+    void main(void) {
+    
+        // Transformamos al v-rtice al espacio de la c-mara
+        vec4 pos_camera_view = uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+        
+        // Transformamos al v-rtice al espacio de la proyecci-n
+        gl_Position = uPMatrix * pos_camera_view;
+        
+        // Coordenada de textura sin modifiaciones
+        vVertexColor = aVertexColor;
+                            
+        ////////////////////////////////////////////
+        // Calculos de la iluminaci-n
+        vec3 light_dir =  uLightPosition - vec3( pos_camera_view );
+        normalize(light_dir);
+        if (!uUseLighting) 
+        {
+            vLightWeighting = vec3(1.0, 1.0, 1.0);
+        }
+        else 
+        {
+            vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);
+            float directionalLightWeighting = max(dot(transformedNormal, light_dir), 0.0);
+            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+        }
+        ////////////////////////////////////////////
+    }
+    </script>
+
+    <script id="shader-fs-textured-obj" type="x-shader/x-fragment">
+    precision mediump float;
+
+    varying vec2 vTextureCoord;
+    varying vec3 vLightWeighting;
+
+    uniform sampler2D uSampler;
+
+    void main(void) {
+        vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+        gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+    }
+    </script>
+
+    <script id="shader-vs-textured-obj" type="x-shader/x-vertex">
+    attribute vec3 aVertexPosition;
+    attribute vec3 aVertexNormal;
+    attribute vec2 aTextureCoord;
+
+    uniform mat4 uViewMatrix;
+    uniform mat4 uModelMatrix;
+    uniform mat4 uPMatrix;
+    uniform mat3 uNMatrix;
+
+    uniform vec3 uAmbientColor;
+
+    uniform vec3 uLightPosition;
+    uniform vec3 uDirectionalColor;
+
+    uniform bool uUseLighting;
+
+    varying vec2 vTextureCoord;
+    varying vec3 vLightWeighting;
+
+    void main(void) {
+	
+		// Transformamos al v-rtice al espacio de la c-mara
+		vec4 pos_camera_view = uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+		
+		// Transformamos al v-rtice al espacio de la proyecci-n
+        gl_Position = uPMatrix * pos_camera_view;
+		
+		// Coordenada de textura sin modifiaciones
+        vTextureCoord = aTextureCoord;
+							
+		////////////////////////////////////////////
+		// Calculos de la iluminaci-n
+		vec3 light_dir =  uLightPosition - vec3( pos_camera_view );
+		normalize(light_dir);
+        if (!uUseLighting) 
+		{
+            vLightWeighting = vec3(1.0, 1.0, 1.0);
+        }
+		else 
+		{
+            vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);
+            float directionalLightWeighting = max(dot(transformedNormal, light_dir), 0.0);
+            vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+        }
+		////////////////////////////////////////////
+    }
+    </script>
+    
     <script type="text/javascript" src="webgl/gl-matrix.js"></script>
     <script type="text/javascript" src="globalVariables.js"></script>
     <script type="text/javascript" src="inheritPrototype.js"></script>
@@ -69,8 +157,8 @@
     <script type="text/javascript" src="objects3D/Tubo.js"></script>
     <script type="text/javascript" src="objects3D/Cilindro.js"></script>
     <script type="text/javascript" src="objects3D/Esfera.js"></script>
-    <script type="text/javascript" src="objects3D/SuperficieBarrido/SuperficieBarrido.js"></script>
-    
+    <script type="text/javascript" src="objects3D/Superficies/SuperficieBarrido.js"></script>
+
     <script type="text/javascript" src="scene/Scene.js"></script>
     <script type="text/javascript" src="webgl/initWebGL.js"></script>
 </head>

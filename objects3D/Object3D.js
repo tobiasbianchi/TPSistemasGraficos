@@ -2,6 +2,9 @@ function Object3D() {
     this.children = [];
     this.mMatrix = mat4.create();
     this.axisBuffers = {};
+    this.hasTexture = false;
+    this.actualShader = null;
+
     mat4.identity(this.mMatrix);
 
     function NotImplementedError(message) {
@@ -13,6 +16,16 @@ function Object3D() {
         for (var i = 0; i < this.children.length; i++) {
             this.children[i].build();
             this.children[i].buildAxis();
+        }
+    }
+
+    this.setUpShader = function(){
+        if (this.hasTexture) {
+            gl.useProgram(shaderProgramTexturedObject);
+            this.actualShader = shaderProgramTexturedObject;
+        } else {
+            gl.useProgram(shaderProgramColoredObject);
+            this.actualShader = shaderProgramColoredObject;
         }
     }
 
@@ -86,15 +99,12 @@ function Object3D() {
             var position = buffers.position;
             var color = buffers.color;
             var index = buffers.index;
-            var vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-            gl.enableVertexAttribArray(vertexPositionAttribute);
-            gl.bindBuffer(gl.ARRAY_BUFFER, position);
-            gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
-            var vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
-            gl.enableVertexAttribArray(vertexColorAttribute);
+            gl.bindBuffer(gl.ARRAY_BUFFER, position);
+            gl.vertexAttribPointer(shaderProgramColoredObject.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
             gl.bindBuffer(gl.ARRAY_BUFFER, color);
-            gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+            gl.vertexAttribPointer(shaderProgramColoredObject.vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
 
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, index);
 
@@ -116,9 +126,12 @@ function Object3D() {
     }
 
     this.draw = function (matrix) {
+        
         var aux = mat4.create();
         mat4.multiply(aux, matrix, this.mMatrix);
         for (var i = 0; i < this.children.length; i++) {
+            this.children[i].setUpShader();
+            this.children[i].setupLighting(vec3.fromValues(-100.0, 0.0, -60.0), vec3.fromValues( 0.5, 0.5, 0.5), vec3.fromValues(0.1, 0.1, 0.1))
             this.children[i].draw(aux);
             this.children[i].drawAxis(aux);
         }        
@@ -146,13 +159,9 @@ function Object3D() {
 
     this.setMatrixUniforms = function (mMatrix) {
 
-        gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-        gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mMatrix);
-
-        var normalMatrix = mat3.create();
-        mat3.identity(normalMatrix);
-        mat3.normalFromMat4(normalMatrix, mvMatrix);
-        gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
+        gl.uniformMatrix4fv(this.actualShader.pMatrixUniform, false, pMatrix);
+        gl.uniformMatrix4fv(this.actualShader.ViewMatrixUniform, false, CameraMatrix);
+        
     }
 
 }

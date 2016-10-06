@@ -26,50 +26,61 @@ function setupWebGL() {
 }
 
 function initShaders() {
-    // Obtenemos los shaders ya compilados
-    var fragmentShader = getShader(gl, "shader-fs");
-    var vertexShader = getShader(gl, "shader-vs");
+    function attachShaders(vertexShader, fragmentShader, type) {
+        // Creamos un programa de shaders de WebGL.
+        var shaderProgram = gl.createProgram();
 
-    // Creamos un programa de shaders de WebGL.
-    shaderProgram = gl.createProgram();
+        // Asociamos cada shader compilado al programa.
+        gl.attachShader(shaderProgram, vertexShader);
+        gl.attachShader(shaderProgram, fragmentShader);
 
-    // Asociamos cada shader compilado al programa.
-    gl.attachShader(shaderProgram, vertexShader);
-    gl.attachShader(shaderProgram, fragmentShader);
+        // Linkeamos los shaders para generar el programa ejecutable.
+        gl.linkProgram(shaderProgram);
 
-    // Linkeamos los shaders para generar el programa ejecutable.
-    gl.linkProgram(shaderProgram);
+        // Chequeamos y reportamos si hubo alg�n error.
+        if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+            alert("Unable to initialize the shader program: " +
+                gl.getProgramInfoLog(shaderProgram));
+            return null;
+        }
 
-    // Chequeamos y reportamos si hubo alg�n error.
-    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-        alert("Unable to initialize the shader program: " +
-            gl.getProgramInfoLog(shaderProgram));
-        return null;
+        shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+        gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+
+        if (type == 'texture') {
+            shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+            gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
+        } else {
+            shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
+            gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
+        }
+
+
+        shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
+        gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+
+        //ESTA CAMBIO
+        //shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+
+        shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+        shaderProgram.ViewMatrixUniform = gl.getUniformLocation(shaderProgram, "uViewMatrix");
+        shaderProgram.ModelMatrixUniform = gl.getUniformLocation(shaderProgram, "uModelMatrix");
+        shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
+        shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
+        shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
+        shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
+        shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightPosition");
+        shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
+        return shaderProgram;
     }
 
-    // Le decimos a WebGL que de aqui en adelante use el programa generado.
-    gl.useProgram(shaderProgram);
+    var fragmentShaderColoredObj = getShader(gl, "shader-fs-colored-obj");
+    var vertexShaderColoredObj = getShader(gl, "shader-vs-colored-obj");
+    shaderProgramColoredObject = attachShaders(vertexShaderColoredObj, fragmentShaderColoredObj);
 
-    shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-    shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-    shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
-    //shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
-    //shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
-    //shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
-    //shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightPosition");
-    //shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
-}
-
-function makeShader(src, type) {
-    //compile the vertex shader
-    var shader = gl.createShader(type);
-    gl.shaderSource(shader, src);
-    gl.compileShader(shader);
-
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        alert("Error compiling shader: " + gl.getShaderInfoLog(shader));
-    }
-    return shader;
+    var fragmentShaderTexturedObj = getShader(gl, "shader-fs-textured-obj");
+    var vertexShaderTexturedObj = getShader(gl, "shader-vs-textured-obj");
+    shaderProgramTexturedObject = attachShaders(fragmentShaderTexturedObj, vertexShaderTexturedObj, 'texture');
 }
 
 // SHADERS FUNCTION
@@ -117,6 +128,32 @@ function getShader(gl, id) {
     return shader;
 }
 
+//TEXTURE FUNCTION
+function handleLoadedTexture() {
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.bindTexture(gl.TEXTURE_2D, mars.texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, mars.texture.image);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+    gl.generateMipmap(gl.TEXTURE_2D);
+
+    gl.bindTexture(gl.TEXTURE_2D, null);
+
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.bindTexture(gl.TEXTURE_2D, deimos.texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, deimos.texture.image);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+    gl.generateMipmap(gl.TEXTURE_2D);
+
+    gl.bindTexture(gl.TEXTURE_2D, null);
+
+    //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    //gl.bindTexture(gl.TEXTURE_2D, phobos.texture);
+    //gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, phobos.texture.image);
+    //...
+}
+
 function setupBuffers() {
     Scene.build();
 }
@@ -125,31 +162,43 @@ function setupBuffers() {
 var gl = null,
     t = 0,
     canvas = null,
-    shaderProgram = null,
+    shaderProgramColoredObject = null, shaderProgramTexturedObject = null,
     fragmentShader = null,
     vertexShader = null;
 
 var Scene = Scene || new Object3D();
 
-var mvMatrix = mat4.create();
+var CameraMatrix = mat4.create();
+
+
 var pMatrix = mat4.create();
 
-
+var xsd = 1;
 function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    var u_proj_matrix = gl.getUniformLocation(shaderProgram, "uPMatrix");
 
-    mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
-    gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
+    mat4.perspective(pMatrix, 3.14 / 12.0, gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0);
 
-    var camara = mat4.create();
-    mat4.identity(camara);
-    mat4.translate(camara, camara, [0,-2,-5]);
+    // Definimos la ubicaci�n de la camara
+    // Pensamos por el momento marsamente la posici�n de la c�mara, la cual siempre mira al mars.
+    var matriz_camara = mat4.create();
+    mat4.identity(matriz_camara);
+    //mat4.identity(CameraMatrix);
+    //mat4.translate(CameraMatrix, CameraMatrix, [0, 0, -60]);
+    var eye_point = vec3.create();
+    vec3.set(eye_point, 0, 0, 0);
+    var at_point = vec3.create();
+    vec3.set(at_point, 0, 0, 0);
+    var up_point = vec3.create();
+    vec3.set(up_point, 0, 1, 0);
 
-    userInteraction.translate(camara);
-    userInteraction.rotateCamera(camara);
-    userInteraction.zoom(camara);
+    mat4.lookAt(CameraMatrix, eye_point, at_point, up_point);
+    mat4.multiply(CameraMatrix, CameraMatrix, matriz_camara);
+    if (xsd ==1 )console.log(CameraMatrix);
+    xsd = 2;
+    //userInteraction.translate(CameraMatrix);
+    //userInteraction.rotateCamera(CameraMatrix);
+    //userInteraction.zoom(CameraMatrix);
     
-
-    Scene.draw(camara);
+    Scene.draw(mat4.identity(mat4.create()));
 }

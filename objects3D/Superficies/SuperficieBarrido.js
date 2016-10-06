@@ -1,6 +1,7 @@
 var SuperficieBarrido =(function (shape, curve, niveles) {
     VertexGrid.call(this, niveles + 1, shape.definition());
     this.position_buffer = [];
+    this.normal_buffer = [];
 
     var pasos = curve.totalCurves() / niveles;
 
@@ -9,13 +10,21 @@ var SuperficieBarrido =(function (shape, curve, niveles) {
     var TANGENT_COLUMN = 2;
     var POINT_COLUMN = 3;
 
+    function normalize(point) {
+        var vec3d = vec3.fromValues(point.x,point.y,point.z);
+        vec3.normalize(vec3d,vec3d);
+        point.x = vec3d[X];
+        point.y = vec3d[Y];
+        point.z = vec3d[Z];
+    }
+
     var makeBarridoMatrix = function (u) {
         var tangente = curve.getDerivateAt(u);
         var normal = curve.getNormalAt(u);
         var binormal = curve.getBinormalAt(u);
         var point = curve.getPointAt(u);
         var matrix = mat4.create();
-        console.log(point);
+        
         fillColumn(matrix, BINORMAL_COLUM, binormal);
         fillColumn(matrix, NORMAL_COLUM, normal);
         fillColumn(matrix, TANGENT_COLUMN, tangente);
@@ -51,14 +60,20 @@ var SuperficieBarrido =(function (shape, curve, niveles) {
 
     for (var i = 0; i <= niveles; i++) {
         var u = i * pasos;
-        console.log('paso',u);
         var matrixBarrido = makeBarridoMatrix(u);
         for (var j = 0; j < shape.definition(); j++) {
             var vertix4D = shape.point(j);
+
             var pointTransformed = transformPoint(vertix4D, matrixBarrido);
+            var normalTransformed
             this.position_buffer.push(pointTransformed.x);
             this.position_buffer.push(pointTransformed.y);
             this.position_buffer.push(pointTransformed.z);
+
+            this.normal_buffer.push(pointTransformed.x);
+            this.normal_buffer.push(pointTransformed.y);
+            this.normal_buffer.push(pointTransformed.z);
+            
         }
     }
 

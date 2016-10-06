@@ -5,12 +5,16 @@ function VertexGrid(_rows, _cols, formGenerator) {
     var rows = _rows;
     this.indexBuffer = null;
     this.position_buffer = null;
-    this.generator = formGenerator === undefined ? DefaultGenerator(_rows,_cols) : formGenerator(_rows,_cols);
+    this.normal_buffer = null;
+    this.generator = formGenerator === undefined ? DefaultGenerator(_rows, _cols) : formGenerator(_rows, _cols);
     this.color_buffer = null;
-    this.colorGenerator = new HeightColorer([RED,GREEN,BLUE],[-0.2,0.2]);//new SameColor(BLUE);
+    this.texture_coord_buffer = null;
+    this.colorGenerator = new HeightColorer([RED, GREEN, BLUE], [-0.2, 0.2]);//new SameColor(BLUE);
     this.webgl_position_buffer = null;
     this.webgl_color_buffer = null;
     this.webgl_indexBuffer = null;
+    this.webgl_normal_buffer = null;
+    this.webgl_texture_coord_buffer = null;
 
     function isOdd(num) {
         return (num % 2 == 1);
@@ -34,7 +38,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
 
     this.createIndexBuffer = function () {
         this.indexBuffer = [];
-        
+
         var rowJump = 0;
         for (var row = 0; row < rows - 1; row++) {
             var rowData = calculateRowData(row);
@@ -50,7 +54,20 @@ function VertexGrid(_rows, _cols, formGenerator) {
 
         this.position_buffer = this.position_buffer || this.generator.position;
         this.color_buffer = this.colorGenerator.make(this.position_buffer);
-        
+        this.normal_buffer = this.normal_buffer || this.generator.normal;
+        this.texture_coord_buffer = this.generator.texture || [];
+    }
+
+    this.initTexture = function (texture_file) {
+        var aux_texture = gl.createTexture();
+        this.texture = aux_texture;
+        this.texture.image = new Image();
+
+        this.texture.image.onload = function () {
+            handleLoadedTexture()
+        }
+        this.texture.image.src = texture_file;
+        this.hasTexture = true;
     }
 
     this.setupWebGLBuffers = function () {
@@ -63,38 +80,74 @@ function VertexGrid(_rows, _cols, formGenerator) {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
 
+        this.webgl_normal_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);
+
         // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
         // Notar tambi-n que se usa un array de enteros en lugar de floats.
         this.webgl_indexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_indexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.indexBuffer), gl.STATIC_DRAW);
+
+        /*this.webgl_texture_coord_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coord_buffer), gl.STATIC_DRAW);
+        this.webgl_texture_coord_buffer.itemSize = 2;
+        this.webgl_texture_coord_buffer.numItems = this.texture_coord_buffer.length / 2;*/
+        console.log(this);
+}
+
+
+    this.setupLighting = function (lightPosition, ambientColor, diffuseColor) {
+        ////////////////////////////////////////////////////
+        // Configuraci�n de la luz
+        // Se inicializan las variables asociadas con la Iluminaci�n
+        var lighting;
+        lighting = true;
+        gl.uniform1i(this.actualShader.useLightingUniform, lighting);
+        gl.uniform3fv(this.actualShader.lightingDirectionUniform, lightPosition);
+        gl.uniform3fv(this.actualShader.ambientColorUniform, ambientColor);
+        gl.uniform3fv(this.actualShader.directionalColorUniform, diffuseColor);
     }
-    
+
     this.draw = function (matrix) {
+            
         var aux = mat4.create();
         mat4.multiply(aux, matrix, this.mMatrix);
-        
+
         this.setMatrixUniforms(aux);
-        var vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-        gl.enableVertexAttribArray(vertexPositionAttribute);
+
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-        gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(this.actualShader.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
         
+        if (this.hasTexture) {
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+            gl.vertexAttribPointer(shaderProgramTexturedObject.textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
+        } else {
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
+            gl.vertexAttribPointer(this.actualShader.vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+        }
+        
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+        gl.vertexAttribPointer(this.actualShader.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+        
+        gl.uniformMatrix4fv(this.actualShader.ModelMatrixUniform, false, aux);
 
-        var vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
-        gl.enableVertexAttribArray(vertexColorAttribute);
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-        gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
-
+        var normalMatrix = mat3.create();
+        mat3.fromMat4(normalMatrix, aux);
+        mat3.invert(normalMatrix, normalMatrix);
+        mat3.transpose(normalMatrix, normalMatrix)
+        gl.uniformMatrix3fv(this.actualShader.nMatrixUniform, false, normalMatrix);
+        
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_indexBuffer);
-
-        gl.drawElements(gl.TRIANGLE_STRIP, 2*cols*(rows - 1), gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(gl.TRIANGLE_STRIP, 2 * cols * (rows - 1), gl.UNSIGNED_SHORT, 0);
     }
 
-    this.build = function() {
+    this.build = function () {
         this.createUniformPlaneGrid();
         this.createIndexBuffer();
-        this.setupWebGLBuffers();     
-    }  
+        this.setupWebGLBuffers();
+    }
 }
 inheritPrototype(VertexGrid, Object3D);
