@@ -77,13 +77,25 @@ function VertexGrid(_rows, _cols, formGenerator) {
         
         
     }
-    
+
+    this.setupLighting = function (lightPosition, ambientColor, diffuseColor) {
+        ////////////////////////////////////////////////////
+        // Configuraci�n de la luz
+        // Se inicializan las variables asociadas con la Iluminaci�n
+        var lighting;
+        lighting = true;
+        gl.uniform1i(shaderProgram.useLightingUniform, lighting);
+        gl.uniform3fv(shaderProgram.lightingDirectionUniform, lightPosition);
+        gl.uniform3fv(shaderProgram.ambientColorUniform, ambientColor);
+        gl.uniform3fv(shaderProgram.directionalColorUniform, diffuseColor);
+    }
+
     this.draw = function (matrix) {
         var aux = mat4.create();
         mat4.multiply(aux, matrix, this.mMatrix);
         
         this.setMatrixUniforms(aux);
-        
+        this.setupLighting(vec3.fromValues(-100.0, 0.0, -60.0), vec3.fromValues(0.5, 0.5, 0.5), vec3.fromValues(0.05, 0.05, 0.05));
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
         
@@ -95,7 +107,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_indexBuffer);
 
-        gl.drawElements(gl.LINE_LOOP, 2*cols*(rows - 1), gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(gl.TRIANGLE_STRIP, 2*cols*(rows - 1), gl.UNSIGNED_SHORT, 0);
     }
 
     this.build = function() {
