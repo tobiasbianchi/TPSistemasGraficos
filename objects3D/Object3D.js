@@ -143,11 +143,13 @@ function Object3D() {
     this.setMatrixUniforms = function (mMatrix) {
 
         gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-        gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mMatrix);
+        gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, vMatrix);
+        gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, mMatrix);
 
         var normalMatrix = mat3.create();
-        mat3.identity(normalMatrix);
-        mat3.normalFromMat4(normalMatrix, mvMatrix);
+        mat3.fromMat4(normalMatrix, mMatrix);
+        mat3.invert(normalMatrix, normalMatrix);
+        mat3.transpose(normalMatrix, normalMatrix);
         gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
     }
 

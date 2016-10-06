@@ -55,18 +55,16 @@ function initShaders() {
     
     shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
     gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
-
-
-
     
     shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-    shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+    shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uModelMatrix");
+    shaderProgram.vMatrixUniform = gl.getUniformLocation(shaderProgram, "uViewMatrix");
     shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
-    //shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
-    //shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
-    //shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
-    //shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightPosition");
-    //shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
+    shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
+    shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
+    shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
+    shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightPosition");
+    shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
 }
 
 // SHADERS FUNCTION
@@ -128,7 +126,8 @@ var gl = null,
 
 var Scene = Scene || new Object3D();
 
-var mvMatrix = mat4.create();
+var vMatrix = mat4.create();
+var modelMatrix = mat4.create();
 var pMatrix = mat4.create();
 
 
@@ -139,14 +138,13 @@ function drawScene() {
     mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
     gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 
-    var camara = mat4.create();
-    mat4.identity(camara);
-    mat4.translate(camara, camara, [0,-2,-5]);
+    mat4.identity(vMatrix);
+    mat4.translate(vMatrix, vMatrix, [0,-2,-5]);
 
-    userInteraction.translate(camara);
-    userInteraction.rotateCamera(camara);
-    userInteraction.zoom(camara);
+    userInteraction.translate(vMatrix);
+    userInteraction.rotateCamera(vMatrix);
+    userInteraction.zoom(vMatrix);
     
-
-    Scene.draw(camara);
+    var identity = mat4.identity(mat4.create());
+    Scene.draw(identity);
 }

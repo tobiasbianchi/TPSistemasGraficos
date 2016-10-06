@@ -11,9 +11,19 @@
 
             // Los uniforms son caracter-sticas propias de una etapa de dibujado completa.
             // Son comunes a todos los vertices involucrados en el dibujado.
-            uniform mat4 uMVMatrix;
+            uniform mat4 uModelMatrix;
+            uniform mat4 uViewMatrix;
             uniform mat4 uPMatrix;
             uniform mat3 uNMatrix;
+            uniform vec3 uAmbientColor;
+
+            uniform vec3 uLightPosition;
+            uniform vec3 uDirectionalColor;
+
+            uniform bool uUseLighting;
+
+            varying vec3 vVertexColor;
+            varying vec3 vLightWeighting;
             
             // Los varying son propiedades que toman valor para cada fragmento a partir
             // de interpolar linealmente entre los valores que se les asigna en cada 
@@ -23,7 +33,8 @@
             void main(void) {
                 // gl_Position es una variable "built-in" de GLSL que es usada para 
                 // almacenar la posici-n resultante del fragmento.
-                gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+                vec4 pos_camera_view = uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+                gl_Position = uPMatrix * pos_camera_view;
                 vColor = vec4(aVertexColor,1.0);
             }
         </script>
