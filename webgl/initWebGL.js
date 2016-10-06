@@ -52,13 +52,13 @@ function initShaders() {
 
     shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
     gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-    
+
     shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
     gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
 
     shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
     gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
-    
+
     shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
     shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uModelMatrix");
     shaderProgram.vMatrixUniform = gl.getUniformLocation(shaderProgram, "uViewMatrix");
@@ -139,12 +139,25 @@ function drawScene() {
     mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
 
     mat4.identity(vMatrix);
-    mat4.translate(vMatrix, vMatrix, [0,-2,-5]);
 
-    userInteraction.translate(vMatrix);
-    userInteraction.rotateCamera(vMatrix);
-    userInteraction.zoom(vMatrix);
-    
+    var matriz_camara = mat4.create();
+    mat4.identity(matriz_camara);
+    //mat4.identity(CameraMatrix);
+    //mat4.translate(CameraMatrix, CameraMatrix, [0, 0, -60]);
+    var eye_point = vec3.create();
+    vec3.set(eye_point, 3, 4, -3);
+    var at_point = vec3.create();
+    vec3.set(at_point, 0, 0, 0);
+    var up_point = vec3.create();
+    vec3.set(up_point, 0, 1, 0);
+
+    userInteraction.translate(matriz_camara);
+    userInteraction.rotateCamera(matriz_camara);
+    userInteraction.zoom(matriz_camara);
+
+    mat4.lookAt(vMatrix, eye_point, at_point, up_point);
+    mat4.multiply(vMatrix, vMatrix, matriz_camara);
+
     var identity = mat4.identity(mat4.create());
     Scene.draw(identity);
 }

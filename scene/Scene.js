@@ -31,9 +31,9 @@ Scene.addChild(cubo);
 Scene.addChild(Vertex);
 */
 
-var curve = new CurvesGroupBezier([[1,0.1],[0,0],[-1,0.1]],CurveBezier2);
+var curve = new CurvesGroupBezier([[1,0],[0,0],[-1,0]],CurveBezier2);
 
-var pedazoTorre = new SuperficieBarrido(new Circle(4),curve,15);
+var pedazoTorre = new SuperficieBarrido(new Hache(4),curve,15);
 pedazoTorre.scale([1,1,1])
 Scene.addChild(pedazoTorre);
 
