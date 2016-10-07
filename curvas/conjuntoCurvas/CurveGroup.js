@@ -45,4 +45,25 @@ function CurveGroup(){
         return this.curves[indexes.curveIndex].getBinormalAt(indexes.indexAtCurve);
     };
 
+    this.definition = function(){
+        var totalDef = 0;
+        for (var curve  = 0; curve < this.curves.length; i++){
+            totalDef += this.curves[curve].definition();
+        }
+        return totalDef;
+    }
+
+    this.point = function(index){
+        var previousDef = 0;
+        var totalDefinition = 0;
+        for (var curve  = 0; curve < this.curves.length; i++){
+            previousDef = totalDefinition;
+            totalDefinition += this.curves[curve].definition();
+            if (totalDefinition >= index && index > previousDef){
+                return totalDef += this.curves[curve].point(totalDefinition - index);
+            }
+        }
+        return totalDef;
+    }
+
 }

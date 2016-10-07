@@ -54,8 +54,6 @@ function CurveWithControlPoints(controlPoints, defin) {
         var paramU = index* u /(definition - 1);
         var point  = this.getPointAt(paramU);
         return vec4.fromValues(point.x,point.y,0,1);
-        
-
     }
 
 }

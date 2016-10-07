@@ -1,4 +1,4 @@
-function CurveBezier2(controlPoints, defin = 10) {
+function CurveBezier2(controlPoints, defin=10) {
     CurveWithControlPoints.call(this, controlPoints, defin);
 
     var Base0, Base1, Base2;
