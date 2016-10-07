@@ -1,5 +1,5 @@
-function CurveBezier2(controlPoints) {
-    Curve.call(this, controlPoints);
+function CurveBezier2(controlPoints, defin = 10) {
+    CurveWithControlPoints.call(this, controlPoints, defin);
 
     var Base0, Base1, Base2;
     var Base0der, Base1der, Base2der;
@@ -15,4 +15,4 @@ function CurveBezier2(controlPoints) {
     this.basesFunctions = [Base0, Base1, Base2];
     this.basesDerivatesFunctions = [Base0der, Base1der, Base2der];
 }
-inheritPrototype(CurveBezier2, Curve);
+inheritPrototype(CurveBezier2, CurveWithControlPoints);

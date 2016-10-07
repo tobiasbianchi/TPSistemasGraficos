@@ -36,9 +36,10 @@ esfera.translate([-2,0,0]);
 esfera.setColorer(new SameColor(BLUE));
 Scene.addChild(esfera);
 
-var curve = new CurvesGroupBezier([[1,0],[0,0],[-1,0]],CurveBezier2);
-
-var pedazoTorre = new SuperficieBarrido(new Hache(4),curve,15);
+//console.log(new CurveBezier2().pointsInCurve());
+var curveToRotate = new CurveBezier2([[1,0],[0,0],[0,1]]);//,CurveBezier2);
+var curve = new CurveCircular(2*Math.PI);
+var pedazoTorre = new SuperficieBarrido(curveToRotate,curve,15);
 
 Scene.addChild(pedazoTorre);
 

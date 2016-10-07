@@ -1,5 +1,6 @@
 function CurvesGroupBezier(controlPoints,constructor) {
     CurveGroup.call(this);
+    console.log(constructor);
     var amountPoints = new constructor().pointsInCurve();
     var amountCurves = controlPoints.length/amountPoints;
 

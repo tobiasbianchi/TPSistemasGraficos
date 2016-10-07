@@ -1,4 +1,5 @@
 var SuperficieBarrido =(function (shape, curve, niveles) {
+    console.log(shape);
     VertexGrid.call(this, niveles + 1, shape.definition());
     this.position_buffer = [];
 
