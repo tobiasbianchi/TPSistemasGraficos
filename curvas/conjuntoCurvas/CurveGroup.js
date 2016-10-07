@@ -47,23 +47,27 @@ function CurveGroup(){
 
     this.definition = function(){
         var totalDef = 0;
-        for (var curve  = 0; curve < this.curves.length; i++){
+        for (var curve  = 0; curve < this.curves.length; curve++){
             totalDef += this.curves[curve].definition();
         }
         return totalDef;
     }
 
-    this.point = function(index){
+    this.point = function(totalIndex){
         var previousDef = 0;
         var totalDefinition = 0;
-        for (var curve  = 0; curve < this.curves.length; i++){
+        for (var curve  = 0; curve < this.curves.length; curve++){
             previousDef = totalDefinition;
             totalDefinition += this.curves[curve].definition();
-            if (totalDefinition >= index && index > previousDef){
-                return totalDef += this.curves[curve].point(totalDefinition - index);
+            if (totalDefinition > totalIndex && totalIndex >= previousDef || totalIndex == 0){
+                var indexRange = totalDefinition - previousDef;
+                var indexInCurve = totalIndex - indexRange;
+                console.log(totalIndex,totalDefinition,previousDef);
+                return this.curves[curve].point(indexInCurve);
             }
+            
         }
-        return totalDef;
+        return this.curves[this.curves.length -1].point(0);;
     }
 
 }

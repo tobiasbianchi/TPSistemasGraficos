@@ -36,12 +36,12 @@ esfera.translate([-2,0,0]);
 esfera.setColorer(new SameColor(BLUE));
 Scene.addChild(esfera);
 
-var doblado = new CurvesGroupBezier([[8,0],[0,0],[0,8]],CurveBezier2);
-var tuboDoblado = new SuperficieBarrido(new Circle(10),doblado,5);
+var doblado = new CurvesGroupBezier([[8,0],[4,0],[0,4],[0,8]],CurveBezier3);
+var tuboDoblado = new SuperficieBarrido(new Circle(10),doblado,10);
 tuboDoblado.translate([2,0,0]);
 Scene.addChild(tuboDoblado);
 
-var curveToRotate = new CurveBezier2([[3,0],[0,0],[0,1]],20);//,CurveBezier2);
+var curveToRotate = new  CurvesGroupBezier([[3,0],[0,0],[0,1],[0,1],[-1,1],[-1,0]],CurveBezier2);//,CurveBezier2);
 var curve = new CurveCircular(2*Math.PI);
 var pedazoTorre = new SuperficieBarrido(curveToRotate,curve,25);
 

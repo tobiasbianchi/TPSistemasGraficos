@@ -15,18 +15,18 @@ var SuperficieBarrido =(function (shape, curve, niveles) {
         var binormal = curve.getBinormalAt(u);
         var point = curve.getPointAt(u);
         var matrix = mat4.create();
-        console.log(point);
         fillColumn(matrix, BINORMAL_COLUM, binormal);
         fillColumn(matrix, NORMAL_COLUM, normal);
         fillColumn(matrix, TANGENT_COLUMN, tangente);
-        fillColumn(matrix, POINT_COLUMN, point, 1);
+        fillColumn(matrix, POINT_COLUMN, point, false, 1);
         return matrix;
     }
 
-    var fillColumn = function (matrix, index, point,lastRow = 0) {
-        matrix[X*4 + index] = point.x;
-        matrix[Y*4 + index] = point.y;
-        matrix[Z*4 + index] = point.z;
+    var fillColumn = function (matrix, index, point,normalize = true,lastRow = 0) {
+        var len = normalize ? vec3.length([point.x,point.y,point.z]) : 1;
+        matrix[X*4 + index] = point.x/len;
+        matrix[Y*4 + index] = point.y/len;
+        matrix[Z*4 + index] = point.z/len;
         matrix[W*4 +  index] = lastRow;
     }
 

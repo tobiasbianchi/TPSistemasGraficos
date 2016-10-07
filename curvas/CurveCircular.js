@@ -2,7 +2,7 @@ function CurveCircular(angleSwept) {
     /*Todas las curvas son planas sobre el eje x,y*/
     /*Radio 0.5cm*/
 
-    var radius = 0.5;
+    var radius = 0.0001;
 
     this.totalCurves = function(){
         return 1;
