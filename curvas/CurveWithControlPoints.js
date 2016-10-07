@@ -31,9 +31,8 @@ function CurveWithControlPoints(controlPoints, defin) {
 
     this.getNormalAt = function (u) {
         var derivate = this.getDerivateAt(u);
-        var angle = Math.PI /2;
-        var newX = derivate.x*Math.cos(angle) - derivate.y * Math.sin(angle);
-        var newY = derivate.x*Math.sin(angle) + derivate.y * Math.cos(angle);
+        var newX = - derivate.y;
+        var newY = derivate.x;
         return {
             x: newX, 
             y: newY, 
