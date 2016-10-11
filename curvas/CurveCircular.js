@@ -2,17 +2,16 @@ function CurveCircular(angleSwept) {
     /*Todas las curvas son planas sobre el eje x,y*/
     /*Radio 0.5cm*/
 
-    var radius = 0.0001;
+    var radius = 1;
 
     this.totalCurves = function(){
         return 1;
     }
 
     this.getPointAt = function (u){
-        var angle = angleSwept*u;
         return {
-            x: radius*Math.cos(angle),
-            y: radius*Math.sin(angle),
+            x: 0,
+            y: 0,
             z: 0    
         }
     };
@@ -20,14 +19,19 @@ function CurveCircular(angleSwept) {
     this.getDerivateAt = function (u){
         var angle = angleSwept*u;
         return {
-            x: -radius*Math.sin(angle),
-            y: radius*Math.cos(angle),
+            x: -Math.sin(angle),
+            y: Math.cos(angle),
             z: 0    
         }
     }
 
     this.getNormalAt = function (u) {
-        return this.getPointAt(u)
+        var angle = angleSwept*u;
+        return {
+            x: Math.cos(angle),
+            y: Math.sin(angle),
+            z: 0    
+        }
     }
 
     this.getBinormalAt = function (u){

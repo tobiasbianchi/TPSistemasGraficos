@@ -1,9 +1,9 @@
-var SuperficieBarrido =(function (shape, curve, niveles) {
+var SuperficieBarrido =(function (shape, curve, niveles, scaler) {
     VertexGrid.call(this, niveles + 1, shape.definition());
     this.position_buffer = [];
 
     var pasos = curve.totalCurves() / niveles;
-
+    this.scaler = scaler ? scaler : new Scaler();
     var BINORMAL_COLUM = 0;
     var NORMAL_COLUM = 1;
     var TANGENT_COLUMN = 2;
@@ -51,11 +51,20 @@ var SuperficieBarrido =(function (shape, curve, niveles) {
 
     for (var i = 0; i <= niveles; i++) {
         var u = i * pasos;
-        console.log('paso',u);
         var matrixBarrido = makeBarridoMatrix(u);
+        var scaleX = this.scaler.scaleX(u);
+        var scaleY = this.scaler.scaleY(u);
+        var scaleZ = this.scaler.scaleZ(u);
+
         for (var j = 0; j < shape.definition(); j++) {
             var vertix4D = shape.point(j);
+            vertix4D[X] = vertix4D[X]*scaleX;
+            vertix4D[Y] = vertix4D[Y]*scaleY;
+            vertix4D[Z] = vertix4D[Z]*scaleZ;
+
+
             var pointTransformed = transformPoint(vertix4D, matrixBarrido);
+            
             this.position_buffer.push(pointTransformed.x);
             this.position_buffer.push(pointTransformed.y);
             this.position_buffer.push(pointTransformed.z);

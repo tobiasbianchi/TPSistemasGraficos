@@ -62,7 +62,6 @@ function CurveGroup(){
             if (totalDefinition > totalIndex && totalIndex >= previousDef || totalIndex == 0){
                 var indexRange = totalDefinition - previousDef;
                 var indexInCurve = totalIndex - indexRange;
-                console.log(totalIndex,totalDefinition,previousDef);
                 return this.curves[curve].point(indexInCurve);
             }
             

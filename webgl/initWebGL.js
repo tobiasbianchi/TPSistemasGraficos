@@ -125,7 +125,8 @@ var gl = null,
     canvas = null,
     shaderProgram = null,
     fragmentShader = null,
-    vertexShader = null;
+    vertexShader = null,
+    PAINTING_WAY = null;
 
 var Scene = Scene || new Object3D();
 
@@ -155,7 +156,7 @@ function drawScene() {
     userInteraction.rotateCamera(matriz_camara);
     userInteraction.zoom(matriz_camara);
 
-    mat4.lookAt(vMatrix, eye_point, at_point, up_point);
+    //mat4.lookAt(vMatrix, eye_point, at_point, up_point);
     mat4.multiply(vMatrix, vMatrix, matriz_camara);
 
     var identity = mat4.identity(mat4.create());
