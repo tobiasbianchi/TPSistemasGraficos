@@ -57,16 +57,18 @@ function CurveGroup(){
         var previousDef = 0;
         var totalDefinition = 0;
         for (var curve  = 0; curve < this.curves.length; curve++){
-            previousDef = totalDefinition;
-            totalDefinition += this.curves[curve].definition();
-            if (totalDefinition > totalIndex && totalIndex >= previousDef || totalIndex == 0){
-                var indexRange = totalDefinition - previousDef;
-                var indexInCurve = totalIndex - indexRange;
+            var indexRange = this.curves[curve].definition();
+            totalDefinition += indexRange;
+
+            var indexInCurve = indexRange - (totalDefinition - totalIndex) ;
+            if ( indexInCurve < indexRange){
                 return this.curves[curve].point(indexInCurve);
             }
             
         }
-        return this.curves[this.curves.length -1].point(0);;
+        var lastCurveIndex = this.curves.length -1; 
+        var lasCurve = this.curves[lastCurveIndex]; 
+        return lasCurve.point(lasCurve.definition());;
     }
 
 }

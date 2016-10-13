@@ -1,4 +1,4 @@
-function CurvesGroupBezier(controlPoints,constructor) {
+function CurvesGroupBezier(controlPoints,constructor,defPercurve=10) {
     CurveGroup.call(this);
     var amountPoints = new constructor().pointsInCurve();
     var amountCurves = controlPoints.length/amountPoints;
@@ -8,7 +8,7 @@ function CurvesGroupBezier(controlPoints,constructor) {
         for (var j = 0; j < amountPoints; j++) {
             pointsOfCurve.push(controlPoints[i*amountPoints+j]);
         }
-        this.curves.push(new constructor(pointsOfCurve));
+        this.curves.push(new constructor(pointsOfCurve,defPercurve));
     }
 }
 inheritPrototype(CurvesGroupBezier, CurveGroup);

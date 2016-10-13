@@ -61,8 +61,7 @@ var SuperficieBarrido =(function (shape, curve, niveles, scaler) {
             vertix4D[X] = vertix4D[X]*scaleX;
             vertix4D[Y] = vertix4D[Y]*scaleY;
             vertix4D[Z] = vertix4D[Z]*scaleZ;
-
-
+            
             var pointTransformed = transformPoint(vertix4D, matrixBarrido);
             
             this.position_buffer.push(pointTransformed.x);
