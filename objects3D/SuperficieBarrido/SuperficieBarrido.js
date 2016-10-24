@@ -31,7 +31,7 @@ var SuperficieBarrido = (function (shape, curve, niveles, scaler, rotateShape = 
         matrix[Y * 4 + index] = vector[Y];
         matrix[Z * 4 + index] = vector[Z];
         matrix[W * 4 + index] = lastRow;
-        console.log(matrix);
+        
     }
 
     var transformPoint = function (vertix4D, mat4D) {
@@ -67,15 +67,15 @@ var SuperficieBarrido = (function (shape, curve, niveles, scaler, rotateShape = 
         var scaleX = this.scaler.scaleX(u);
         var scaleY = this.scaler.scaleY(u);
         var scaleZ = this.scaler.scaleZ(u);
-
+        
         for (var j = 0; j < shape.definition(); j++) {
             var vertix4D = shape.point(j);
             vertix4D[X] = vertix4D[X] * scaleX;
             vertix4D[Y] = vertix4D[Y] * scaleY;
             vertix4D[Z] = vertix4D[Z] * scaleZ;
-
+            //console.log(vertix4D)
             var pointTransformed = transformPoint(vertix4D, matrixBarrido);
-
+            //console.log(pointTransformed)
             this.position_buffer.push(pointTransformed.x);
             this.position_buffer.push(pointTransformed.y);
             this.position_buffer.push(pointTransformed.z);

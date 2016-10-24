@@ -14,7 +14,7 @@ function Puente(alturaRio,alturaTerreno,alturaPuente,alturaTorres,separacionTira
         var u = steps;
         for (var i = 0; i < cantidad; i++){
             var alturaPrimerBloque = Math.abs(curvePuente.getPointAt(u).y - alturaRio );
-            var torre = new Torre(alturaTorres, alturaPrimerBloque);
+            var torre = new Torre(alturaTorres - alturaRio, alturaPrimerBloque);
             var distanceX = curvePuente.getPointAt(u).x;
             var correrVeticalmente = -alturaPrimerBloque + (curvePuente.getPointAt(u).y -alturaTerreno);
             torre.translate([correrVeticalmente,distanceX,anchoPuente/2]);

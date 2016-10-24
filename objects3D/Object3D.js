@@ -34,21 +34,21 @@ function Object3D() {
             -0.02, -0.02, 0
         ]
         var xColor = [
-            1,0,0,
-            1,0,0,
-            1,0,0
+            1, 0, 0,
+            1, 0, 0,
+            1, 0, 0
         ]
         var yColor = [
-            0,1,0,
-            0,1,0,
-            0,1,0
+            0, 1, 0,
+            0, 1, 0,
+            0, 1, 0
         ]
         var zColor = [
-            0,0,1,
-            0,0,1,
-            0,0,1
+            0, 0, 1,
+            0, 0, 1,
+            0, 0, 1
         ];
-        
+
         var indexBuffer = [0, 1, 2];
         var buffers = {};
 
@@ -78,17 +78,17 @@ function Object3D() {
                 normal: webgl_normal_buffer
             }
         }
-        if (VISIBLE_AXIS == true){
-            initializeAxis(xaxisVertixs,xColor,'x');
-            initializeAxis(yaxisVertixs,yColor,'y');
-            initializeAxis(zaxisVertixs,zColor,'z');
-            this.axisBuffers = buffers;
-        }
-    
+        
+        initializeAxis(xaxisVertixs, xColor, 'x');
+        initializeAxis(yaxisVertixs, yColor, 'y');
+        initializeAxis(zaxisVertixs, zColor, 'z');
+        this.axisBuffers = buffers;
+        
+
     }
 
     this.drawAxis = function () {
-        function draw(buffers){
+        function draw(buffers) {
             var position = buffers.position;
             var color = buffers.color;
             var index = buffers.index;
@@ -105,11 +105,15 @@ function Object3D() {
 
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, index);
 
-           gl.drawElements(gl.TRIANGLE_STRIP, 3, gl.UNSIGNED_SHORT, 0);
+            gl.drawElements(gl.TRIANGLE_STRIP, 3, gl.UNSIGNED_SHORT, 0);
         }
-        for (key in this.axisBuffers){
-            draw(this.axisBuffers[key]);
+
+        if (VISIBLE_AXIS) {
+            for (key in this.axisBuffers) {
+                draw(this.axisBuffers[key]);
+            }
         }
+
 
 
     }
@@ -128,7 +132,7 @@ function Object3D() {
         for (var i = 0; i < this.children.length; i++) {
             this.children[i].draw(aux);
             this.children[i].drawAxis(aux);
-        }        
+        }
     }
 
     this.removeChild = function () {

@@ -1,4 +1,5 @@
 var SuperficieRevolucion =(function (curve, angle, pasos) {
+    //rota por eje x
     VertexGrid.call(this, pasos + 1, curve.definition());
     this.position_buffer = [];
 
