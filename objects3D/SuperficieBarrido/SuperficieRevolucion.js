@@ -1,40 +1,43 @@
-var SuperficieRevolucion =(function (curve, angle, pasos) {
+var SuperficieRevolucion = (function (curve, angle, pasos) {
     //rota por eje x
     VertexGrid.call(this, pasos + 1, curve.definition());
     this.position_buffer = [];
 
     var anguloBase = angle / pasos;
 
-    var rotationMatrix = function(angle){
-        var firstRow =[1,0,0,0];
-        var secondRow = [0,Math.cos(angle),-Math.sin(angle),0];
-        var thirdRow = [0,Math.sin(angle),Math.cos(angle),0]; 
-        
+    var rotationMatrix = function (angle) {
+        var firstRow = [1, 0, 0, 0];
+        var secondRow = [0, Math.cos(angle), -Math.sin(angle), 0];
+        var thirdRow = [0, Math.sin(angle), Math.cos(angle), 0];
+
         return {
             firstRow: firstRow,
             secondRow: secondRow,
             thirdRow: thirdRow
         }
-    } 
-    
-    function transformPoint(point,angulo) {
-        var vec3D = vec3.fromValues(point[X],point[Y],point[Z]);
-        vec3.rotateX(vec3D,vec3D,[0,0,0],angulo);        
+    }
+
+    function transformPoint(point, angulo) {
+        var vec3D = vec3.fromValues(point[X], point[Y], point[Z]);
+        vec3.rotateX(vec3D, vec3D, [0, 0, 0], angulo);
         return vec3D;
     }
 
-    for (var i = 0; i <= pasos; i++) {
-        var angulo = i * anguloBase;
-        var matrix = rotationMatrix(angulo);
-        for (var j = 0; j < curve.definition(); j++) {
-            var vertix4D = curve.point(j);
-            var vecRotated = transformPoint(vertix4D,angulo);
+    this.createUniformPlaneGrid = function () {
+        for (var i = 0; i <= pasos; i++) {
+            var angulo = i * anguloBase;
+            var matrix = rotationMatrix(angulo);
+            for (var j = 0; j < curve.definition(); j++) {
+                var vertix4D = curve.point(j);
+                var vecRotated = transformPoint(vertix4D, angulo);
 
-            this.position_buffer.push(vecRotated[X]);
-            this.position_buffer.push(vecRotated[Y]);
-            this.position_buffer.push(vecRotated[Z]);
+                this.position_buffer.push(vecRotated[X]);
+                this.position_buffer.push(vecRotated[Y]);
+                this.position_buffer.push(vecRotated[Z]);
+            }
         }
     }
+
 
 });
 inheritPrototype(SuperficieRevolucion, VertexGrid);

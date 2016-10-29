@@ -5,7 +5,6 @@ function VertexGrid(_rows, _cols, formGenerator) {
     var rows = _rows;
     this.indexBuffer = null;
     this.position_buffer = null;
-    this.generator = formGenerator === undefined ? DefaultGenerator(_rows,_cols) : formGenerator(_rows,_cols);
     this.color_buffer = null;
     this.colorGenerator = new SameColor(RED);//new SameColor(BLUE);
     this.webgl_position_buffer = null;
@@ -50,12 +49,12 @@ function VertexGrid(_rows, _cols, formGenerator) {
             }
         }
     }
+    this.generateColor = function () {
+        this.color_buffer = this.colorGenerator.make(this.position_buffer);
+    }
 
     this.createUniformPlaneGrid = function () {
-
-        this.position_buffer = this.position_buffer || this.generator.position;
-        this.color_buffer = this.colorGenerator.make(this.position_buffer);
-        
+        throw new Error("No hay buffers");
     }
 
     this.setupWebGLBuffers = function () {
@@ -116,6 +115,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
 
     this.build = function() {
         this.createUniformPlaneGrid();
+        this.generateColor();
         this.createIndexBuffer();
         this.setupWebGLBuffers();     
     }  
