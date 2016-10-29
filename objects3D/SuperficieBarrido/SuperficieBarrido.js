@@ -15,7 +15,7 @@ var SuperficieBarrido = (function (shape, curve, niveles, scaler, rotateShape = 
         var binormal = rotateShape ? curve.getBinormalAt(0):curve.getBinormalAt(u);
         var point = curve.getPointAt(u);
         var matrix = mat4.create();
-
+        
         fillColumn(matrix, BINORMAL_COLUM, binormal);
         fillColumn(matrix, NORMAL_COLUM, normal);
         fillColumn(matrix, TANGENT_COLUMN, tangente);
@@ -35,13 +35,7 @@ var SuperficieBarrido = (function (shape, curve, niveles, scaler, rotateShape = 
     }
 
     var transformPoint = function (vertix4D, mat4D) {
-        if (rotateShape) {
-            var vector3d = [vertix4D[X], vertix4D[Y], vertix4D[Z]];
-            vec3.rotateX(vector3d, vector3d, [0, 0, 0], Math.PI / 2);
-            vertix4D[X] = vector3d[X];
-            vertix4D[Y] = vector3d[Y];
-            vertix4D[Z] = vector3d[Z];
-        }
+        
         var newX = vec4.dot(vertix4D, makeVec4DFrom(mat4D, X));
         var newY = vec4.dot(vertix4D, makeVec4DFrom(mat4D, Y));
         var newZ = vec4.dot(vertix4D, makeVec4DFrom(mat4D, Z));
@@ -73,7 +67,6 @@ var SuperficieBarrido = (function (shape, curve, niveles, scaler, rotateShape = 
             vertix4D[X] = vertix4D[X] * scaleX;
             vertix4D[Y] = vertix4D[Y] * scaleY;
             vertix4D[Z] = vertix4D[Z] * scaleZ;
-            //console.log(vertix4D)
             var pointTransformed = transformPoint(vertix4D, matrixBarrido);
             //console.log(pointTransformed)
             this.position_buffer.push(pointTransformed.x);

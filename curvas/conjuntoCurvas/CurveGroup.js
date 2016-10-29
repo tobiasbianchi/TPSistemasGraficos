@@ -71,4 +71,10 @@ function CurveGroup(){
         return lasCurve.point(lasCurve.definition());;
     }
 
+    this.rotateCurve = function (){
+        for (var curve  = 0; curve < this.curves.length; curve++){
+            this.curves[curve].rotateCurve();
+        }
+    }
+
 }
