@@ -24,3 +24,12 @@ var GREY = getColor(130,130,130);
 var DARK_RED = getColor(142,15,4);
 var DARK_GREEN = getColor(0,188,18);
 
+var ALTURA_RIO = -6;
+var ALTURA_TERRENO = 0;
+var ALTURA_PUENTE = 2;
+var ALTURA_TORRES = 10;
+var LONGITUD_MAPA = 50;
+var ANCHO_MAPA = 50;
+var SEPARACION_CABLES = 2;
+var LARGO_PUENTE = 30;
+var CANTIDAD_TORRES = 3;

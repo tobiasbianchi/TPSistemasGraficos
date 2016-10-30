@@ -1,27 +1,12 @@
-function Puente(alturaRio,alturaTerreno,alturaPuente,alturaTorres,separacionTirantes){
+function Puente(){
     Object3D.call(this);
 
-    var lengthPuente = 20;
-    var startPuente = -lengthPuente/2;
+    var startPuente = -LARGO_PUENTE/2;
     var middlePuente = 0;
     var endPuente = -startPuente;
 
     var anchoPuente = 4; 
-    var curvePuente = new CurveBezier2([[startPuente,alturaTerreno],[middlePuente,2*alturaPuente],[endPuente,alturaTerreno]],15);
-    
-    this.makeTorres = function(cantidad){
-        var steps = 1/(cantidad+1);
-        var u = steps;
-        for (var i = 0; i < cantidad; i++){
-            var alturaPrimerBloque = Math.abs(curvePuente.getPointAt(u).y - alturaRio );
-            var torre = new Torre(alturaTorres - alturaRio, alturaPrimerBloque);
-            var distanceX = curvePuente.getPointAt(u).x;
-            var correrVeticalmente = -alturaPrimerBloque + (curvePuente.getPointAt(u).y -alturaTerreno);
-            torre.translate([correrVeticalmente,distanceX,anchoPuente/2]);
-            this.addChild(torre);
-            u+= steps;    
-        }
-    }
+    var curvePuente = new CurveBezier2([[startPuente,ALTURA_TERRENO],[middlePuente,2*ALTURA_PUENTE],[endPuente,ALTURA_TERRENO]],15);
 
     this.makeCaminoPuente = function(){
         var camino = new SuperficieBarrido(new ProfileBridge(),curvePuente,15);
@@ -30,7 +15,9 @@ function Puente(alturaRio,alturaTerreno,alturaPuente,alturaTorres,separacionTira
     }
 
     this.makeCaminoPuente();
-    this.makeTorres(3);
+    var side = new PuenteSide(curvePuente);
+    side.translate([0,0,anchoPuente/2])
+    this.addChild(side)
 
 }
 inheritPrototype(Puente, Object3D);

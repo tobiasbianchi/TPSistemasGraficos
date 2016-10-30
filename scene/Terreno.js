@@ -1,22 +1,22 @@
-function Terreno(largoPuente, curvaRio, longitudTotal, alturaPiso, alturaRio) {
+function Terreno(curvaRio) {
     Object3D.call(this);
     //largo mayor >= 12
-    var mitadAncho = largoPuente / 2;
-    var mitadAnchoTotal = longitudTotal / 2;
+    var mitadAncho = LARGO_PUENTE / 2;
+    var mitadAnchoTotal = LONGITUD_MAPA / 2;
     var mitadLargoTotal = mitadAnchoTotal;
     function createRioPart() {
-        var altoCrecida = alturaPiso - alturaRio;
+        var altoCrecida = ALTURA_TERRENO - ALTURA_RIO;
 
         var distanciaCambioCurvatura = mitadAncho - 3;
         var distanicaFinDeBajada = distanciaCambioCurvatura - 3;
-        var alturaCambioConcavidad = altoCrecida / 3 + alturaRio;
-        var alturaCambioColor = 2 * altoCrecida / 3 + alturaRio;
+        var alturaCambioConcavidad = altoCrecida / 3 + ALTURA_RIO;
+        var alturaCambioColor = 2 * altoCrecida / 3 + ALTURA_RIO;
         var puntosBezier = [
-            [-mitadAncho, alturaPiso], [-distanciaCambioCurvatura, alturaPiso], [-distanciaCambioCurvatura, alturaCambioConcavidad],
-            [-distanciaCambioCurvatura, alturaCambioConcavidad], [-distanciaCambioCurvatura, alturaRio], [-distanicaFinDeBajada, alturaRio],
-            [-distanicaFinDeBajada, alturaRio], [0, alturaRio], [distanicaFinDeBajada, alturaRio],
-            [distanicaFinDeBajada, alturaRio], [distanciaCambioCurvatura, alturaRio], [distanciaCambioCurvatura, alturaCambioConcavidad],
-            [distanciaCambioCurvatura, alturaCambioConcavidad], [distanciaCambioCurvatura, alturaPiso], [mitadAncho, alturaPiso]
+            [-mitadAncho, ALTURA_TERRENO], [-distanciaCambioCurvatura, ALTURA_TERRENO], [-distanciaCambioCurvatura, alturaCambioConcavidad],
+            [-distanciaCambioCurvatura, alturaCambioConcavidad], [-distanciaCambioCurvatura, ALTURA_RIO], [-distanicaFinDeBajada, ALTURA_RIO],
+            [-distanicaFinDeBajada, ALTURA_RIO], [0, ALTURA_RIO], [distanicaFinDeBajada, ALTURA_RIO],
+            [distanicaFinDeBajada, ALTURA_RIO], [distanciaCambioCurvatura, ALTURA_RIO], [distanciaCambioCurvatura, alturaCambioConcavidad],
+            [distanciaCambioCurvatura, alturaCambioConcavidad], [distanciaCambioCurvatura, ALTURA_TERRENO], [mitadAncho, ALTURA_TERRENO]
         ];
         var pozo = new CurvesGroupBezier(puntosBezier, CurveBezier2, 15);
         var pozoMaszigZag = new SuperficieBarrido(curvaRio, pozo, 50, null, true);
@@ -28,7 +28,7 @@ function Terreno(largoPuente, curvaRio, longitudTotal, alturaPiso, alturaRio) {
     function createLand() {
         function makeSuperficie(negativeSide) {
             negativeSide = negativeSide ? 1 : -1; 
-            var distanceX = (longitudTotal - mitadAncho)* negativeSide;
+            var distanceX = (LONGITUD_MAPA - mitadAncho)* negativeSide;
             var translationX = mitadAncho * negativeSide;
             var puntosControl = [
                 [distanceX, mitadAnchoTotal],
