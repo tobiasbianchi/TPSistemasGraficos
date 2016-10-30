@@ -14,7 +14,7 @@ function Torre(totalHeight,firstBlockHeight){
         var thirdPoint = [partHeight,0];
         return new CurvesGroupBezier([firstPoint,secondPoint,thirdPoint],CurveBezier2);
     }
-    var part = 1;
+    
     function makeTorrePart(height) {
         var heightNormal = height*(1-porcentajeTope);
         var heightTope = height*porcentajeTope;
