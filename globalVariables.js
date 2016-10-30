@@ -9,9 +9,18 @@ var ZAxis = [0,0,1];
 
 var VISIBLE_AXIS = true;
 
+ function getColor(r,g,b){
+     return {r: r/256,
+            g: g/256,
+            b: b/256
+        }
+ }
+
 var BLUE = {r:0,g:0,b:1};
 var GREEN = {r:0,g:1,b:0};
 var RED = {r:1,g:0,b:0};
 var YELLOW = {r:0.9335,g:0.9531,b:0.5039};
+var GREY = getColor(130,130,130);
+var DARK_RED = getColor(142,15,4);
+var DARK_GREEN = getColor(0,188,18);
 
- 

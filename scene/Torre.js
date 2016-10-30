@@ -23,7 +23,7 @@ function Torre(totalHeight,firstBlockHeight){
         var bloqueNormal = new SuperficieBarrido(formaTorre,caminoBarridoNormal,1);
         var bloqueTope = new SuperficieBarrido(formaTorre,caminoBarridoTope,1,scaleTopBlock);
         var torreParte = new Object3D();
-        bloqueTope.setColorer(new SameColor(GREEN));
+        bloqueTope.setColorer(new SameColor(DARK_RED));
         bloqueTope.translate([heightNormal,0,0]);
         torreParte.addChild(bloqueNormal);
         torreParte.addChild(bloqueTope);

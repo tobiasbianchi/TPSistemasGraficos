@@ -45,6 +45,8 @@ function Terreno(largoPuente,curvaRio,longitudTotal, alturaPiso, alturaRio){
         var superfice2 = new SupEntreCurvas(borde2,curvaRio, Math.PI/2);
         superfice.translate([-mitadAncho,0,0]);
         superfice2.translate([mitadAncho,0,0]);
+        superfice.setColorer(new SameColor(DARK_GREEN));
+        superfice2.setColorer(new SameColor(DARK_GREEN));
         return { sup1: superfice, sup2 : superfice2};
     }
 

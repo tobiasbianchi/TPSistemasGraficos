@@ -35,13 +35,14 @@
                 // gl_Position es una variable "built-in" de GLSL que es usada para 
                 // almacenar la posici-n resultante del fragmento.
                 vec4 pos_camera_view = uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+                vec4 pos_model_view = uModelMatrix * vec4(aVertexPosition, 1.0);
                 gl_Position = uPMatrix * pos_camera_view;
                 
                 vVertexColor = aVertexColor;
                             
                 ////////////////////////////////////////////
                 // Calculos de la iluminaci�n
-                vec3 light_dir =  uLightPosition - vec3( pos_camera_view );
+                vec3 light_dir =  uLightPosition - vec3( pos_model_view );
                 normalize(light_dir);
                 if (!uUseLighting) 
                 {

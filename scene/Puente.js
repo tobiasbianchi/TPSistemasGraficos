@@ -25,6 +25,7 @@ function Puente(alturaRio,alturaTerreno,alturaPuente,alturaTorres,separacionTira
 
     this.makeCaminoPuente = function(){
         var camino = new SuperficieBarrido(new ProfileBridge(),curvePuente,15);
+        camino.setColorer(new SameColor(GREY));
         this.addChild(camino);
     }
 
