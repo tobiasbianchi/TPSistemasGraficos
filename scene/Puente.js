@@ -17,7 +17,10 @@ function Puente(){
     this.makeCaminoPuente();
     var side = new PuenteSide(curvePuente);
     side.translate([0,0,anchoPuente/2])
+    var side2 = new PuenteSide(curvePuente);
+    side2.translate([0,0,-anchoPuente/2])
     this.addChild(side)
+    this.addChild(side2)
 
 }
 inheritPrototype(Puente, Object3D);

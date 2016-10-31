@@ -1,17 +1,19 @@
-function CurveCircular(angleSwept) {
+function CurveCircular(angleSwept, radio, def) {
     /*Todas las curvas son planas sobre el eje x,y*/
-    /*Radio 0.5cm*/
+    /*Radio 1m*/
 
-    var radius = 1;
+    var radius = radio ? radio : 1;
+    var def = def ? def : 10;
 
     this.totalCurves = function(){
         return 1;
     }
 
     this.getPointAt = function (u){
+        var angle = angleSwept*u;
         return {
-            x: 0,
-            y: 0,
+            x: radius*Math.cos(angle),
+            y: radius*Math.sin(angle),
             z: 0    
         }
     };
@@ -38,6 +40,16 @@ function CurveCircular(angleSwept) {
         var tangent = this.getDerivateAt(u);
 		var z = vec3.length([tangent.x,tangent.y,tangent.z]);
 		return {x: 0, y: 0, z: z};
+    }
+
+    this.definition = function () {
+        return def;
+    }
+
+    this.point = function (index) {
+        var paramU = index / (this.definition() - 1);
+        var point = this.getPointAt(paramU);
+        return vec4.fromValues(point.x, point.y, point.z, 1);
     }
 
 }
