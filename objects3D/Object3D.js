@@ -16,12 +16,10 @@ function Object3D() {
         }
     }
 
-    this.rebuild = function() {
+    this.destroy = function() {
         for (var i = 0; i < this.children.length; i++) {
             this.children[i].destroy();
             this.children[i].destroyAxis();
-            this.children[i].build();
-            this.children[i].buildAxis();
         }
     }
 
