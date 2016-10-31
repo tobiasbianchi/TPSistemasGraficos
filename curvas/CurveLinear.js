@@ -1,37 +1,35 @@
-function CurveCircular(angleSwept, radio, def) {
-    /*Todas las curvas son planas sobre el eje x,y*/
-    /*Radio 1m*/
-
-    var radius = radio ? radio : 1;
-    var def = def ? def : 10;
+function CurveLinear(puntoInicio,puntoFin){
+    var distanceX = (puntoFin[X] - puntoInicio[X]);
+    var distanceY =  (puntoFin[Y] - puntoInicio[Y]);
+    var distance = Math.sqrt(distanceX*distanceX + distanceY*distanceY);
+    var normalizedVector = [distanceX/distance,distanceY/distance]; 
 
     this.totalCurves = function(){
         return 1;
     }
 
     this.getPointAt = function (u){
-        var angle = angleSwept*u;
+        var totalDistance = distance*u;
         return {
-            x: radius*Math.cos(angle),
-            y: radius*Math.sin(angle),
+            x: puntoInicio[X] + totalDistance*normalizedVector[X],
+            y: puntoInicio[Y] + totalDistance*normalizedVector[Y],
             z: 0    
         }
     };
 
     this.getDerivateAt = function (u){
-        var angle = angleSwept*u;
         return {
-            x: -Math.sin(angle),
-            y: Math.cos(angle),
+            x: normalizedVector[X],
+            y: normalizedVector[Y],
             z: 0    
         }
     }
 
     this.getNormalAt = function (u) {
-        var angle = angleSwept*u;
+        var angle = Math.PI/2;
         return {
-            x: Math.cos(angle),
-            y: Math.sin(angle),
+            x: normalizedVector[X]*Math.cos(angle),
+            y: normalizedVector[Y]*Math.sin(angle),
             z: 0    
         }
     }
@@ -39,11 +37,11 @@ function CurveCircular(angleSwept, radio, def) {
     this.getBinormalAt = function (u){
         var tangent = this.getDerivateAt(u);
 		var z = vec3.length([tangent.x,tangent.y,tangent.z]);
-		return {x: 0, y: 0, z: z};
+		return {x: 0, y: 0, z:z};
     }
 
     this.definition = function () {
-        return def;
+        return 2;
     }
 
     this.point = function (index) {
@@ -63,5 +61,4 @@ function CurveCircular(angleSwept, radio, def) {
         var point = this.getDerivateAt(paramU);
         return vec4.fromValues(point.x, point.y, point.z, 1);
     }
-
 }

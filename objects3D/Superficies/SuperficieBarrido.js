@@ -73,6 +73,11 @@ var SuperficieBarrido = (function (shape, curve, niveles, scaler, keepNormal = f
                 this.position_buffer.push(pointTransformed.x);
                 this.position_buffer.push(pointTransformed.y);
                 this.position_buffer.push(pointTransformed.z);
+
+                //save tangente
+
+                //save normal
+                
             }
         }
     }

@@ -24,27 +24,6 @@ function PuenteSide(curvePuente) {
         }
     }
 
-    function getPointAt(xValue, curve) {
-        function compareMinToMax(value) {
-            return xValue < value;
-        }
-        function compareMaxToMin(value) {
-            return xValue > value;
-        }
-        var u = 0;
-        var max = curve.totalCurves();
-        var comparer = curve.getPointAt(u).x > curve.getPointAt(max).x ? compareMaxToMin : compareMinToMax;
-        while (u <= max + 0.05) {
-            var point = curve.getPointAt(u);
-            if (comparer(point.x)) {
-                return point;
-            }
-            u +=0.05;
-        }
-        throw new Error("Point looking outide of curve, x:" + xValue + ". u = " + u);
-
-    }
-
     this.makeLine = function(topPoint, bottomPoint, xValue){
         var points = [
             [0,0],[0,0],[0,topPoint.y - bottomPoint.y]

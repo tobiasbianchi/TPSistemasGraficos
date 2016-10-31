@@ -1,5 +1,9 @@
 function Hache(){
-    Shape.call(this,13);
+    var maxX = 1;
+    var maxY = 1;
+    var breakX = 0.5;
+    var minY = 0.5;
+
     var points = [
         1,1,
         1,-1,
@@ -16,10 +20,21 @@ function Hache(){
         1,1
     ]
 
-    this.point = function(index){
-        var x = points[2*index + X];
-        var y = points[2*index + Y];
-        return vec4.fromValues(x,y,0,1);
-    }
+    var controlPoints = [
+        [maxX,maxY],[maxX, -maxY],
+        [maxX, -maxY],[breakX,-maxY],
+        [breakX,-maxY],[breakX,-minY],
+        [breakX,-minY],[-breakX,-minY],
+        [-breakX,-minY],[-breakX,-maxY],
+        [-breakX,-maxY],[-maxX,-maxY],
+        [-maxX,-maxY],[-maxX,maxY],
+        [-maxX,maxY],[-breakX,maxY],
+        [-breakX,maxY],[-breakX,minY],
+        [-breakX,minY],[breakX,minY],
+        [breakX,minY],[breakX,maxY],
+        [breakX,maxY],[maxX,maxY]
+    ]
+    
+    CurveGroupLinear.call(this,controlPoints);
 }
-inheritPrototype(Hache, Shape);
+inheritPrototype(Hache, CurveGroupLinear);

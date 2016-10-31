@@ -5,6 +5,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
     var rows = _rows;
     this.indexBuffer = null;
     this.position_buffer = null;
+    this.normal_buffer = null;
     this.color_buffer = null;
     this.colorGenerator = new SameColor(RED);//new SameColor(BLUE);
     this.webgl_position_buffer = null;
@@ -58,7 +59,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
     }
 
     this.setupWebGLBuffers = function () {
-
+        this.normal_buffer = this.position_buffer
         this.webgl_position_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
@@ -69,7 +70,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
 
         this.webgl_normal_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);
         
         // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
         // Notar tambi-n que se usa un array de enteros en lugar de floats.

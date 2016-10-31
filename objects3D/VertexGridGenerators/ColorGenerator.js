@@ -27,7 +27,7 @@ function SameColor(color){
 inheritPrototype(SameColor, Colorer);
 
 
-function HeightColorer(colors,heightLimitsInOrder){
+function HeightColorer(colors,heightLimitsInOrder, axisToCompare = Y){
     Colorer.call(this);
     var colorsPaint = colors ? colors:[{r:0,g:0,b:1}];
     var hLimits = heightLimitsInOrder ? heightLimitsInOrder: [];
@@ -35,7 +35,7 @@ function HeightColorer(colors,heightLimitsInOrder){
     this.pickColor = function(points){
         previousHeight = -50000;
         for (var i = 0; i < hLimits.length; i++){
-            if (points[Y] < hLimits[i] && previousHeight < points[Y]){
+            if (points[axisToCompare] < hLimits[i] && previousHeight < points[axisToCompare]){
                 break;
             }
             previousHeight = hLimits[i];
