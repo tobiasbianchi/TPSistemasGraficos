@@ -16,6 +16,15 @@ function Object3D() {
         }
     }
 
+    this.rebuild = function() {
+        for (var i = 0; i < this.children.length; i++) {
+            this.children[i].destroy();
+            this.children[i].destroyAxis();
+            this.children[i].build();
+            this.children[i].buildAxis();
+        }
+    }
+
     this.buildAxis = function () {
         var xaxisVertixs = [
             0, 0.02, 0.02,
@@ -61,8 +70,6 @@ function Object3D() {
             gl.bindBuffer(gl.ARRAY_BUFFER, webgl_color_buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(color_buffer), gl.STATIC_DRAW);
 
-            // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
-            // Notar tambi-n que se usa un array de enteros en lugar de floats.
             var webgl_indexBuffer = gl.createBuffer();
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, webgl_indexBuffer);
             gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexBuffer), gl.STATIC_DRAW);
@@ -83,8 +90,15 @@ function Object3D() {
         initializeAxis(yaxisVertixs, yColor, 'y');
         initializeAxis(zaxisVertixs, zColor, 'z');
         this.axisBuffers = buffers;
-        
+    }
 
+    this.destroyAxis = function(){
+        for (axisBuffers in this.axisBuffers){
+            for (buffer in axisBuffers){
+                gl.deleteBuffer(buffer);
+            }
+        }
+        this.axisBuffers = {};
     }
 
     this.drawAxis = function () {

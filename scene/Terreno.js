@@ -28,7 +28,7 @@ function Terreno(curvaRio) {
     function createLand() {
         function makeSuperficie(negativeSide) {
             negativeSide = negativeSide ? 1 : -1; 
-            var distanceX = (LONGITUD_MAPA - mitadAncho)* negativeSide;
+            var distanceX = (LONGITUD_MAPA/2 - mitadAncho)* negativeSide;
             var translationX = mitadAncho * negativeSide;
             var puntosControl = [
                 [distanceX, mitadAnchoTotal],

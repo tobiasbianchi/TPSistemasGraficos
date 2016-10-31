@@ -53,7 +53,8 @@ function CurveGroup(){
         return totalDef;
     }
 
-    this.point = function(totalIndex){
+    
+    this.returnPointOfData = function(getDataPoint,totalIndex){
         var previousDef = 0;
         var totalDefinition = 0;
         for (var curve  = 0; curve < this.curves.length; curve++){
@@ -62,13 +63,34 @@ function CurveGroup(){
 
             var indexInCurve = indexRange - (totalDefinition - totalIndex) ;
             if ( indexInCurve < indexRange){
-                return this.curves[curve].point(indexInCurve);
+                return getDataPoint(this.curves[curve],(indexInCurve));
             }
             
         }
         var lastCurveIndex = this.curves.length -1; 
         var lasCurve = this.curves[lastCurveIndex]; 
-        return lasCurve.point(lasCurve.definition());;
+        return getDataPoint(lasCurve,lasCurve.definition());
+    }
+
+    this.point = function(totalIndex){
+        function getPoint(curve,index){
+            return curve.point(index);
+        }
+        return this.returnPointOfData(getPoint,totalIndex);
+    }
+
+    this.getNormalAtIndex = function(totalIndex){
+        function getNormal(curve,index){
+            return curve.getNormalAtIndex(index);
+        }
+        return this.returnPointOfData(getNormal,totalIndex);
+    }
+
+    this.getTangentAtIndex = function(index){
+        function getTangent(curve,index){
+            return curve.getTangentAtIndex(index);
+        }
+        return this.returnPointOfData(getTangent,totalIndex);
     }
 
     this.rotateCurve = function (Yangle){

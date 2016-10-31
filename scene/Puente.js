@@ -5,8 +5,9 @@ function Puente(){
     var middlePuente = 0;
     var endPuente = -startPuente;
 
-    var anchoPuente = 4; 
-    var curvePuente = new CurveBezier2([[startPuente,ALTURA_TERRENO],[middlePuente,2*ALTURA_PUENTE],[endPuente,ALTURA_TERRENO]],15);
+    var curvePuente = new CurveBezier2([
+        [startPuente,ALTURA_TERRENO],[middlePuente,2*ALTURA_PUENTE],[endPuente,ALTURA_TERRENO]
+        ],15);
 
     this.makeCaminoPuente = function(){
         var camino = new SuperficieBarrido(new ProfileBridge(),curvePuente,15);
@@ -16,9 +17,9 @@ function Puente(){
 
     this.makeCaminoPuente();
     var side = new PuenteSide(curvePuente);
-    side.translate([0,0,anchoPuente/2])
+    side.translate([0,0,ANCHO_PUENTE/2])
     var side2 = new PuenteSide(curvePuente);
-    side2.translate([0,0,-anchoPuente/2])
+    side2.translate([0,0,-ANCHO_PUENTE/2])
     this.addChild(side)
     this.addChild(side2)
 

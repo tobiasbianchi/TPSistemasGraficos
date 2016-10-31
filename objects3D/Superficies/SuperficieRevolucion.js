@@ -2,6 +2,7 @@ var SuperficieRevolucion = (function (curve, angle, pasos) {
     //rota por eje x
     VertexGrid.call(this, pasos + 1, curve.definition());
     this.position_buffer = [];
+    this.normal_buffer = [];
 
     var anguloBase = angle / pasos;
 
@@ -34,6 +35,13 @@ var SuperficieRevolucion = (function (curve, angle, pasos) {
                 this.position_buffer.push(vecRotated[X]);
                 this.position_buffer.push(vecRotated[Y]);
                 this.position_buffer.push(vecRotated[Z]);
+
+                //save normal
+                vertix4D = shape.getNormalAtIndex(j);
+                var normalTransformed = transformPoint(vertix4D, angulo);
+                this.normal_buffer.push(normalTransformed.x);
+                this.normal_buffer.push(normalTransformed.y);
+                this.normal_buffer.push(normalTransformed.z);
             }
         }
     }

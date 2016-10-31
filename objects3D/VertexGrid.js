@@ -59,7 +59,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
     }
 
     this.setupWebGLBuffers = function () {
-        this.normal_buffer = this.position_buffer
+        //this.normal_buffer = this.position_buffer
         this.webgl_position_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
@@ -119,6 +119,13 @@ function VertexGrid(_rows, _cols, formGenerator) {
         this.generateColor();
         this.createIndexBuffer();
         this.setupWebGLBuffers();     
+    }
+
+    this.destroy = function() {
+        gl.deleteBuffer(this.webgl_color_buffer)
+        gl.deleteBuffer(this.webgl_indexBuffer)
+        gl.deleteBuffer(this.webgl_normal_buffer)
+        gl.deleteBuffer(this.webgl_position_buffer)
     }  
 }
 inheritPrototype(VertexGrid, Object3D);

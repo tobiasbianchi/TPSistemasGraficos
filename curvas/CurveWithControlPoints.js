@@ -78,29 +78,57 @@ function CurveWithControlPoints(controlPoints, defin) {
         return vec4.fromValues(point.x, point.y, point.z, 1);
     }
 
+    this.getNormalAtIndex = function(index){
+        var paramU = index / (this.definition() - 1);
+        var point = this.getNormalAt(paramU);
+        return vec4.fromValues(point.x, point.y, point.z, 1);
+    }
+
+    this.getTangentAtIndex = function(index){
+        var paramU = index / (this.definition() - 1);
+        var point = this.getDerivateAt(paramU);
+        return vec4.fromValues(point.x, point.y, point.z, 1);
+    }
+
 }
 CurveWithControlPoints.prototype.pointsInCurve = function () {
     return this.basesFunctions.length;
 }
 
 
-function getPointAt(xValue, curve) {
+function getPointAt(xValue, curve,axis=X) {
     function compareMinToMax(value) {
         return xValue < value;
     }
     function compareMaxToMin(value) {
         return xValue > value;
     }
+    function valueOfPointX(point){
+        return point.x;
+    }
+    function valueOfPointY(point){
+        return point.y;
+    }
+    function valueOfPointZ(point){
+        return point.z;
+    }
+    var valueGetter = axis == X ? valueOfPointX : (axis == Y ? valueOfPointY : valueOfPointZ);
     var u = 0;
     var max = curve.totalCurves();
-    var comparer = curve.getPointAt(u).x > curve.getPointAt(max).x ? compareMaxToMin : compareMinToMax;
+    var pointStart = curve.getPointAt(u);
+    var pointMax = curve.getPointAt(max);
+    var comparer = valueGetter(pointStart) > valueGetter(pointMax) ? compareMaxToMin : compareMinToMax;
     while (u <= max + 0.05) {
         var point = curve.getPointAt(u);
-        if (comparer(point.x)) {
+        if (axis == Z) {
+            console.log(point)
+        }
+        if (comparer(valueGetter(point))) {
             return point;
         }
         u += 0.05;
     }
-    throw new Error("Point looking outide of curve, x:" + xValue + ". u = " + u);
+    
+    throw new Error("Point looking outide of curve, " + axis + ":" + xValue + "; u = " + u);
 
 }
