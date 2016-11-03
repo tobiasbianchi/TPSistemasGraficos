@@ -5,7 +5,7 @@ function SupEntreCurvas(curvaInicio, curvaFin) {
     this.normal_buffer = [];
     var uInicioStep = curvaInicio.totalCurves() / (pointsPerRow - 1);
     var uFinalStep = curvaFin.totalCurves() / (pointsPerRow - 1);
-    console.log(pointsPerRow)
+    
     this.createUniformPlaneGrid = function () {
         curvaFin.rotateCurve(Math.PI/2)
         for (var j = 0; j < pointsPerRow; j++) {            

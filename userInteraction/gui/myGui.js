@@ -22,7 +22,6 @@ VARIABLES = new guiController();
 
 window.onload = function() {
     var gui = new dat.GUI();
-    console.log(VARIABLES);
     gui.add(VARIABLES, 'ALTURA_RIO')
     gui.add(VARIABLES, "ALTURA_TERRENO")
     gui.add(VARIABLES, "ALTURA_PUENTE")
