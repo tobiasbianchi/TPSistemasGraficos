@@ -64,4 +64,9 @@ function CurveCircular(angleSwept, radio, def) {
         return vec4.fromValues(point.x, point.y, point.z, 1);
     }
 
+    this.getBinormalAtIndex = function(index){
+        var paramU = index / (this.definition() - 1);
+        var point = this.getBinormalAt(paramU);
+        return vec4.fromValues(point.x, point.y, point.z, 1);
+    }
 }

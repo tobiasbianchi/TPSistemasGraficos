@@ -92,8 +92,8 @@ function Object3D() {
 
     this.destroyAxis = function(){
         for (axisBuffers in this.axisBuffers){
-            for (buffer in axisBuffers){
-                gl.deleteBuffer(buffer);
+            for (buffer in axisBuffers[axisBuffers]){
+                gl.deleteBuffer(axisBuffers[axisBuffers][buffer]);
             }
         }
         this.axisBuffers = {};

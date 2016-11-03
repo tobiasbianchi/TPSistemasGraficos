@@ -1,11 +1,12 @@
 function PuenteSide(curvePuente) {
     Object3D.call(this)
-
+    VARIABLES.CANTIDAD_TORRES = parseInt(VARIABLES.CANTIDAD_TORRES)
     var referencePoints = [];
     var uUsed = [];
-    var steps = 1 / (CANTIDAD_TORRES + 1);
+    var steps = 1 / (VARIABLES.CANTIDAD_TORRES + 1);
     var u = steps;
-    for (var i = 0; i < CANTIDAD_TORRES; i++) {
+    
+    for (var i = 0; i < VARIABLES.CANTIDAD_TORRES; i++) {
         referencePoints.push(curvePuente.getPointAt(u));
         uUsed.push(u);
         u += steps;
@@ -15,10 +16,10 @@ function PuenteSide(curvePuente) {
     this.makeTorres = function () {
         for (var i = 0; i < referencePoints.length; i++) {
             var point = referencePoints[i];
-            var alturaPrimerBloque = Math.abs(point.y - ALTURA_RIO);
-            var torre = new Torre(ALTURA_TORRES - ALTURA_RIO, alturaPrimerBloque);
+            var alturaPrimerBloque = Math.abs(point.y - VARIABLES.ALTURA_RIO);
+            var torre = new Torre(VARIABLES.ALTURA_TORRES - VARIABLES.ALTURA_RIO, alturaPrimerBloque);
             var distanceX = point.x;
-            var correrVeticalmente = -alturaPrimerBloque + (point.y - ALTURA_TERRENO);
+            var correrVeticalmente = VARIABLES.ALTURA_RIO;
             torre.translate([correrVeticalmente, distanceX, 0]);
             this.addChild(torre);
         }
@@ -38,15 +39,15 @@ function PuenteSide(curvePuente) {
         var startPoint = curveSide.getPointAt(0);
         var endPoint = curveSide.getPointAt(curveSide.totalCurves());
         var totalLength = Math.abs(startPoint.x - endPoint.x);
-        var countLines = Math.floor((totalLength - 1) / SEPARACION_CABLES);
+        var countLines = Math.floor((totalLength - 1) / VARIABLES.SEPARACION_CABLES);
         var crescendo = startPoint.x > endPoint.x ? -1 : 1;
-        var xValue = startPoint.x + SEPARACION_CABLES*crescendo;
+        var xValue = startPoint.x + VARIABLES.SEPARACION_CABLES*crescendo;
         
         for (var i = 0; i < countLines; i++) {
             var topPoint = getPointAt(xValue,curveSide);
             var bottomPoint = getPointAt(xValue,curvePuente);
             this.makeLine(topPoint,bottomPoint, xValue) 
-            xValue = SEPARACION_CABLES*crescendo + xValue;
+            xValue = VARIABLES.SEPARACION_CABLES*crescendo + xValue;
         }
 
     }
@@ -68,11 +69,11 @@ function PuenteSide(curvePuente) {
             var endPoint = curvePuente.getPointAt(uEnd);
             var startX = startPoint.x;
             var endX = endPoint.x;
-            var heightY = ALTURA_TORRES;
+            var heightY = VARIABLES.ALTURA_TORRES;
             var heightPuenteStart = startPoint.y;
             var heightPuenteEnd = endPoint.y;
-            var distanceToBridgeStart = (ALTURA_TORRES - thirdPoint.y) / 5;
-            var distanceToBridgeEnd = (ALTURA_TORRES - secondThirdPoint.y) / 5;
+            var distanceToBridgeStart = (VARIABLES.ALTURA_TORRES - thirdPoint.y) / 5;
+            var distanceToBridgeEnd = (VARIABLES.ALTURA_TORRES - secondThirdPoint.y) / 5;
             var points = [
                 [startX, heightY], [startX, heightY], [startX, heightY], [thirdPoint.x, thirdPoint.y + distanceToBridgeStart],
                 [secondThirdPoint.x, secondThirdPoint.y + distanceToBridgeEnd], [endX, heightY], [endX, heightY], [endX, heightY]
@@ -87,13 +88,13 @@ function PuenteSide(curvePuente) {
             var points = [
                 [startPoint.x, startPoint.y + 0.6], [startPoint.x, startPoint.y + 0.6],
                 [startPoint.x, startPoint.y + 0.6], [middlePoint.x, middlePoint.y + 0.6],
-                [endPoint.x, endPoint.y + (ALTURA_TORRES - endPoint.y) / 2], [endPoint.x, ALTURA_TORRES],
-                [endPoint.x, ALTURA_TORRES], [endPoint.x, ALTURA_TORRES]
+                [endPoint.x, endPoint.y + (VARIABLES.ALTURA_TORRES - endPoint.y) / 2], [endPoint.x, VARIABLES.ALTURA_TORRES],
+                [endPoint.x, VARIABLES.ALTURA_TORRES], [endPoint.x, VARIABLES.ALTURA_TORRES]
             ];
             return points;
         }
 
-        for (var i = 0; i < CANTIDAD_TORRES - 1; i++) {
+        for (var i = 0; i < VARIABLES.CANTIDAD_TORRES - 1; i++) {
             var controlPoints = makePoints(uUsed[i], uUsed[i + 1]);
             this.addTubo(controlPoints);
         }

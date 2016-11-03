@@ -86,13 +86,18 @@ function CurveGroup(){
         return this.returnPointOfData(getNormal,totalIndex);
     }
 
-    this.getTangentAtIndex = function(index){
+    this.getTangentAtIndex = function(totalIndex){
         function getTangent(curve,index){
             return curve.getTangentAtIndex(index);
         }
         return this.returnPointOfData(getTangent,totalIndex);
     }
-
+    this.getBinormalAtIndex = function(totalIndex) {
+        function getBinormal(curve,index){
+            return curve.getBinormalAtIndex(index);
+        }
+        return this.returnPointOfData(getBinormal,totalIndex);
+    }
     this.rotateCurve = function (Yangle){
         for (var curve  = 0; curve < this.curves.length; curve++){
             this.curves[curve].rotateCurve(Yangle);

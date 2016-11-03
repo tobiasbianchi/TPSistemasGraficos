@@ -5,7 +5,7 @@ function SupEntreCurvas(curvaInicio, curvaFin) {
     this.normal_buffer = [];
     var uInicioStep = curvaInicio.totalCurves() / (pointsPerRow - 1);
     var uFinalStep = curvaFin.totalCurves() / (pointsPerRow - 1);
-    
+    console.log(pointsPerRow)
     this.createUniformPlaneGrid = function () {
         curvaFin.rotateCurve(Math.PI/2)
         for (var j = 0; j < pointsPerRow; j++) {            
@@ -21,18 +21,22 @@ function SupEntreCurvas(curvaInicio, curvaFin) {
             this.normal_buffer.push(normalInicio.y);
             this.normal_buffer.push(normalInicio.z);
         }
-
+        
         for (var j = 0; j < pointsPerRow; j++) {
             var pointFin = curvaFin.getPointAt(uFinalStep * j);
-            this.position_buffer.push(pointFin.x)
-            this.position_buffer.push(pointFin.y)
-            this.position_buffer.push(pointFin.z)
+            var zToCorrespond = -this.position_buffer[j*3 + Z];
+            var pointToCorrespondZ = getPointAt(zToCorrespond, curvaFin,Z);
+
+            this.position_buffer.push(pointToCorrespondZ.x)
+            this.position_buffer.push(pointToCorrespondZ.y)
+            this.position_buffer.push(-pointToCorrespondZ.z)
 
             //save normal
-            var normalFin = curvaFin.getNormalAtIndex(uFinalStep*j);
-            this.normal_buffer.push(normalFin.x);
-            this.normal_buffer.push(normalFin.y);
-            this.normal_buffer.push(normalFin.z);
+            var normalFin = curvaFin.getBinormalAt(uFinalStep*j);
+            this.normal_buffer.push(pointToCorrespondZ.x);
+            this.normal_buffer.push(pointToCorrespondZ.y);
+            this.normal_buffer.push(pointToCorrespondZ.z);
+            //console.log(normalFin);
         }
         curvaFin.rotateCurve()
     }

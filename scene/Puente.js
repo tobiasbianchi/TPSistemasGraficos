@@ -1,12 +1,12 @@
 function Puente(){
     Object3D.call(this);
 
-    var startPuente = -LARGO_PUENTE/2;
+    var startPuente = -VARIABLES.LARGO_PUENTE/2;
     var middlePuente = 0;
     var endPuente = -startPuente;
 
     var curvePuente = new CurveBezier2([
-        [startPuente,ALTURA_TERRENO],[middlePuente,2*ALTURA_PUENTE],[endPuente,ALTURA_TERRENO]
+        [startPuente,VARIABLES.ALTURA_TERRENO],[middlePuente,2*VARIABLES.ALTURA_PUENTE],[endPuente,VARIABLES.ALTURA_TERRENO]
         ],15);
 
     this.makeCaminoPuente = function(){
@@ -17,9 +17,9 @@ function Puente(){
 
     this.makeCaminoPuente();
     var side = new PuenteSide(curvePuente);
-    side.translate([0,0,ANCHO_PUENTE/2])
+    side.translate([0,0,VARIABLES.ANCHO_PUENTE/2])
     var side2 = new PuenteSide(curvePuente);
-    side2.translate([0,0,-ANCHO_PUENTE/2])
+    side2.translate([0,0,-VARIABLES.ANCHO_PUENTE/2])
     this.addChild(side)
     this.addChild(side2)
 

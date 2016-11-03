@@ -79,6 +79,11 @@
     </script>
     <script type="text/javascript" src="webgl/gl-matrix.js"></script>
     <script type="text/javascript" src="globalVariables.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="userInteraction/gui/dat.gui.css"></script>
+    <script type="text/javascript" src="userInteraction/gui/dat.gui.min.js"></script>
+    <script type="text/javascript" src="userInteraction/gui/myGui.js"></script>
+
     <script type="text/javascript" src="inheritPrototype.js"></script>
 
     <script type="text/javascript" src="scaler/Scaler.js"></script>
@@ -95,6 +100,8 @@
     <script type="text/javascript" src="curvas/conjuntoCurvas/CurvesGroupBezier.js"></script>
     <script type="text/javascript" src="curvas/conjuntoCurvas/CurvesGroupBspline.js"></script>
     <script type="text/javascript" src="curvas/conjuntoCurvas/CurveGroupLinear.js"></script>
+
+    <script type="text/javascript" src="userInteraction/curveRioCanvas/init.js"></script>
 
     <script type="text/javascript" src="formas/Hache.js"></script>
     <script type="text/javascript" src="formas/ProfileBridge.js"></script>
@@ -114,8 +121,7 @@
     <script type="text/javascript" src="scene/PuenteSide.js"></script>
     <script type="text/javascript" src="scene/Puente.js"></script>
     <script type="text/javascript" src="scene/Terreno.js"></script>
-    <script type="text/javascript" src="scene/Scene.js"></script>
-    <script type="text/javascript" src="webgl/initWebGL.js"></script>
+    
 </head>
 
 <body>
@@ -124,9 +130,14 @@
         <h2>WebGL - Grilla de v-rtices</h2>
         <canvas id="my-canvas" width="900" height="500">
             Your browser does not support the HTML5 canvas element.
-            </scanvas>
+            </canvas>
+        <canvas id="canvasRio" width="200" height="200" style="background-color:red"></canvas>
 
     </center>
+    <script type="text/javascript" src="scene/Scene.js"></script>
+    
+    <script type="text/javascript" src="webgl/initWebGL.js"></script>
+
     <script type="text/javascript" src="userInteraction/keysControls.js"></script>
     <script type="text/javascript" src="userInteraction/rotation.js"></script>
     <script type="text/javascript" src="userInteraction/zoom.js"></script>

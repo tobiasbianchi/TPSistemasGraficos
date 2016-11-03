@@ -21,6 +21,7 @@ function CurveWithControlPoints(controlPoints, defin) {
             mat4.rotate(rotationMatrix,rotationMatrix,YAxis,this.Yangle);
             mat4.rotate(rotationMatrix,rotationMatrix,XAxis,Math.PI/2);*/
             
+            
             vec3.rotateX(vector3d, vector3d, [0, 0, 0], Math.PI / 2);
             vec3.rotateY(vector3d, vector3d, [0, 0, 0], this.Yangle);
             point.x = vector3d[X];
@@ -90,6 +91,12 @@ function CurveWithControlPoints(controlPoints, defin) {
         return vec4.fromValues(point.x, point.y, point.z, 1);
     }
 
+    this.getBinormalAtIndex = function(index){
+        var paramU = index / (this.definition() - 1);
+        var point = this.getBinormalAt(paramU);
+        return vec4.fromValues(point.x, point.y, point.z, 1);
+    }
+
 }
 CurveWithControlPoints.prototype.pointsInCurve = function () {
     return this.basesFunctions.length;
@@ -98,10 +105,10 @@ CurveWithControlPoints.prototype.pointsInCurve = function () {
 
 function getPointAt(xValue, curve,axis=X) {
     function compareMinToMax(value) {
-        return xValue < value;
+        return xValue <= value;
     }
     function compareMaxToMin(value) {
-        return xValue > value;
+        return xValue >= value;
     }
     function valueOfPointX(point){
         return point.x;
@@ -121,8 +128,9 @@ function getPointAt(xValue, curve,axis=X) {
     while (u <= max + 0.05) {
         var point = curve.getPointAt(u);
         if (axis == Z) {
-            console.log(point)
+            //console.log(point.z,xValue)
         }
+        
         if (comparer(valueGetter(point))) {
             return point;
         }

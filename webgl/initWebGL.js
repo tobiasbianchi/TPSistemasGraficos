@@ -136,6 +136,10 @@ var pMatrix = mat4.create();
 
 function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    if (REBUILDING){
+        return;
+    }
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
 
