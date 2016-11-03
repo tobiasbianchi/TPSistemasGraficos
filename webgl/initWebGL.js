@@ -9,6 +9,7 @@ function initWebGL() {
         setupWebGL();
         initShaders();
         setupBuffers();
+
         setInterval(drawScene, 10);
     } else {
         alert("Error: Your browser does not appear to support WebGL.");
@@ -126,8 +127,9 @@ var gl = null,
     shaderProgram = null,
     fragmentShader = null,
     vertexShader = null,
-    PAINTING_WAY = null;
-
+    PAINTING_WAY = null,
+    actualCamara = new CameraGlobal();
+actualCamara.init();
 var Scene = Scene || new Object3D();
 
 var vMatrix = mat4.create();
@@ -143,25 +145,20 @@ function drawScene() {
 
     mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
 
-    mat4.identity(vMatrix);
-
+    //mat4.identity(vMatrix);
+    vMatrix = actualCamara.getOriginalMatrix();
     var matriz_camara = mat4.create();
     mat4.identity(matriz_camara);
     //mat4.identity(CameraMatrix);
     //mat4.translate(CameraMatrix, CameraMatrix, [0, 0, -60]);
-    var eye_point = vec3.create();
-    vec3.set(eye_point, 3, 4, -3);
-    var at_point = vec3.create();
-    vec3.set(at_point, 0, 0, 0);
-    var up_point = vec3.create();
-    vec3.set(up_point, 0, 1, 0);
+    
 
-    userInteraction.translate(matriz_camara);
-    userInteraction.rotateCamera(matriz_camara);
-    userInteraction.zoom(matriz_camara);
+    actualCamara.move(vMatrix);
+    actualCamara.rotate(vMatrix);
+    actualCamara.scale(vMatrix);
 
     //mat4.lookAt(vMatrix, eye_point, at_point, up_point);
-    mat4.multiply(vMatrix, vMatrix, matriz_camara);
+    //mat4.multiply(vMatrix, matriz_camara, vMatrix);
 
     var identity = mat4.identity(mat4.create());
     Scene.draw(identity);
