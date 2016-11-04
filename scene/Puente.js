@@ -7,10 +7,10 @@ function Puente(){
 
     var curvePuente = new CurveBezier2([
         [startPuente,VARIABLES.ALTURA_TERRENO],[middlePuente,2*VARIABLES.ALTURA_PUENTE],[endPuente,VARIABLES.ALTURA_TERRENO]
-        ],15);
+        ],10);
 
     this.makeCaminoPuente = function(){
-        var camino = new SuperficieBarrido(new ProfileBridge(),curvePuente,15);
+        var camino = new SuperficieBarrido(new ProfileBridge(),curvePuente,10);
         camino.setColorer(new SameColor(GREY));
         this.addChild(camino);
     }

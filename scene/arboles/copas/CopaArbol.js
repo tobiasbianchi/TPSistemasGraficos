@@ -12,11 +12,8 @@ function CopaArbol(){
     ],CurveBezier2);
 
     SuperficieRevolucion.call(this, curve, Math.PI*2, 20);
-
-    function getRandom(){
-        var max = 0.8;
-        var min = 0.2;
-        return Math.random() * max + min;
+    this.getHeight = function(){
+        return 2.5
     }
     this.setColorer(new SameColor(GREEN))
     this.rotate(-90,ZAxis);

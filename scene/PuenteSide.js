@@ -39,7 +39,7 @@ function PuenteSide(curvePuente) {
         var startPoint = curveSide.getPointAt(0);
         var endPoint = curveSide.getPointAt(curveSide.totalCurves());
         var totalLength = Math.abs(startPoint.x - endPoint.x);
-        var countLines = Math.floor((totalLength - 1) / VARIABLES.SEPARACION_CABLES);
+        var countLines = Math.floor((totalLength) / VARIABLES.SEPARACION_CABLES);
         var crescendo = startPoint.x > endPoint.x ? -1 : 1;
         var xValue = startPoint.x + VARIABLES.SEPARACION_CABLES*crescendo;
         
@@ -53,8 +53,8 @@ function PuenteSide(curvePuente) {
     }
 
     this.addTubo = function (controlPoints) {
-        var spline = new CurvesGroupBspline(controlPoints, CurveBspline3, 15);
-        var tubo = new SuperficieBarrido(new CurveCircular(Math.PI * 2, 0.2), spline, 15);
+        var spline = new CurvesGroupBspline(controlPoints, CurveBspline3, 10);
+        var tubo = new SuperficieBarrido(new CurveCircular(Math.PI * 2, 0.2), spline, 10);
         tubo.setColorer(new SameColor(DARK_RED))
         this.makeAlambres(spline);
         this.addChild(tubo);

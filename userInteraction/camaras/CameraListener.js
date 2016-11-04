@@ -25,7 +25,11 @@ function CameraListener(){
         camera.canInteractKeysOrZoom = false;
     }
 
+    this.setVariables = function (){
+
+    }
     this.init = function(){
+        this.setVariables();
         canvasScene.addEventListener('mousewheel',this.zoomListener);
         document.addEventListener('keydown',this.translationListener);
         canvasScene.addEventListener('mousedown',this.activateRotation);
@@ -52,14 +56,24 @@ function CameraListener(){
     this.zoomListener = function(e){
         throw new Error("Not implemented");
     }
-    this.move = function(matrix){
+    this.move = function(){
         throw new Error("Not implemented");
     }
-    this.rotate = function(matrix){
+    this.rotate = function(){
         throw new Error("Not implemented");
     }
     this.scale = function(matrix){
         throw new Error("Not implemented");
+    }
+    this.getCamaraMatrix= function(){
+        this.move();
+        this.rotate();
+        var matrix = this.getOriginalMatrix();
+        var transform = mat4.create();
+        mat4.identity(transform);
+        this.scale(transform);
+        mat4.multiply(matrix,transform,matrix);
+        return matrix
     }
 
 

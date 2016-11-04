@@ -128,13 +128,16 @@ var gl = null,
     fragmentShader = null,
     vertexShader = null,
     PAINTING_WAY = null,
-    actualCamara = new CameraGlobal();
+    CAMARA_PUENTE = new CameraPuente(),
+    CAMARA_GLOBAL =new CameraGlobal(),
+    actualCamara = CAMARA_GLOBAL;
 actualCamara.init();
 var Scene = Scene || new Object3D();
 
 var vMatrix = mat4.create();
 var modelMatrix = mat4.create();
 var pMatrix = mat4.create();
+
 
 function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -146,19 +149,8 @@ function drawScene() {
     mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
 
     //mat4.identity(vMatrix);
-    vMatrix = actualCamara.getOriginalMatrix();
-    var matriz_camara = mat4.create();
-    mat4.identity(matriz_camara);
-    //mat4.identity(CameraMatrix);
-    //mat4.translate(CameraMatrix, CameraMatrix, [0, 0, -60]);
+    vMatrix = actualCamara.getCamaraMatrix();
     
-
-    actualCamara.move(vMatrix);
-    actualCamara.rotate(vMatrix);
-    actualCamara.scale(vMatrix);
-
-    //mat4.lookAt(vMatrix, eye_point, at_point, up_point);
-    //mat4.multiply(vMatrix, matriz_camara, vMatrix);
 
     var identity = mat4.identity(mat4.create());
     Scene.draw(identity);

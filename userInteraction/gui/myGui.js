@@ -14,6 +14,7 @@ function guiController(){
         var controlPoints = RIO_CANVAS.getModelControlPoints();
         var curvaRio = new CurvesGroupBspline(controlPoints, CurveBspline2);
         curvaRio.rotateCurve();
+        actualCamara.setVariables();
         Scene.rebuild(curvaRio);
     };
  }  

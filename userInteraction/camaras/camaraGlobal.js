@@ -6,17 +6,24 @@ function CameraGlobal() {
     var translation = [0, 0, 0];
     var depthFactor = 0.1;
     var widthFactor = 0.05;
-
+    var originalUpVector = [0,1,0];
+    var originalEyePoint = [0, 30 ,1];
+    var originalAtPoint;
+    var upVector = originalUpVector;
+    var eyePoint = [0,30,5]
     var scale = 1;
 
+    this.setVariables = function (){
+        originalAtPoint = [0,VARIABLES.ALTURA_PUENTE + 1, VARIABLES.ANCHO_PUENTE/2];
+    }
     var camara = this;
     this.getOriginalMatrix = function () {
         var eye_point = vec3.create();
-        vec3.set(eye_point, 0, 30, -5);
+        vec3.set(eye_point, eyePoint[X],eyePoint[Y],eyePoint[Z]);
         var at_point = vec3.create();
-        vec3.set(at_point, 0, 0, 0);
+        vec3.set(at_point, originalAtPoint[X], originalAtPoint[Y], originalAtPoint[Z]);
         var up_point = vec3.create();
-        vec3.set(up_point, 0, 1, 0);
+        vec3.set(up_point, upVector[X], upVector[Y], upVector[Z]);
 
         var matriz_camara = mat4.create();
         mat4.identity(matriz_camara);
@@ -25,42 +32,31 @@ function CameraGlobal() {
     }
 
     this.translationListener = function (e) {
-        if (camara.canInteractKeysOrZoom) {
-            if (e.keyCode == 37) {
-                translation[X] += -widthFactor;
-            } else if (e.keyCode == 38) {
-                translation[Y] += depthFactor;
-            } else if (e.keyCode == 39) {
-                translation[X] += widthFactor;
-            } else if (e.keyCode == 40) {
-                translation[Y] += -depthFactor;
-            }
-        }
-
+        
     }
 
     this.move = function (matrix) {
-        mat4.translate(matrix, matrix, translation);
+        
     }
 
     this.zoomListener = function (e) {
-        var smallFactor = 0.005;
+        var smallFactor = 0.1;
         var zoomOut = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))) == 1;
         
         if (camara.canInteractKeysOrZoom) {
             if (zoomOut) {
-                scale -= smallFactor;
+                translation[Y] += -smallFactor;
             } else {
-                scale += smallFactor;
+                translation[Y] += smallFactor;
             }
-            if (scale < 0.01) scale = 0.01;
-            if (scale > 5) scale = 5;
+            if (translation[Y] <=  originalAtPoint[Y] - originalEyePoint[Y] ){
+                translation[Y] = originalAtPoint[Y] - originalEyePoint[Y]
+            }
         }
 
     }
 
     this.scale = function (matrix) {
-        
         mat4.scale(matrix, matrix, [scale, scale, scale]);
     }
 
@@ -73,22 +69,25 @@ function CameraGlobal() {
             }
 
             rotationX += delta.x * factorVelocidad;
-            rotationY += delta.y * -factorVelocidad;
+            rotationY += delta.y * factorVelocidad;
             this.previousPosition.x = this.actualPosition.x;
             this.previousPosition.y = this.actualPosition.y;
         }
-        if (rotationX < -90) {
-            rotationX = -90;
+
+        if (rotationX < 0) {
+            rotationX = 0;
         } else if (rotationX > 90) {
             rotationX = 90;
         }
-
-        function gradToRad(grados) {
-            return grados * Math.PI / 180;
+        if (rotationY > 360){
+            rotationY = 360 - rotationY;
         }
 
-        mat4.rotate(matrix, matrix, gradToRad(rotationX), XAxis);
-        mat4.rotate(matrix, matrix, gradToRad(rotationY), YAxis);
+        
+        var eyePointPosition = [originalEyePoint[X] + translation[X], originalEyePoint[Y] + translation[Y], originalEyePoint[Z] + translation[Z]]
+        
+        vec3.rotateX(eyePoint,eyePointPosition,originalAtPoint,gradToRad(rotationX));
+        vec3.rotateY(eyePoint,eyePoint,originalAtPoint,gradToRad(rotationY));
     }
 }
 inheritPrototype(CameraGlobal, CameraListener);

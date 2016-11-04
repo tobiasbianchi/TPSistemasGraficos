@@ -31,20 +31,22 @@ function canvasRio(originalControlPoints) {
     this.selectedPoint = null;
 
     this.transformControlPointsToCanvas = function (modelControlPoints) {
+        var anchoRelacion = (VARIABLES.ANCHO_MAPA - VARIABLES.LARGO_PUENTE)/VARIABLES.ANCHO_MAPA
         for (var i = 1; i < modelControlPoints.length - 1; i++) {
-            var newX = (modelControlPoints[i][Y] / VARIABLES.LONGITUD_MAPA + 1 / 2) * height;
+            var newX = (modelControlPoints[i][Y] / (VARIABLES.LONGITUD_MAPA- VARIABLES.LARGO_PUENTE) + 1 / 2) * height;
             var newY = (modelControlPoints[i][X] / VARIABLES.ANCHO_MAPA + 1 / 2) * width;
             children.push(new canvasPoint(newX, newY));
         }
     }
 
     this.getModelControlPoints = function () {
+        var anchoRelacion = (VARIABLES.ANCHO_MAPA - VARIABLES.LARGO_PUENTE)/VARIABLES.ANCHO_MAPA
         var modelPoints = this.getControlPoints();
         var modifierWidth = width / VARIABLES.LONGITUD_MAPA;
         var modifierHeigth = height / VARIABLES.ANCHO_MAPA;
         for (var i = 0; i < modelPoints.length; i++) {
             var newX = (modelPoints[i][Y] / height - 1 / 2) * VARIABLES.LONGITUD_MAPA;
-            var newY = (modelPoints[i][X] / width - 1 / 2) * VARIABLES.ANCHO_MAPA;
+            var newY = (modelPoints[i][X] / width - 1 / 2) * (VARIABLES.ANCHO_MAPA - VARIABLES.LARGO_PUENTE);
             modelPoints[i] = [newX, newY]
         }
         return modelPoints;

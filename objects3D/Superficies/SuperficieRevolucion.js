@@ -37,7 +37,7 @@ var SuperficieRevolucion = (function (curve, angle, pasos) {
                 this.position_buffer.push(vecRotated[Z]);
 
                 //save normal
-                vertix4D = shape.getNormalAtIndex(j);
+                vertix4D = curve.getNormalAtIndex(j);
                 var normalTransformed = transformPoint(vertix4D, angulo);
                 this.normal_buffer.push(normalTransformed.x);
                 this.normal_buffer.push(normalTransformed.y);

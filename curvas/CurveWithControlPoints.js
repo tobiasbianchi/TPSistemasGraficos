@@ -137,6 +137,7 @@ function getPointAt(xValue, curve,axis=X) {
         u += 0.05;
     }
     
-    throw new Error("Point looking outide of curve, " + axis + ":" + xValue + "; u = " + u);
+    throw new Error("Point looking outide of curve, " + axis + ":" + xValue + "; u = " + u + 
+    " max: " +  curve.getPointAt(max).x + "," + curve.getPointAt(max).y + "," + curve.getPointAt(max).z);
 
 }

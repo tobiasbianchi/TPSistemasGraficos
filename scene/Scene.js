@@ -20,7 +20,8 @@ function ScenePuente(curvaRio) {
         puente.translate([xCurvaParaPuente.z, 0, VARIABLES.Z_PUENTE])
         this.addChild(puente);
         this.addChild(new Terreno(newCurveRio))
-
+        this.addChild(new ArbolesSide(newCurveRio));
+        this.addChild(new ArbolesSide(newCurveRio,true));
 
         var endNegativo = -VARIABLES.LARGO_PUENTE / 2 + xCurvaParaPuente.z;
         var startPositivo = VARIABLES.LARGO_PUENTE / 2 + xCurvaParaPuente.z;;
