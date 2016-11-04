@@ -5,29 +5,16 @@ function ScenePuente(curvaRio) {
         var line = new CurveBezier2([[startPoint, 0], [endPoint, 0], [endPoint, 0]]);
         var camino = new SuperficieBarrido(new ProfileBridge(), line, 15);
         camino.setColorer(new SameColor(GREY));
-        camino.translate([0, 0.1 + VARIABLES.ALTURA_TERRENO, VARIABLES.Z_PUENTE])
+        camino.translate([0, 0.02+VARIABLES.ALTURA_TERRENO, VARIABLES.Z_PUENTE])
         this.addChild(camino);
-    }
-
-    this.makeTreesSide = function() {
-
     }
 
     this.createScene = function (newCurveRio) {
         this.children = [];
-        var puente = new Puente();
-        var xCurvaParaPuente = getPointAt(VARIABLES.Z_PUENTE, newCurveRio);
-        puente.translate([xCurvaParaPuente.z, 0, VARIABLES.Z_PUENTE])
-        this.addChild(puente);
+        this.addChild(new Puente(newCurveRio));
         this.addChild(new Terreno(newCurveRio))
         this.addChild(new ArbolesSide(newCurveRio));
         this.addChild(new ArbolesSide(newCurveRio,true));
-
-        var endNegativo = -VARIABLES.LARGO_PUENTE / 2 + xCurvaParaPuente.z;
-        var startPositivo = VARIABLES.LARGO_PUENTE / 2 + xCurvaParaPuente.z;;
-
-        this.makeCaminoLLano(-VARIABLES.LONGITUD_MAPA / 2, endNegativo);
-        this.makeCaminoLLano(startPositivo, VARIABLES.LONGITUD_MAPA / 2);
     }
 
     this.createScene(curvaRio);

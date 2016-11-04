@@ -29,6 +29,6 @@ window.onload = function() {
     gui.add(VARIABLES, "ALTURA_TORRES")
     gui.add(VARIABLES,"SEPARACION_CABLES",0.1,7).step(0.1);
     gui.add(VARIABLES, "CANTIDAD_TORRES", {Dos: 2, Tres: 3, Cuatro: 4} )
-    gui.add(VARIABLES,"Z_PUENTE",-21.8,21.8);
+    gui.add(VARIABLES,"Z_PUENTE",-21.8,21.8).step(0.1);
     gui.add(VARIABLES,"Reload");
 }

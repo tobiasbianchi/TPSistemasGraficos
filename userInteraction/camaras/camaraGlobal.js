@@ -7,11 +7,16 @@ function CameraGlobal() {
     var depthFactor = 0.1;
     var widthFactor = 0.05;
     var originalUpVector = [0,1,0];
-    var originalEyePoint = [0, 30 ,1];
+    var yEyeStart = 30;
+    var zEyeStart = 40;
+    var originalEyePoint = [0, 30 ,50];
+    var originalEyeModule = Math.sqrt(yEyeStart*yEyeStart+zEyeStart*zEyeStart);
+    var normalizedOriginalEye = [0,yEyeStart/originalEyeModule,zEyeStart/originalEyeModule];
+    var startRad = Math.acos(normalizedOriginalEye[Z]);
+    var startAngle = startRad*180/Math.PI;
     var originalAtPoint;
-    var upVector = originalUpVector;
-    var eyePoint = [0,30,5]
-    var scale = 1;
+    var upVector = [originalUpVector[X],originalUpVector[Y],originalUpVector[Z]];
+    var eyePoint = [0,30,1]
 
     this.setVariables = function (){
         originalAtPoint = [0,VARIABLES.ALTURA_PUENTE + 1, VARIABLES.ANCHO_PUENTE/2];
@@ -44,20 +49,25 @@ function CameraGlobal() {
         var zoomOut = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))) == 1;
         
         if (camara.canInteractKeysOrZoom) {
+            var factor;
             if (zoomOut) {
-                translation[Y] += -smallFactor;
+                factor = -smallFactor;
             } else {
-                translation[Y] += smallFactor;
+                factor = smallFactor;
             }
-            if (translation[Y] <=  originalAtPoint[Y] - originalEyePoint[Y] ){
-                translation[Y] = originalAtPoint[Y] - originalEyePoint[Y]
+
+            originalEyePoint[Y] += factor*normalizedOriginalEye[Y];
+            originalEyePoint[Z] += factor*normalizedOriginalEye[Z]; 
+            if (originalEyePoint[Y] < originalAtPoint[Y]){
+                originalEyePoint[Y] = originalAtPoint[Y]
+                originalEyePoint[Z] = originalAtPoint[Z]
             }
         }
 
     }
 
     this.scale = function (matrix) {
-        mat4.scale(matrix, matrix, [scale, scale, scale]);
+        //mat4.scale(matrix, matrix, [scale, scale, scale]);
     }
 
     this.rotate = function (matrix) {
@@ -74,13 +84,13 @@ function CameraGlobal() {
             this.previousPosition.y = this.actualPosition.y;
         }
 
-        if (rotationX < 0) {
-            rotationX = 0;
-        } else if (rotationX > 90) {
-            rotationX = 90;
+        if (rotationX < startAngle - 90) {
+            rotationX = startAngle - 90;
+        } else if (rotationX > startAngle) {
+            rotationX = startAngle;
         }
         if (rotationY > 360){
-            rotationY = 360 - rotationY;
+            rotationY = rotationY - 360;
         }
 
         
@@ -88,6 +98,7 @@ function CameraGlobal() {
         
         vec3.rotateX(eyePoint,eyePointPosition,originalAtPoint,gradToRad(rotationX));
         vec3.rotateY(eyePoint,eyePoint,originalAtPoint,gradToRad(rotationY));
+        
     }
 }
 inheritPrototype(CameraGlobal, CameraListener);
