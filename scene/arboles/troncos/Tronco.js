@@ -1,9 +1,9 @@
 function Tronco(){
     
     var curve = new CurvesGroupBezier([
-        [0,0],[0,1],[0,1],
-        [0,1],[1,0.7],[1,0.7],
-        [1,0.7],[1,0],[1,0]
+        [0,0],[0,0.5],[0,1],
+        [0,1],[1,0.85],[1,0.7],
+        [1,0.7],[1,0.35],[1,0]
     ],CurveBezier2);
 
     SuperficieRevolucion.call(this, curve, Math.PI*2, 20);

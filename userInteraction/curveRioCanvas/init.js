@@ -90,7 +90,7 @@ function canvasRio(originalControlPoints) {
 
     this.removeLastPoint = function () {
         if (children.length > 3) {
-            children.pop();
+            children.splice(children.length - 2,1);
         }
     }
 

@@ -99,7 +99,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
         mat4.multiply(aux, matrix, this.mMatrix);
         
         this.setMatrixUniforms(aux);
-        this.setupLighting(vec3.fromValues(-100.0, 0.0, -60.0), vec3.fromValues(0.5, 0.5, 0.5), vec3.fromValues(0.05, 0.05, 0.05));
+        this.setupLighting(vec3.fromValues(-1000.0, 100.0, -1000.0), vec3.fromValues(0.7, 0.7, 0.7), vec3.fromValues(0.001, 0.001, 0.001));
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
         

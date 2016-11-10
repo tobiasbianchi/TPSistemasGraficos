@@ -26,10 +26,10 @@ function CurveLinear(puntoInicio,puntoFin){
     }
 
     this.getNormalAt = function (u) {
-        var angle = Math.PI/2;
+        var angle = -Math.PI/2;
         return {
-            x: normalizedVector[X]*Math.cos(angle),
-            y: normalizedVector[Y]*Math.sin(angle),
+            x: -normalizedVector[Y],
+            y: normalizedVector[X],
             z: 0    
         }
     }

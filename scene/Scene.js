@@ -12,9 +12,10 @@ function ScenePuente(curvaRio) {
     this.createScene = function (newCurveRio) {
         this.children = [];
         this.addChild(new Puente(newCurveRio));
-        this.addChild(new Terreno(newCurveRio))
+        
         this.addChild(new ArbolesSide(newCurveRio));
         this.addChild(new ArbolesSide(newCurveRio,true));
+        this.addChild(new Terreno(newCurveRio))
     }
 
     this.createScene(curvaRio);
@@ -53,7 +54,10 @@ function movePointCanvas(e) {
 function clickOnCanvas(e) {
     var windowX = e.clientX;
     var windowY = e.clientY;
-    RIO_CANVAS.selectPointAt(windowX, windowY);
+    if (e.which == 1)
+        RIO_CANVAS.selectPointAt(windowX, windowY);
+    else if (e.which == 3)
+        RIO_CANVAS.removeLastPoint()
 }
 
 function unclickCanvas() {

@@ -14,8 +14,7 @@ function Terreno(curvaRio) {
         var alturaCambioColor = 2 * altoCrecida / 3 + VARIABLES.ALTURA_RIO;
         
         var puntosBezier = [
-            [-mitadAncho - 1, VARIABLES.ALTURA_TERRENO- 0.1], [-mitadAncho - 1/2, VARIABLES.ALTURA_TERRENO - 0.1],
-            [-mitadAncho , VARIABLES.ALTURA_TERRENO],
+            
             [-mitadAncho , VARIABLES.ALTURA_TERRENO], [-distanciaCambioCurvatura, VARIABLES.ALTURA_TERRENO],
              [-distanciaCambioCurvatura, alturaCambioConcavidad],
             [-distanciaCambioCurvatura, alturaCambioConcavidad], [-distanciaCambioCurvatura, VARIABLES.ALTURA_RIO], 
@@ -25,10 +24,10 @@ function Terreno(curvaRio) {
             [distanicaFinDeBajada, VARIABLES.ALTURA_RIO], [distanciaCambioCurvatura, VARIABLES.ALTURA_RIO],
              [distanciaCambioCurvatura, alturaCambioConcavidad],
             [distanciaCambioCurvatura, alturaCambioConcavidad], [distanciaCambioCurvatura, VARIABLES.ALTURA_TERRENO], 
-            [mitadAncho, VARIABLES.ALTURA_TERRENO],
-            [mitadAncho  , VARIABLES.ALTURA_TERRENO ], [mitadAncho + 1/2, VARIABLES.ALTURA_TERRENO - 0.1],
-            [mitadAncho  + 1, VARIABLES.ALTURA_TERRENO - 0.1]
+            [mitadAncho, VARIABLES.ALTURA_TERRENO]
+            
         ];
+        
         var pozo = new CurvesGroupBezier(puntosBezier, CurveBezier2, 15);
         var pozoMaszigZag = new SuperficieBarrido(curvaRio, pozo, 50, null, true);
         pozoMaszigZag.setColorer(new HeightColorer([YELLOW, GREEN], [alturaCambioColor]));
@@ -41,7 +40,8 @@ function Terreno(curvaRio) {
         var distanicaFinDeBajada = distanciaCambioCurvatura - finBajada/2;
         var lineaRio = new CurveLinear([-distanciaCambioCurvatura,VARIABLES.ALTURA_RIO+0.1],
         [distanciaCambioCurvatura,VARIABLES.ALTURA_RIO + 0.1]);
-        var water = new SuperficieBarrido(curvaRio,lineaRio,5);
+        var water = new SuperficieBarrido(curvaRio,lineaRio,5,null,false,true);
+        //water.rotate(180,YAxis)
         water.setColorer(new SameColor(BLUE));
         return water;
     }
@@ -53,12 +53,12 @@ function Terreno(curvaRio) {
             var translationX = mitadAncho * negativeSide;
             var puntosControl = [
                 [distanceX, mitadAnchoTotal],
-                [distanceX, mitadAnchoTotal],
+                [distanceX, 0],
                 [distanceX, -mitadAnchoTotal],
             ];
             var borde = new CurvesGroupBezier(puntosControl, CurveBezier2, 100);
             borde.rotateCurve();
-            var superfice = new SupEntreCurvas(borde, curvaRio, Math.PI / 2);
+            var superfice = new SupEntreCurvas(borde, curvaRio, negativeSide);
             superfice.translate([translationX, VARIABLES.ALTURA_TERRENO, 0]);
             superfice.setColorer(new SameColor(DARK_GREEN));    
             return superfice;    

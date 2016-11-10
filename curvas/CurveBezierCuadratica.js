@@ -9,7 +9,7 @@ function CurveBezier2(controlPoints, defin=10) {
     Base2 = function (u) { return (u) * (u); }
     
     Base0der = function (u) { return 2 * (u - 1); }
-    Base1der = function (u) { return 2 * (1 - 2 * u); }
+    Base1der = function (u) { return -4*u + 2; }
     Base2der = function (u) { return 2 * u; }
 
     this.basesFunctions = [Base0, Base1, Base2];

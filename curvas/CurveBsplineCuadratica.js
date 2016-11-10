@@ -9,7 +9,7 @@ function CurveBspline2(controlPoints, defin = 10 ) {
     Base2 = function (u) { return 0.5 * (u) * (u); }
     // bases derivadas
     Base0der = function (u) { return (u - 1); }
-    Base1der = function (u) { return 0.5 - u; }
+    Base1der = function (u) { return 0.5*(-4*u +3); }
     Base2der = function (u) { return u; }
 
     this.basesFunctions = [Base0,Base1,Base2];

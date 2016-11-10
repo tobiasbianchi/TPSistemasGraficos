@@ -52,5 +52,6 @@ function Torre(totalHeight,firstBlockHeight){
     this.addChild(thirdPart);
 
     this.rotate(90,ZAxis)
+    
 }
 inheritPrototype(Torre, Object3D);

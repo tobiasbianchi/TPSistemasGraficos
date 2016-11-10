@@ -42,7 +42,8 @@
                             
                 ////////////////////////////////////////////
                 // Calculos de la iluminaci�n
-                vec3 light_dir =  uLightPosition - vec3( pos_model_view );
+                vec3 light_dir =  uLightPosition;
+                // - vec3( pos_model_view );
                 normalize(light_dir);
                 if (!uUseLighting) 
                 {

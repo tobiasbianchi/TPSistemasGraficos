@@ -40,8 +40,7 @@ function Puente(curveRio){
         [endPuente,VARIABLES.ALTURA_TERRENO + elevation],
         [endPuente + lengthPositivo,VARIABLES.ALTURA_TERRENO+ elevation]
         ];
-    
-        var camino = new SuperficieBarrido(new ProfileBridge(),new CurvesGroupBezier(curvaEnteraPuente,CurveBezier2),10);
+        var camino = new SuperficieBarrido(new ProfileBridge(),new CurvesGroupBezier(curvaEnteraPuente,CurveBezier2),20);
         camino.setColorer(new SameColor(GREY));
         this.addChild(camino);
     }

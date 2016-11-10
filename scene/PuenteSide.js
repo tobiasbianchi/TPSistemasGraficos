@@ -26,8 +26,9 @@ function PuenteSide(curvePuente) {
     }
 
     this.makeLine = function(topPoint, bottomPoint, xValue){
+        var totalHeight = topPoint.y - bottomPoint.y;
         var points = [
-            [0,0],[0,0],[0,topPoint.y - bottomPoint.y]
+            [0,0],[0,totalHeight/2],[0,totalHeight]
         ];
         var bezier = new CurveBezier2(points);
         var linea = new SuperficieBarrido(new CurveCircular(Math.PI*2,0.05),bezier,3);

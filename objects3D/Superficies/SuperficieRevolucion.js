@@ -28,6 +28,7 @@ var SuperficieRevolucion = (function (curve, angle, pasos) {
         for (var i = 0; i <= pasos; i++) {
             var angulo = i * anguloBase;
             var matrix = rotationMatrix(angulo);
+            
             for (var j = 0; j < curve.definition(); j++) {
                 var vertix4D = curve.point(j);
                 var vecRotated = transformPoint(vertix4D, angulo);
@@ -39,9 +40,9 @@ var SuperficieRevolucion = (function (curve, angle, pasos) {
                 //save normal
                 vertix4D = curve.getNormalAtIndex(j);
                 var normalTransformed = transformPoint(vertix4D, angulo);
-                this.normal_buffer.push(normalTransformed.x);
-                this.normal_buffer.push(normalTransformed.y);
-                this.normal_buffer.push(normalTransformed.z);
+                this.normal_buffer.push(normalTransformed[X]);
+                this.normal_buffer.push(normalTransformed[Y]);
+                this.normal_buffer.push(normalTransformed[Z]);
             }
         }
     }

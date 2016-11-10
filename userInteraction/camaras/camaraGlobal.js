@@ -10,8 +10,8 @@ function CameraGlobal() {
     var yEyeStart = 30;
     var zEyeStart = 40;
     var originalEyePoint = [0, 30 ,50];
-    var originalEyeModule = Math.sqrt(yEyeStart*yEyeStart+zEyeStart*zEyeStart);
-    var normalizedOriginalEye = [0,yEyeStart/originalEyeModule,zEyeStart/originalEyeModule];
+    var originalEyeModule = Math.sqrt(originalEyePoint[Y]*originalEyePoint[Y]+originalEyePoint[Z]*originalEyePoint[Z]);
+    var normalizedOriginalEye = [0,originalEyePoint[Y]/originalEyeModule,originalEyePoint[Z]/originalEyeModule];
     var startRad = Math.acos(normalizedOriginalEye[Z]);
     var startAngle = startRad*180/Math.PI;
     var originalAtPoint;
@@ -23,6 +23,9 @@ function CameraGlobal() {
     }
     var camara = this;
     this.getOriginalMatrix = function () {
+        originalEyeModule = Math.sqrt(originalEyePoint[Y]*originalEyePoint[Y]+originalEyePoint[Z]*originalEyePoint[Z]);
+        normalizedOriginalEye = [0,originalEyePoint[Y]/originalEyeModule,originalEyePoint[Z]/originalEyeModule];
+        
         var eye_point = vec3.create();
         vec3.set(eye_point, eyePoint[X],eyePoint[Y],eyePoint[Z]);
         var at_point = vec3.create();

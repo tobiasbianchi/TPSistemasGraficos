@@ -1,4 +1,4 @@
-var SuperficieBarrido = (function (shape, curve, niveles, scaler, keepNormal = false) {
+var SuperficieBarrido = (function (shape, curve, niveles, scaler, keepNormal = false, normalIsBinormal = false) {
     VertexGrid.call(this, niveles + 1, shape.definition());
     this.position_buffer = [];
     this.normal_buffer = [];
@@ -68,11 +68,12 @@ var SuperficieBarrido = (function (shape, curve, niveles, scaler, keepNormal = f
         for (var i = 0; i <= niveles; i++) {
             var u = i * pasos;
             var matrixBarrido = makeBarridoMatrix(u);
-            //var matrixBarridoNotMantainsNormal = makeNotMantainBarridoMatrix(u);
             var scaleX = this.scaler.scaleX(u);
             var scaleY = this.scaler.scaleY(u);
             var scaleZ = this.scaler.scaleZ(u);
-
+            var normalMatrix = mat4.create();
+            mat4.invert(normalMatrix, makeNotMantainBarridoMatrix(u));
+            mat4.transpose(normalMatrix, normalMatrix);
             for (var j = 0; j < shape.definition(); j++) {
                 var vertix4D = shape.point(j);
                 vertix4D[X] = vertix4D[X] * scaleX;
@@ -84,14 +85,15 @@ var SuperficieBarrido = (function (shape, curve, niveles, scaler, keepNormal = f
                 this.position_buffer.push(pointTransformed.y);
                 this.position_buffer.push(pointTransformed.z);
 
-                //save tangente
-
                 //save normal
-                vertix4D = shape.getNormalAtIndex(j);
-                var normalTransformed = transformPoint(vertix4D, matrixBarrido);
-                this.normal_buffer.push(normalTransformed.x);
+                vertix4D = keepNormal || normalIsBinormal ? shape.getBinormalAtIndex(j) : shape.getNormalAtIndex(j);
+                var normalTransformed = transformPoint(vertix4D, normalMatrix);
+                if (keepNormal || normalIsBinormal){
+                    normalTransformed.y = -normalTransformed.y;
+                }
+                this.normal_buffer.push(-normalTransformed.x);
                 this.normal_buffer.push(normalTransformed.y);
-                this.normal_buffer.push(normalTransformed.z);                
+                this.normal_buffer.push(normalTransformed.z);       
             }
         }
     }

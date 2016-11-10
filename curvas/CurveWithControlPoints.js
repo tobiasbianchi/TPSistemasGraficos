@@ -15,15 +15,14 @@ function CurveWithControlPoints(controlPoints, defin) {
 
     this.rotatePoint = function (point) {
         if (this.rotate) {
-            var vector3d = [point.x, point.y, 0, 1];
+            var vector3d = [point.x, point.y, point.z, 1];
             /*var rotationMatrix = mat4.create();
             mat4.identity(rotationMatrix,rotationMatrix)
             mat4.rotate(rotationMatrix,rotationMatrix,YAxis,this.Yangle);
             mat4.rotate(rotationMatrix,rotationMatrix,XAxis,Math.PI/2);*/
-            
-            
             vec3.rotateX(vector3d, vector3d, [0, 0, 0], Math.PI / 2);
             vec3.rotateY(vector3d, vector3d, [0, 0, 0], this.Yangle);
+
             point.x = vector3d[X];
             point.y = vector3d[Y];
             point.z = vector3d[Z];
@@ -56,17 +55,18 @@ function CurveWithControlPoints(controlPoints, defin) {
 
     this.getNormalAt = function (u) {
         var derivate = this.getPointWithSomeBase(u, this.basesDerivatesFunctions)
-        var newX = - derivate.y;
+        var newX = -derivate.y;
         var newY = derivate.x;
-        derivate.x = newX;
-        derivate.y = newY;
-        return this.rotatePoint(derivate);
+        var size = Math.sqrt(newX * newX + newY * newY)
+        newX = newX / size;
+        newY = newY / size;
+        return this.rotatePoint({x: newX, y: newY, z: 0});
     }
 
     this.getBinormalAt = function (u) {
         var tangent = this.getPointWithSomeBase(u, this.basesDerivatesFunctions)
         var z = vec3.length([tangent.x, tangent.y, tangent.z]);
-        return this.rotatePoint({ x: 0, y: 0, z: z });
+        return this.rotatePoint({ x: 0, y: 0, z: 1 });
     }
 
     this.definition = function () {
@@ -79,19 +79,19 @@ function CurveWithControlPoints(controlPoints, defin) {
         return vec4.fromValues(point.x, point.y, point.z, 1);
     }
 
-    this.getNormalAtIndex = function(index){
+    this.getNormalAtIndex = function (index) {
         var paramU = index / (this.definition() - 1);
         var point = this.getNormalAt(paramU);
         return vec4.fromValues(point.x, point.y, point.z, 1);
     }
 
-    this.getTangentAtIndex = function(index){
+    this.getTangentAtIndex = function (index) {
         var paramU = index / (this.definition() - 1);
         var point = this.getDerivateAt(paramU);
         return vec4.fromValues(point.x, point.y, point.z, 1);
     }
 
-    this.getBinormalAtIndex = function(index){
+    this.getBinormalAtIndex = function (index) {
         var paramU = index / (this.definition() - 1);
         var point = this.getBinormalAt(paramU);
         return vec4.fromValues(point.x, point.y, point.z, 1);
@@ -103,20 +103,20 @@ CurveWithControlPoints.prototype.pointsInCurve = function () {
 }
 
 
-function getPointAt(xValue, curve,axis=X) {
+function getPointAt(xValue, curve, axis = X) {
     function compareMinToMax(value) {
         return xValue <= value;
     }
     function compareMaxToMin(value) {
         return xValue >= value;
     }
-    function valueOfPointX(point){
+    function valueOfPointX(point) {
         return point.x;
     }
-    function valueOfPointY(point){
+    function valueOfPointY(point) {
         return point.y;
     }
-    function valueOfPointZ(point){
+    function valueOfPointZ(point) {
         return point.z;
     }
     var valueGetter = axis == X ? valueOfPointX : (axis == Y ? valueOfPointY : valueOfPointZ);
@@ -130,14 +130,15 @@ function getPointAt(xValue, curve,axis=X) {
         if (axis == Z) {
             //console.log(point.z,xValue)
         }
-        
+
         if (comparer(valueGetter(point))) {
+            point.u = u;
             return point;
         }
         u += 0.05;
     }
-    
-    throw new Error("Point looking outide of curve, " + axis + ":" + xValue + "; u = " + u + 
-    " max: " +  curve.getPointAt(max).x + "," + curve.getPointAt(max).y + "," + curve.getPointAt(max).z);
+
+    throw new Error("Point looking outide of curve, " + axis + ":" + xValue + "; u = " + u +
+        " max: " + curve.getPointAt(max).x + "," + curve.getPointAt(max).y + "," + curve.getPointAt(max).z);
 
 }
