@@ -33,6 +33,7 @@ function PuenteSide(curvePuente) {
         var bezier = new CurveBezier2(points);
         var linea = new SuperficieBarrido(new CurveCircular(Math.PI*2,0.05),bezier,3);
         linea.translate([xValue,bottomPoint.y,0]);
+        linea.setColorer(new SameColor(BLACK))
         this.addChild(linea);
     }
 
@@ -57,6 +58,7 @@ function PuenteSide(curvePuente) {
         var spline = new CurvesGroupBspline(controlPoints, CurveBspline3, 10);
         var tubo = new SuperficieBarrido(new CurveCircular(Math.PI * 2, 0.2), spline, 10);
         tubo.setColorer(new SameColor(DARK_RED))
+        tubo.addTexture('maps/alambres.jpg')
         this.makeAlambres(spline);
         this.addChild(tubo);
     }

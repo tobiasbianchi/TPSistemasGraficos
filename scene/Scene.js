@@ -12,9 +12,12 @@ function ScenePuente(curvaRio) {
     this.createScene = function (newCurveRio) {
         this.children = [];
         this.addChild(new Puente(newCurveRio));
-        
+        //this.addChild(new Arbol(0))
+        //this.addChild(new Arbol(1))
+        //this.addChild(new Arbol(2))
         this.addChild(new ArbolesSide(newCurveRio));
         this.addChild(new ArbolesSide(newCurveRio,true));
+        this.addChild(new Cielo());
         this.addChild(new Terreno(newCurveRio))
     }
 
@@ -36,10 +39,6 @@ var controlPoints = [[-50, -2], [-50, -2], [-10, 3], [0, -3], [10, 3], [50, -2],
 var curvaRio = new CurvesGroupBspline(controlPoints, CurveBspline2);
 curvaRio.rotateCurve();
 
-
-
-
-Scene = new ScenePuente(curvaRio);
 var RIO_CANVAS = new canvasRio(controlPoints);
 
 var canvas = document.getElementById('canvasRio');

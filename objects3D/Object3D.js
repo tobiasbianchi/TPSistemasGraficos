@@ -2,6 +2,8 @@ function Object3D() {
     this.children = [];
     this.mMatrix = mat4.create();
     this.axisBuffers = {};
+    this.isTextured = false;
+
     mat4.identity(this.mMatrix);
 
     function NotImplementedError(message) {
@@ -121,6 +123,7 @@ function Object3D() {
         }
 
         if (VISIBLE_AXIS) {
+            this.setShader();
             for (key in this.axisBuffers) {
                 draw(this.axisBuffers[key]);
             }
@@ -165,6 +168,15 @@ function Object3D() {
 
     this.scale = function (scale) {
         mat4.scale(this.mMatrix, this.mMatrix, scale);
+    }
+
+    this.setShader = function() {
+        if (this.isTextured){
+            shaderProgram = shaderProgramTexturedObject;
+        } else {
+            shaderProgram = shaderProgramColoredObject;
+        }
+        gl.useProgram(shaderProgram);
     }
 
     this.setMatrixUniforms = function (mMatrix) {

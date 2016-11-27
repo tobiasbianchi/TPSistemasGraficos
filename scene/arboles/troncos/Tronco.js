@@ -10,7 +10,7 @@ function Tronco(){
     this.getHeight =function(){
         return 1;
     }
-    this.setColorer(new SameColor(YELLOW))
+    this.setColorer(new SameColor(BROWN))
     
     this.rotate(90,ZAxis);
     //this.translate([1,0,0]);

@@ -22,6 +22,12 @@ function Torre(totalHeight,firstBlockHeight){
         var caminoBarridoTope = makeCurve(heightTope);
         var bloqueNormal = new SuperficieBarrido(formaTorre,caminoBarridoNormal,1);
         var bloqueTope = new SuperficieBarrido(formaTorre,caminoBarridoTope,1,scaleTopBlock);
+        bloqueNormal.addTexture('maps/oxido.jpg')
+        bloqueTope.addTexture('maps/oxido.jpg')
+        bloqueNormal.setMaper(new uvShape(formaTorre))
+        bloqueNormal.textureScale(1,1)
+        bloqueTope.setMaper(new uvShape(formaTorre))
+
         var torreParte = new Object3D();
         bloqueTope.setColorer(new SameColor(DARK_RED));
         bloqueTope.translate([heightNormal,0,0]);

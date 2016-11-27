@@ -31,6 +31,9 @@ function Terreno(curvaRio) {
         var pozo = new CurvesGroupBezier(puntosBezier, CurveBezier2, 15);
         var pozoMaszigZag = new SuperficieBarrido(curvaRio, pozo, 50, null, true);
         pozoMaszigZag.setColorer(new HeightColorer([YELLOW, GREEN], [alturaCambioColor]));
+        pozoMaszigZag.addTexture('maps/arena.jpg');
+        pozoMaszigZag.setMaper(new uvArenaMaper());
+        pozoMaszigZag.textureScale(0.08,0.08);
         return pozoMaszigZag;
 
     }
@@ -42,7 +45,11 @@ function Terreno(curvaRio) {
         [distanciaCambioCurvatura,VARIABLES.ALTURA_RIO + 0.1]);
         var water = new SuperficieBarrido(curvaRio,lineaRio,5,null,false,true);
         //water.rotate(180,YAxis)
+        
+        water.addTexture('maps/aguaDeMar.jpg');
+        water.textureScale(0.01,0.01);
         water.setColorer(new SameColor(BLUE));
+        //water.setMaper(new uvZYPlane());
         return water;
     }
 
@@ -61,6 +68,8 @@ function Terreno(curvaRio) {
             var superfice = new SupEntreCurvas(borde, curvaRio, negativeSide);
             superfice.translate([translationX, VARIABLES.ALTURA_TERRENO, 0]);
             superfice.setColorer(new SameColor(DARK_GREEN));    
+            superfice.textureScale(0.05,0.05);
+            superfice.addTexture('maps/pasto3.jpg');
             return superfice;    
         }
         var superfice1 = makeSuperficie(true);

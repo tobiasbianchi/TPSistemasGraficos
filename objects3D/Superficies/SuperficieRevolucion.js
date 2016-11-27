@@ -25,6 +25,7 @@ var SuperficieRevolucion = (function (curve, angle, pasos) {
     }
 
     this.createUniformPlaneGrid = function () {
+        this.texture_coord_buffer = []
         for (var i = 0; i <= pasos; i++) {
             var angulo = i * anguloBase;
             var matrix = rotationMatrix(angulo);
@@ -43,8 +44,16 @@ var SuperficieRevolucion = (function (curve, angle, pasos) {
                 this.normal_buffer.push(normalTransformed[X]);
                 this.normal_buffer.push(normalTransformed[Y]);
                 this.normal_buffer.push(normalTransformed[Z]);
+
+                var u = angulo/angle;
+                
+                var v = j/(curve.definition() - 1);
+                this.texture_coord_buffer.push(u*this.scaleU)
+                this.texture_coord_buffer.push(v*this.scaleV)
+                this.texture_coord_buffer.push(0)
             }
         }
+        //this.setMaper(new revolutionMaper(curve, angle));
     }
 
 

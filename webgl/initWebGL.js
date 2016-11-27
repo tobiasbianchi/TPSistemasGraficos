@@ -6,10 +6,10 @@ function initWebGL() {
     }
 
     if (gl) {
+        Scene = new ScenePuente(curvaRio);
         setupWebGL();
         initShaders();
         setupBuffers();
-
         setInterval(drawScene, 10);
     } else {
         alert("Error: Your browser does not appear to support WebGL.");
@@ -32,43 +32,79 @@ function initShaders() {
     var vertexShader = getShader(gl, "shader-vs");
 
     // Creamos un programa de shaders de WebGL.
-    shaderProgram = gl.createProgram();
+    shaderProgramColoredObject = gl.createProgram();
 
     // Asociamos cada shader compilado al programa.
-    gl.attachShader(shaderProgram, vertexShader);
-    gl.attachShader(shaderProgram, fragmentShader);
+    gl.attachShader(shaderProgramColoredObject, vertexShader);
+    gl.attachShader(shaderProgramColoredObject, fragmentShader);
 
     // Linkeamos los shaders para generar el programa ejecutable.
-    gl.linkProgram(shaderProgram);
+    gl.linkProgram(shaderProgramColoredObject);
 
     // Chequeamos y reportamos si hubo alg�n error.
-    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+    if (!gl.getProgramParameter(shaderProgramColoredObject, gl.LINK_STATUS)) {
         alert("Unable to initialize the shader program: " +
-            gl.getProgramInfoLog(shaderProgram));
+            gl.getProgramInfoLog(shaderProgramColoredObject));
         return null;
     }
 
     // Le decimos a WebGL que de aqui en adelante use el programa generado.
-    gl.useProgram(shaderProgram);
+    //gl.useProgram(shaderProgramColoredObject);
 
-    shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-    gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+    shaderProgramColoredObject.vertexPositionAttribute = gl.getAttribLocation(shaderProgramColoredObject, "aVertexPosition");
+    gl.enableVertexAttribArray(shaderProgramColoredObject.vertexPositionAttribute);
 
-    shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
-    gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
+    shaderProgramColoredObject.vertexColorAttribute = gl.getAttribLocation(shaderProgramColoredObject, "aVertexColor");
+    gl.enableVertexAttribArray(shaderProgramColoredObject.vertexColorAttribute);
 
-    shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
-    gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+    shaderProgramColoredObject.vertexNormalAttribute = gl.getAttribLocation(shaderProgramColoredObject, "aVertexNormal");
+    gl.enableVertexAttribArray(shaderProgramColoredObject.vertexNormalAttribute);
 
-    shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-    shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uModelMatrix");
-    shaderProgram.vMatrixUniform = gl.getUniformLocation(shaderProgram, "uViewMatrix");
-    shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
-    shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
-    shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
-    shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
-    shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightPosition");
-    shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
+    shaderProgramColoredObject.pMatrixUniform = gl.getUniformLocation(shaderProgramColoredObject, "uPMatrix");
+    shaderProgramColoredObject.mMatrixUniform = gl.getUniformLocation(shaderProgramColoredObject, "uModelMatrix");
+    shaderProgramColoredObject.vMatrixUniform = gl.getUniformLocation(shaderProgramColoredObject, "uViewMatrix");
+    shaderProgramColoredObject.nMatrixUniform = gl.getUniformLocation(shaderProgramColoredObject, "uNMatrix");
+    shaderProgramColoredObject.samplerUniform = gl.getUniformLocation(shaderProgramColoredObject, "uSampler");
+    shaderProgramColoredObject.useLightingUniform = gl.getUniformLocation(shaderProgramColoredObject, "uUseLighting");
+    shaderProgramColoredObject.ambientColorUniform = gl.getUniformLocation(shaderProgramColoredObject, "uAmbientColor");
+    shaderProgramColoredObject.lightingDirectionUniform = gl.getUniformLocation(shaderProgramColoredObject, "uLightPosition");
+    shaderProgramColoredObject.directionalColorUniform = gl.getUniformLocation(shaderProgramColoredObject, "uDirectionalColor");
+    // PARA EL TEXTURED OBJECT
+    var fragmentShaderTexturedObj = getShader(gl, "shader-fs-textured-obj");
+    var vertexShaderTexturedObj = getShader(gl, "shader-vs-textured-obj");
+
+    shaderProgramTexturedObject = gl.createProgram();
+    gl.attachShader(shaderProgramTexturedObject, vertexShaderTexturedObj);
+    gl.attachShader(shaderProgramTexturedObject, fragmentShaderTexturedObj);
+    gl.linkProgram(shaderProgramTexturedObject);
+
+    if (!gl.getProgramParameter(shaderProgramTexturedObject, gl.LINK_STATUS)) {
+        alert("Could not initialise shaders");
+    }
+
+    shaderProgramTexturedObject.vertexPositionAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aVertexPosition");
+    gl.enableVertexAttribArray(shaderProgramTexturedObject.vertexPositionAttribute);
+
+    shaderProgramTexturedObject.textureCoordAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aTextureCoord");
+    gl.enableVertexAttribArray(shaderProgramTexturedObject.textureCoordAttribute);
+
+    shaderProgramTexturedObject.vertexNormalAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aVertexNormal");
+    gl.enableVertexAttribArray(shaderProgramTexturedObject.vertexNormalAttribute);
+
+    shaderProgramTexturedObject.pMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPMatrix");
+    shaderProgramTexturedObject.vMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uViewMatrix");
+    shaderProgramTexturedObject.mMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uModelMatrix");
+    shaderProgramTexturedObject.nMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uNMatrix");
+    shaderProgramTexturedObject.samplerUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uSampler");
+    shaderProgramTexturedObject.useLightingUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uUseLighting");
+    shaderProgramTexturedObject.ambientColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uAmbientColor");
+    shaderProgramTexturedObject.lightingDirectionUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uLightPosition");
+    shaderProgramTexturedObject.directionalColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uDirectionalColor");
+    shaderProgramTexturedObject.samplerSecond = gl.getUniformLocation(shaderProgramTexturedObject, "uSamplerSecond");
+    shaderProgramTexturedObject.samplerMixer = gl.getUniformLocation(shaderProgramTexturedObject, "uSamplerMix");
+    shaderProgramTexturedObject.useMixTextures = gl.getUniformLocation(shaderProgramTexturedObject, "uMixTextures");
+
+    //shaderProgram = shaderProgramColoredObject
 }
 
 // SHADERS FUNCTION
@@ -122,15 +158,17 @@ function setupBuffers() {
 
 
 var gl = null,
-    t = 0,
-    canvas = null,
-    shaderProgram = null,
-    fragmentShader = null,
-    vertexShader = null,
-    PAINTING_WAY = null,
-    CAMARA_PUENTE = new CameraPuente(),
-    CAMARA_GLOBAL =new CameraGlobal(),
-    actualCamara = CAMARA_GLOBAL;
+t = 0,
+canvas = null,
+shaderProgram = null,
+shaderProgramTexturedObject = null,
+shaderProgramColoredObject = null,
+fragmentShader = null,
+vertexShader = null,
+PAINTING_WAY = null,
+CAMARA_PUENTE = new CameraPuente(),
+CAMARA_GLOBAL =new CameraGlobal(),
+actualCamara = CAMARA_GLOBAL;
 actualCamara.init();
 var Scene = Scene || new Object3D();
 
@@ -146,7 +184,7 @@ function drawScene() {
     }
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
+    mat4.perspective(pMatrix, 45, canvas.width / canvas.height, 0.01, 300.0);
 
     //mat4.identity(vMatrix);
     vMatrix = actualCamara.getCamaraMatrix();

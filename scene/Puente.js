@@ -42,6 +42,10 @@ function Puente(curveRio){
         ];
         var camino = new SuperficieBarrido(new ProfileBridge(),new CurvesGroupBezier(curvaEnteraPuente,CurveBezier2),20);
         camino.setColorer(new SameColor(GREY));
+        camino.addTexture('maps/tramo-doblemarilla.jpg');
+        camino.setMaper(new uvShape(new ProfileBridge()));
+        camino.textureScale(1,0.5);
+        camino.addOtherTexture('maps/vereda.jpg');
         this.addChild(camino);
     }
         

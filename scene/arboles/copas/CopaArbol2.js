@@ -12,5 +12,6 @@ function CopaArbol2(){
     this.setColorer(new SameColor(GREEN))
     this.rotate(-90,ZAxis);
     this.translate([-2,0,0]);
+    this.textureScale(1,1);
 }
 inheritPrototype(CopaArbol2, SuperficieRevolucion);
