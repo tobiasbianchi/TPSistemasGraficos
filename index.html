@@ -73,16 +73,28 @@
             uniform sampler2D uSamplerMix;
 
             uniform bool uMixTextures;
+            uniform bool uNormalMap;
 
             void main(void) {
                 vec4 textureColor;
                 if (vTextureCoord.z == 1.0){
                     textureColor = texture2D(uSamplerSecond, vec2(vTextureCoord.s, vTextureCoord.t));    
                 } else if (uMixTextures){
-
+                    vec4 texture1Color = texture2D(uSamplerSecond, vec2(vTextureCoord.s, vTextureCoord.t));    
+                    vec4 texture2Color = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+                    vec4 noiseColor = texture2D(uSamplerMix, vec2(vTextureCoord.s, vTextureCoord.t));    
+                    vec4 contraryNoiseColor = vec4(1,1,1,1) - noiseColor;
+                    textureColor =  texture1Color*contraryNoiseColor + texture2Color*noiseColor;
                 } else {
                     textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));    
                 }
+
+                //if (uNormalMap){
+                    //vec4 normalRGB = texture2D(uNormalMap, vec2(vTextureCoord.s,vTextureCoord.t));
+                    //porcess each coordinate to -1, 0 1
+                    //makeBumpMap
+
+                //}
                 
                 gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
             }

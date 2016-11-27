@@ -14,11 +14,17 @@ function VertexGrid(_rows, _cols, formGenerator) {
     this.texture = null;
     this.secondTexture = null;
     this.texture_coord_buffer = null;
+    this.binormalBuffer = null;
+    this.tangentBuffer = null;
     this.webgl_texture_coord_buffer = null;
     this.webgl_position_buffer = null;
     this.webgl_color_buffer = null;
     this.webgl_indexBuffer = null;
     this.webgl_normal_buffer = null;
+    this.webgl_binormalBuffer = null;
+    this.webgl_tangentBuffer = null;
+    this.noiseTexture = null;
+    this.normalMap = null;
 
     function isOdd(num) {
         return (num % 2 == 1);
@@ -71,6 +77,29 @@ function VertexGrid(_rows, _cols, formGenerator) {
             handleLoadedTexture(texture)
         }
         this.secondTexture.image.src = path;
+        this.isTextured = true;
+    }
+    this.addNoiseTexture = function(path, mipmap = true) {
+        var aux_texture = gl.createTexture();
+        this.noiseTexture = aux_texture;
+        this.noiseTexture.image = new Image();
+        var texture = this.noiseTexture;
+        this.noiseTexture.image.onload = function () {
+            handleLoadedTexture(texture)
+        }
+        this.noiseTexture.image.src = path;
+        this.isTextured = true;
+    }
+
+    this.addNormalMap = function(path) {
+        var aux_texture = gl.createTexture();
+        this.normalMap = aux_texture;
+        this.normalMap.image = new Image();
+        var texture = this.normalMap;
+        this.normalMap.image.onload = function () {
+            handleLoadedTexture(texture)
+        }
+        this.normalMap.image.src = path;
         this.isTextured = true;
     }
 
@@ -135,6 +164,17 @@ function VertexGrid(_rows, _cols, formGenerator) {
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);    
         }
         
+        if (this.binormalBuffer){
+            this.webgl_binormalBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormalBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.bindBuffer), gl.STATIC_DRAW);    
+        }
+
+        if (this.tangentBuffer){
+            this.webgl_tangentBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangentBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.tangentBuffer), gl.STATIC_DRAW);    
+        }
 
         this.webgl_normal_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
@@ -174,6 +214,15 @@ function VertexGrid(_rows, _cols, formGenerator) {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
+
+        /*if (this.webgl_binormalBuffer){        
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormalBuffer);
+            gl.vertexAttribPointer(shaderProgram.vertexBinormal, 3, gl.FLOAT, false, 0, 0);
+        }
+        if (){
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+            gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+        }*/
         if (this.isTextured){
             var useSecond = false;
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
@@ -186,6 +235,14 @@ function VertexGrid(_rows, _cols, formGenerator) {
                 gl.activeTexture(gl.TEXTURE1);
                 gl.bindTexture(gl.TEXTURE_2D, this.secondTexture);
                 gl.uniform1i(shaderProgramTexturedObject.samplerSecond, 1);
+            }
+            if (this.noiseTexture != null){
+                gl.activeTexture(gl.TEXTURE2);
+                gl.bindTexture(gl.TEXTURE_2D, this.noiseTexture);
+                gl.uniform1i(shaderProgramTexturedObject.samplerMixer, 2);
+                gl.uniform1i(shaderProgram.useMixTextures, true);
+            } else{
+                gl.uniform1i(shaderProgram.useMixTextures, false);
             }
             
         }else {

@@ -32,6 +32,8 @@ function Terreno(curvaRio) {
         var pozoMaszigZag = new SuperficieBarrido(curvaRio, pozo, 50, null, true);
         pozoMaszigZag.setColorer(new HeightColorer([YELLOW, GREEN], [alturaCambioColor]));
         pozoMaszigZag.addTexture('maps/arena.jpg');
+        pozoMaszigZag.addOtherTexture('maps/rocas1.jpg');
+        pozoMaszigZag.addNoiseTexture('maps/noise_pasto.jpg');
         pozoMaszigZag.setMaper(new uvArenaMaper());
         pozoMaszigZag.textureScale(0.08,0.08);
         return pozoMaszigZag;
@@ -70,6 +72,9 @@ function Terreno(curvaRio) {
             superfice.setColorer(new SameColor(DARK_GREEN));    
             superfice.textureScale(0.05,0.05);
             superfice.addTexture('maps/pasto3.jpg');
+            superfice.addOtherTexture('maps/pasto1.jpg');
+            superfice.addNoiseTexture('maps/noise_pasto.jpg');
+            
             return superfice;    
         }
         var superfice1 = makeSuperficie(true);
