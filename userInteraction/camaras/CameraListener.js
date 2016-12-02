@@ -76,5 +76,7 @@ function CameraListener(){
         return matrix
     }
 
-
+    this.getEyeVec = function(){
+        throw new Error("Unimplemented")
+    };
 }

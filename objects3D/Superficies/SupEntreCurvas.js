@@ -9,6 +9,7 @@ function SupEntreCurvas(curvaInicio, curvaFin, invertNormal) {
     this.createUniformPlaneGrid = function () {
         curvaFin.rotateCurve(Math.PI/2)
         this.texture_coord_buffer = [];
+        this.tangentBuffer = []
         for (var j = 0; j < pointsPerRow; j++) {            
             var pointInicio = curvaInicio.getPointAt(uInicioStep * j);
 
@@ -21,6 +22,12 @@ function SupEntreCurvas(curvaInicio, curvaFin, invertNormal) {
             this.normal_buffer.push(normalInicio.x);
             this.normal_buffer.push(normalInicio.y);
             this.normal_buffer.push(normalInicio.z);
+
+            var tangentInicio = curvaInicio.getTangentAtIndex(j);
+            this.tangentBuffer.push(tangentInicio.x);
+            this.tangentBuffer.push(tangentInicio.y);
+            this.tangentBuffer.push(tangentInicio.z);
+
 
             var coordUV = this.uvMaper.mapPosition([pointInicio.x,pointInicio.y,pointInicio.z]);
 
@@ -43,6 +50,11 @@ function SupEntreCurvas(curvaInicio, curvaFin, invertNormal) {
             this.normal_buffer.push(normalFin.x);
             this.normal_buffer.push(normalFin.y);
             this.normal_buffer.push(normalFin.z);
+
+            var tangentFin = curvaFin.getTangentAtIndex(j);
+            this.tangentBuffer.push(tangentFin.x);
+            this.tangentBuffer.push(tangentFin.y);
+            this.tangentBuffer.push(tangentFin.z);
 
             var coordUV = this.uvMaper.mapPosition([pointToCorrespondZ.x,pointToCorrespondZ.y, pointToCorrespondZ.z]);
             

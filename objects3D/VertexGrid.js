@@ -25,9 +25,35 @@ function VertexGrid(_rows, _cols, formGenerator) {
     this.webgl_tangentBuffer = null;
     this.noiseTexture = null;
     this.normalMap = null;
+    this.ambientColor = vec3.fromValues(1.0,1.0,1.0);;
+    this.diffuseColor = vec3.fromValues(1.0,1.0,1.0);;
+    this.specularColor = vec3.fromValues(1.0,1.0,1.0);
+    this.diffuseW = 0.7;
+    this.specularW = 0.0;
+    this.ambientW = 0.7;
+    this.glossiness = 1.0;
+    this.usesDifferentTextures = false;
+    this.blend = false;
+    this.alpha = 1.0;
 
     function isOdd(num) {
         return (num % 2 == 1);
+    }
+
+    this.setAmbient = function(vec3,weight){
+        this.ambientColor = vec3;
+        this.ambientW = weight;
+    }
+
+    this.setDiffuse = function(vec3,weight){
+        this.diffuseColor = vec3;
+        this.diffuseW = weight;
+    }
+
+    this.setSpecular = function(vec3,weight,glossiness){
+        this.specularColor = vec3;
+        this.specularW = weight;
+        this.glossiness = glossiness
     }
 
     this.setColorer = function(colorer) {
@@ -163,17 +189,11 @@ function VertexGrid(_rows, _cols, formGenerator) {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);    
         }
-        
-        if (this.binormalBuffer){
-            this.webgl_binormalBuffer = gl.createBuffer();
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormalBuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.bindBuffer), gl.STATIC_DRAW);    
-        }
 
         if (this.tangentBuffer){
             this.webgl_tangentBuffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangentBuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.tangentBuffer), gl.STATIC_DRAW);    
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.tangentBuffer), gl.STATIC_DRAW);  
         }
 
         this.webgl_normal_buffer = gl.createBuffer();
@@ -196,8 +216,14 @@ function VertexGrid(_rows, _cols, formGenerator) {
         lighting = true;
         gl.uniform1i(shaderProgram.useLightingUniform, lighting);
         gl.uniform3fv(shaderProgram.lightingDirectionUniform, lightPosition);
-        gl.uniform3fv(shaderProgram.ambientColorUniform, ambientColor);
-        gl.uniform3fv(shaderProgram.directionalColorUniform, diffuseColor);
+        gl.uniform3fv(shaderProgram.ambientColorUniform, this.ambientColor);
+        gl.uniform3fv(shaderProgram.directionalColorUniform, this.diffuseColor);
+        gl.uniform3fv(shaderProgram.specularColorUniform, this.specularColor);
+        gl.uniform3fv(shaderProgram.cameraPosition, actualCamara.getEyeVec());
+        gl.uniform1f(shaderProgram.diffuseW, this.diffuseW);
+        gl.uniform1f(shaderProgram.specularW, this.specularW);
+        gl.uniform1f(shaderProgram.ambientW, this.ambientW);
+        gl.uniform1f(shaderProgram.glossiness, this.glossiness);        
     }
 
     this.draw = function (matrix) {
@@ -206,31 +232,28 @@ function VertexGrid(_rows, _cols, formGenerator) {
         mat4.multiply(aux, matrix, this.mMatrix);
         
         this.setMatrixUniforms(aux);
-        this.setupLighting(vec3.fromValues(-1000.0, 100.0, -1000.0), vec3.fromValues(0.7, 0.7, 0.7), vec3.fromValues(0.001, 0.001, 0.001));
+        this.setupLighting(vec3.fromValues(-1000.0, 1000.0, -1000.0), vec3.fromValues(0.7, 0.7, 0.7), vec3.fromValues(0.5, 0.5, 0.5));
         
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
         
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
         gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+        
 
-
-        /*if (this.webgl_binormalBuffer){        
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_binormalBuffer);
-            gl.vertexAttribPointer(shaderProgram.vertexBinormal, 3, gl.FLOAT, false, 0, 0);
-        }
-        if (){
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
-            gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
-        }*/
         if (this.isTextured){
             var useSecond = false;
             gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
             gl.vertexAttribPointer(shaderProgramTexturedObject.textureCoordAttribute, 3, gl.FLOAT, false, 0, 0);
 
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangentBuffer);
+            gl.vertexAttribPointer(shaderProgramTexturedObject.vertexTangentAttribute, 3, gl.FLOAT, false, 0, 0);
+
+
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.uniform1i(shaderProgramTexturedObject.samplerUniform, 0);
+            gl.uniform1i(shaderProgramTexturedObject.usesTwoTextures, this.usesDifferentTextures);
             if (this.secondTexture != null){
                 gl.activeTexture(gl.TEXTURE1);
                 gl.bindTexture(gl.TEXTURE_2D, this.secondTexture);
@@ -241,8 +264,17 @@ function VertexGrid(_rows, _cols, formGenerator) {
                 gl.bindTexture(gl.TEXTURE_2D, this.noiseTexture);
                 gl.uniform1i(shaderProgramTexturedObject.samplerMixer, 2);
                 gl.uniform1i(shaderProgram.useMixTextures, true);
-            } else{
+            } else {
                 gl.uniform1i(shaderProgram.useMixTextures, false);
+            }
+
+            if (this.normalMap != null){
+                gl.activeTexture(gl.TEXTURE2);
+                gl.bindTexture(gl.TEXTURE_2D, this.normalMap);
+                gl.uniform1i(shaderProgramTexturedObject.samplerMixer, 2);
+                gl.uniform1i(shaderProgram.uNormalMap, true);
+            } else {
+                gl.uniform1i(shaderProgram.uNormalMap, false);
             }
             
         }else {
@@ -250,6 +282,14 @@ function VertexGrid(_rows, _cols, formGenerator) {
             gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);    
         }
         
+        gl.uniform1i(shaderProgramTexturedObject.blending,this.blend);
+        if (this.blend){
+            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            gl.enable(gl.BLEND);
+            gl.uniform1f(shaderProgramTexturedObject.alpha,this.alpha);
+        } else{
+            gl.disable(gl.BLEND);
+        }
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_indexBuffer);
 
         gl.drawElements(gl.TRIANGLE_STRIP, 2*cols*(rows - 1), gl.UNSIGNED_SHORT, 0);

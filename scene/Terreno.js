@@ -19,7 +19,7 @@ function Terreno(curvaRio) {
              [-distanciaCambioCurvatura, alturaCambioConcavidad],
             [-distanciaCambioCurvatura, alturaCambioConcavidad], [-distanciaCambioCurvatura, VARIABLES.ALTURA_RIO], 
             [-distanicaFinDeBajada, VARIABLES.ALTURA_RIO],
-            [-distanicaFinDeBajada, VARIABLES.ALTURA_RIO], [0, VARIABLES.ALTURA_RIO],
+            [-distanicaFinDeBajada, VARIABLES.ALTURA_RIO], [0, VARIABLES.ALTURA_RIO - 2],
              [distanicaFinDeBajada, VARIABLES.ALTURA_RIO],
             [distanicaFinDeBajada, VARIABLES.ALTURA_RIO], [distanciaCambioCurvatura, VARIABLES.ALTURA_RIO],
              [distanciaCambioCurvatura, alturaCambioConcavidad],
@@ -52,6 +52,10 @@ function Terreno(curvaRio) {
         water.textureScale(0.01,0.01);
         water.setColorer(new SameColor(BLUE));
         //water.setMaper(new uvZYPlane());
+        water.specularW = 1.0;
+        water.glossiness = 20.0;
+        water.alpha = 0.7;
+        water.blend = true;
         return water;
     }
 

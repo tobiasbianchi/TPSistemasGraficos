@@ -103,5 +103,9 @@ function CameraGlobal() {
         vec3.rotateY(eyePoint,eyePoint,originalAtPoint,gradToRad(rotationY));
         
     }
+
+    this.getEyeVec = function(){
+        return eyePoint;
+    };
 }
 inheritPrototype(CameraGlobal, CameraListener);

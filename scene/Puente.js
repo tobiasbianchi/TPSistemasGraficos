@@ -44,8 +44,14 @@ function Puente(curveRio){
         camino.setColorer(new SameColor(GREY));
         camino.addTexture('maps/tramo-doblemarilla.jpg');
         camino.setMaper(new uvShape(new ProfileBridge()));
+        camino.addNormalMap('maps/vereda-normalmap.jpg')
         camino.textureScale(1,0.5);
         camino.addOtherTexture('maps/vereda.jpg');
+        camino.specularW = 0.4;
+        camino.glossiness = 20.0;
+        camino.diffuseW = 0.6;
+        camino.ambientW = 1.0;
+        camino.usesDifferentTextures = true;
         this.addChild(camino);
     }
         

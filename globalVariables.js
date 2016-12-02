@@ -32,7 +32,7 @@ var YELLOW = { r: 0.9335, g: 0.9531, b: 0.5039 };
 var GREY = getColor(130, 130, 130);
 var DARK_RED = getColor(142, 15, 4);
 var DARK_GREEN = getColor(0, 188, 18);
-var BLACK = getColor(0, 0, 0);
+var BLACK = getColor(30, 30, 30);
 var BROWN = getColor(216, 151, 65);
 
 var LOADED_TEXTURES = {};

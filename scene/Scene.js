@@ -12,13 +12,13 @@ function ScenePuente(curvaRio) {
     this.createScene = function (newCurveRio) {
         this.children = [];
         this.addChild(new Puente(newCurveRio));
-        //this.addChild(new Arbol(0))
-        //this.addChild(new Arbol(1))
-        //this.addChild(new Arbol(2))
         this.addChild(new ArbolesSide(newCurveRio));
         this.addChild(new ArbolesSide(newCurveRio,true));
         this.addChild(new Cielo());
         this.addChild(new Terreno(newCurveRio))
+        //var obj= new SuperficieRevolucion(new CurveCircular(Math.PI, 5,25),Math.PI*2,25);
+        //obj.addTexture('maps/arena.jpg');
+        //this.addChild(obj)
     }
 
     this.createScene(curvaRio);

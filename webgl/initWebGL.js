@@ -69,6 +69,13 @@ function initShaders() {
     shaderProgramColoredObject.ambientColorUniform = gl.getUniformLocation(shaderProgramColoredObject, "uAmbientColor");
     shaderProgramColoredObject.lightingDirectionUniform = gl.getUniformLocation(shaderProgramColoredObject, "uLightPosition");
     shaderProgramColoredObject.directionalColorUniform = gl.getUniformLocation(shaderProgramColoredObject, "uDirectionalColor");
+    shaderProgramColoredObject.specularColorUniform = gl.getUniformLocation(shaderProgramColoredObject, "uSpecularColor");
+    shaderProgramColoredObject.cameraPosition = gl.getUniformLocation(shaderProgramColoredObject,"uCameraPosition");
+    shaderProgramColoredObject.diffuseW = gl.getUniformLocation(shaderProgramColoredObject,"diffuseW");
+    shaderProgramColoredObject.specularW = gl.getUniformLocation(shaderProgramColoredObject,"specularW");
+    shaderProgramColoredObject.ambientW = gl.getUniformLocation(shaderProgramColoredObject,"ambientW");
+    shaderProgramColoredObject.glossiness = gl.getUniformLocation(shaderProgramColoredObject,"glossiness");
+
     // PARA EL TEXTURED OBJECT
     var fragmentShaderTexturedObj = getShader(gl, "shader-fs-textured-obj");
     var vertexShaderTexturedObj = getShader(gl, "shader-vs-textured-obj");
@@ -91,6 +98,9 @@ function initShaders() {
     shaderProgramTexturedObject.vertexNormalAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aVertexNormal");
     gl.enableVertexAttribArray(shaderProgramTexturedObject.vertexNormalAttribute);
 
+    shaderProgramTexturedObject.vertexTangentAttribute = gl.getAttribLocation(shaderProgramTexturedObject, "aVertexTangent");
+    gl.enableVertexAttribArray(shaderProgramTexturedObject.vertexTangentAttribute);
+
     shaderProgramTexturedObject.pMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uPMatrix");
     shaderProgramTexturedObject.vMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uViewMatrix");
     shaderProgramTexturedObject.mMatrixUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uModelMatrix");
@@ -103,7 +113,16 @@ function initShaders() {
     shaderProgramTexturedObject.samplerSecond = gl.getUniformLocation(shaderProgramTexturedObject, "uSamplerSecond");
     shaderProgramTexturedObject.samplerMixer = gl.getUniformLocation(shaderProgramTexturedObject, "uSamplerMix");
     shaderProgramTexturedObject.useMixTextures = gl.getUniformLocation(shaderProgramTexturedObject, "uMixTextures");
-
+    shaderProgramTexturedObject.specularColorUniform = gl.getUniformLocation(shaderProgramTexturedObject, "uSpecularColor");
+    shaderProgramTexturedObject.cameraPosition = gl.getUniformLocation(shaderProgramTexturedObject,"uCameraPosition");
+    shaderProgramTexturedObject.diffuseW = gl.getUniformLocation(shaderProgramTexturedObject,"diffuseW");
+    shaderProgramTexturedObject.specularW = gl.getUniformLocation(shaderProgramTexturedObject,"specularW");
+    shaderProgramTexturedObject.ambientW = gl.getUniformLocation(shaderProgramTexturedObject,"ambientW");
+    shaderProgramTexturedObject.glossiness = gl.getUniformLocation(shaderProgramTexturedObject,"glossiness");
+    shaderProgramTexturedObject.uNormalMap = gl.getUniformLocation(shaderProgramTexturedObject,"uNormalMap");
+    shaderProgramTexturedObject.usesTwoTextures = gl.getUniformLocation(shaderProgramTexturedObject,"uUsesTwoTextures");
+    shaderProgramTexturedObject.alpha = gl.getUniformLocation(shaderProgramTexturedObject,"uAlpha");
+    shaderProgramTexturedObject.blending = gl.getUniformLocation(shaderProgramTexturedObject, "isBlending");
     //shaderProgram = shaderProgramColoredObject
 }
 

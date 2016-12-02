@@ -66,6 +66,7 @@ var SuperficieBarrido = (function (shape, curve, niveles, scaler, keepNormal = f
 
     this.createUniformPlaneGrid = function () {
         this.texture_coord_buffer = []
+        this.tangentBuffer = []
         for (var i = 0; i <= niveles; i++) {
             var u = i * pasos;
             var matrixBarrido = makeBarridoMatrix(u);
@@ -94,7 +95,14 @@ var SuperficieBarrido = (function (shape, curve, niveles, scaler, keepNormal = f
                 }
                 this.normal_buffer.push(-normalTransformed.x);
                 this.normal_buffer.push(normalTransformed.y);
-                this.normal_buffer.push(normalTransformed.z);       
+                this.normal_buffer.push(normalTransformed.z);   
+
+
+                vertix4D = shape.getTangentAtIndex(j);
+                var tangentTransformed = transformPoint(vertix4D, normalMatrix);
+                this.tangentBuffer.push(tangentTransformed.x);
+                this.tangentBuffer.push(tangentTransformed.y);
+                this.tangentBuffer.push(tangentTransformed.z);    
 
                 var coordUV = this.uvMaper.mapPosition([pointTransformed.x,pointTransformed.y,pointTransformed.z]);
                 this.texture_coord_buffer.push(coordUV[X]*this.scaleU)

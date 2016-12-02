@@ -34,6 +34,8 @@ function PuenteSide(curvePuente) {
         var linea = new SuperficieBarrido(new CurveCircular(Math.PI*2,0.05),bezier,3);
         linea.translate([xValue,bottomPoint.y,0]);
         linea.setColorer(new SameColor(BLACK))
+        linea.specularW = 1.0;
+        linea.glossiness = 0.8;
         this.addChild(linea);
     }
 
@@ -59,6 +61,10 @@ function PuenteSide(curvePuente) {
         var tubo = new SuperficieBarrido(new CurveCircular(Math.PI * 2, 0.2), spline, 10);
         tubo.setColorer(new SameColor(DARK_RED))
         tubo.addTexture('maps/alambres.jpg')
+        tubo.addNormalMap('maps/alambres-mormalmap.jpg')
+        tubo.specularW = 1.0;
+        tubo.glossiness = 50.0;
+        tubo.diffuseW = 0.5;
         this.makeAlambres(spline);
         this.addChild(tubo);
     }

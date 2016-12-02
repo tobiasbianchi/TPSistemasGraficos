@@ -26,6 +26,7 @@ var SuperficieRevolucion = (function (curve, angle, pasos) {
 
     this.createUniformPlaneGrid = function () {
         this.texture_coord_buffer = []
+        this.tangentBuffer = []
         for (var i = 0; i <= pasos; i++) {
             var angulo = i * anguloBase;
             var matrix = rotationMatrix(angulo);
@@ -44,6 +45,12 @@ var SuperficieRevolucion = (function (curve, angle, pasos) {
                 this.normal_buffer.push(normalTransformed[X]);
                 this.normal_buffer.push(normalTransformed[Y]);
                 this.normal_buffer.push(normalTransformed[Z]);
+
+                vertix4D = curve.getTangentAtIndex(j);
+                var tangentTransformed = transformPoint(vertix4D, angulo);
+                this.tangentBuffer.push(tangentTransformed[X]);
+                this.tangentBuffer.push(tangentTransformed[Y]);
+                this.tangentBuffer.push(tangentTransformed[Z]);
 
                 var u = angulo/angle;
                 

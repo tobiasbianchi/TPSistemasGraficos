@@ -1,6 +1,5 @@
 function CameraPuente(){
     CameraListener.call(this);
-    CameraListener.call(this);
     var rotationX = 0;
     var rotationY = 0;
 
@@ -94,9 +93,12 @@ function CameraPuente(){
         
         vec3.rotateZ(atPoint,atPointPositioned,eyePoint,gradToRad(rotationX));
         vec3.rotateY(atPoint,atPoint,eyePoint,gradToRad(rotationY));
-        
-    
+
     }
+
+    this.getEyeVec = function(){
+        return eyePoint;
+    };
 
 }
 inheritPrototype(CameraPuente, CameraListener);
