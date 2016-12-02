@@ -5,10 +5,13 @@ function Cielo(){
         return 2.5
     }
     this.setColorer(new SameColor(GREEN))
-    this.rotate(-100,YAxis)
+    
+    this.rotate(-90,YAxis)
     this.rotate(-90,ZAxis);
+    
     this.setDiffuse(vec3.fromValues(0.0,0.0,0.0),0.0);
     this.setAmbient(vec3.fromValues(1.0,1.0,1.0),1.0);
-    this.addTexture('maps/sky_lightblue.jpg')
+    this.addTexture(TEXTURES.cielo)
+    this.setMaper(new revolutionMaper(curve));
 }
 inheritPrototype(Cielo, SuperficieRevolucion);

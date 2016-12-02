@@ -97,6 +97,28 @@ function CurveWithControlPoints(controlPoints, defin) {
         return vec4.fromValues(point.x, point.y, point.z, 1);
     }
 
+     this.getTotalLength = function(){
+        return this.lengthAt(1);
+    }
+
+    function calculateLength(previousPoint,nextPoint){
+        var distanceX = Math.abs(previousPoint.x - nextPoint.x);
+        var distanceY = Math.abs(previousPoint.y - nextPoint.y);
+        return Math.sqrt(distanceX*distanceX + distanceY*distanceY);
+    }
+    this.lengthAt = function(u){
+        var step = 0.001;
+        var stepU = step;
+        var length = 0;
+        var previousPoint = this.getPointAt(0);
+        while (stepU <= u ){
+            var nextPoint = this.getPointAt(stepU);
+            length += calculateLength(previousPoint,nextPoint);
+            previousPoint = nextPoint;
+            stepU += step; 
+        }
+        return length;
+    } 
 }
 CurveWithControlPoints.prototype.pointsInCurve = function () {
     return this.basesFunctions.length;

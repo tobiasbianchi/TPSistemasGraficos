@@ -67,4 +67,16 @@ function CurveLinear(puntoInicio,puntoFin){
         var point = this.getBinormalAt(paramU);
         return vec4.fromValues(point.x, point.y, point.z, 1);
     }
+
+    this.getTotalLength = function(){
+        return distance;
+    }
+
+    this.lengthAt = function(u){
+        var newPoint = this.getPointAt(u);
+        var _distanceX = Math.abs(puntoInicio[X] - newPoint.x);
+        var _distanceY = Math.abs(puntoInicio[Y] - newPoint.y);
+        return Math.sqrt(_distanceX*_distanceX + _distanceY*_distanceY);
+    } 
+
 }

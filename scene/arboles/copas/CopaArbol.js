@@ -11,13 +11,14 @@ function CopaArbol(){
         [2.5,2.5],[2.5,1.75],[2.5,0]
     ],CurveBezier2);
 
-    SuperficieRevolucion.call(this, curve, Math.PI*2, 20);
+    SuperficieRevolucion.call(this, curve, Math.PI*2, 10);
     this.getHeight = function(){
         return 2.5
     }
     this.setColorer(new SameColor(GREEN))
     this.rotate(-90,ZAxis);
     this.translate([-2.5,0,0]);
-    this.textureScale(2,-2);
+    this.textureScale(1,-1);
+    this.setMaper(new revolutionMaper(curve));
 }
 inheritPrototype(CopaArbol, SuperficieRevolucion);

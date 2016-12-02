@@ -42,11 +42,11 @@ function Puente(curveRio){
         ];
         var camino = new SuperficieBarrido(new ProfileBridge(),new CurvesGroupBezier(curvaEnteraPuente,CurveBezier2),20);
         camino.setColorer(new SameColor(GREY));
-        camino.addTexture('maps/tramo-doblemarilla.jpg');
+        camino.addTexture(TEXTURES.camino);
         camino.setMaper(new uvShape(new ProfileBridge()));
-        camino.addNormalMap('maps/vereda-normalmap.jpg')
+        camino.addNormalMap(TEXTURES.veredaNormalMap)
         camino.textureScale(1,0.5);
-        camino.addOtherTexture('maps/vereda.jpg');
+        camino.addOtherTexture(TEXTURES.vereda);
         camino.specularW = 0.4;
         camino.glossiness = 20.0;
         camino.diffuseW = 0.6;

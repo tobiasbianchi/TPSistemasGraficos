@@ -53,7 +53,6 @@ function CurveGroup(){
         return totalDef;
     }
 
-    
     this.returnPointOfData = function(getDataPoint,totalIndex){
         var previousDef = 0;
         var totalDefinition = 0;
@@ -104,4 +103,30 @@ function CurveGroup(){
         }
     }
 
+     this.getTotalLength = function(){
+
+        var length = 0;
+        for (var i = 0; i < this.curves.length; i++){
+
+            length += this.curves[i].getTotalLength();
+        }
+        return length;
+    }
+
+    this.lengthAt = function(u){
+        var indexes = this.getIndexes(u);
+        var length = 0;
+        for (var i = 0; i < indexes.curveIndex - 1; i++){
+            length += this.curves[i].getTotalLength();
+        }
+        var lastCurve = this.curves[indexes.curveIndex];
+        if (lastCurve == undefined){
+            return length;
+        }
+        return length + lastCurve.lengthAt(indexes.indexAtCurve);
+    } 
+
+    this.lengthAtIndex = function(i){
+       return this.lengthAt(i*0.1);
+    } 
 }

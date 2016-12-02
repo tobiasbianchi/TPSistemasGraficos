@@ -22,10 +22,10 @@ function Torre(totalHeight,firstBlockHeight){
         var caminoBarridoTope = makeCurve(heightTope);
         var bloqueNormal = new SuperficieBarrido(formaTorre,caminoBarridoNormal,1);
         var bloqueTope = new SuperficieBarrido(formaTorre,caminoBarridoTope,1,scaleTopBlock);
-        bloqueNormal.addTexture('maps/oxido.jpg')
-        bloqueTope.addTexture('maps/oxido.jpg')
-        bloqueNormal.addNormalMap('maps/oxido-normal map.jpg')
-        bloqueTope.addNormalMap('maps/oxido-normal map.jpg')
+        bloqueNormal.addTexture(TEXTURES.oxido)
+        bloqueTope.addTexture(TEXTURES.oxido)
+        bloqueNormal.addNormalMap(TEXTURES.oxidoNormalMap)
+        bloqueTope.addNormalMap(TEXTURES.oxidoNormalMap)
         bloqueNormal.setMaper(new uvShape(formaTorre))
         bloqueNormal.textureScale(1,1)
         bloqueTope.setMaper(new uvShape(formaTorre))
@@ -35,10 +35,10 @@ function Torre(totalHeight,firstBlockHeight){
         bloqueTope.translate([heightNormal,0,0]);
         torreParte.addChild(bloqueNormal);
         torreParte.addChild(bloqueTope);
-        bloqueTope.specularW = 1.0;
-        bloqueNormal.specularW = 1.0;
-        bloqueTope.glossiness = 10.0;
-        bloqueNormal.glossiness = 10.0;
+        bloqueTope.specularW = 0.3;
+        bloqueNormal.specularW = 0.3;
+        bloqueTope.glossiness = 80.0;
+        bloqueNormal.glossiness = 80.0;
         bloqueTope.diffuseW = 0.7;
         bloqueNormal.diffuseW = 0.7;
         return torreParte; 

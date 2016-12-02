@@ -31,11 +31,15 @@ function Terreno(curvaRio) {
         var pozo = new CurvesGroupBezier(puntosBezier, CurveBezier2, 15);
         var pozoMaszigZag = new SuperficieBarrido(curvaRio, pozo, 50, null, true);
         pozoMaszigZag.setColorer(new HeightColorer([YELLOW, GREEN], [alturaCambioColor]));
-        pozoMaszigZag.addTexture('maps/arena.jpg');
-        pozoMaszigZag.addOtherTexture('maps/rocas1.jpg');
-        pozoMaszigZag.addNoiseTexture('maps/noise_pasto.jpg');
-        pozoMaszigZag.setMaper(new uvArenaMaper());
-        pozoMaszigZag.textureScale(0.08,0.08);
+        pozoMaszigZag.addTexture(TEXTURES.arena);
+        //pozoMaszigZag.addOtherTexture('maps/rocas1.jpg');
+        pozoMaszigZag.addOtherTexture(TEXTURES.piedras2);
+        pozoMaszigZag.addNoiseTexture(TEXTURES.noiseArena);
+        pozoMaszigZag.setMaper(new uvArenaMaper(pozo,50,curvaRio));
+        pozoMaszigZag.textureScale(50,10);
+        pozoMaszigZag.usesDifferentTextures = true;
+        pozoMaszigZag.specularW = 0.2;
+        pozoMaszigZag.glossiness = 900.0;
         return pozoMaszigZag;
 
     }
@@ -48,11 +52,15 @@ function Terreno(curvaRio) {
         var water = new SuperficieBarrido(curvaRio,lineaRio,5,null,false,true);
         //water.rotate(180,YAxis)
         
-        water.addTexture('maps/aguaDeMar.jpg');
+        
+        water.addTexture(TEXTURES.agua);
+        //water.addOtherTexture('maps/sky_lightblue.jpg');
+        water.addOtherTexture(TEXTURES.cielo);
+        water.reflectionMap = true;
         water.textureScale(0.01,0.01);
         water.setColorer(new SameColor(BLUE));
         //water.setMaper(new uvZYPlane());
-        water.specularW = 1.0;
+        water.specularW = 0.8;
         water.glossiness = 20.0;
         water.alpha = 0.7;
         water.blend = true;
@@ -75,9 +83,10 @@ function Terreno(curvaRio) {
             superfice.translate([translationX, VARIABLES.ALTURA_TERRENO, 0]);
             superfice.setColorer(new SameColor(DARK_GREEN));    
             superfice.textureScale(0.05,0.05);
-            superfice.addTexture('maps/pasto3.jpg');
-            superfice.addOtherTexture('maps/pasto1.jpg');
-            superfice.addNoiseTexture('maps/noise_pasto.jpg');
+            superfice.addTexture(TEXTURES.pasto1);
+            superfice.addOtherTexture(TEXTURES.pasto2);
+            //superfice.addNoiseTexture('maps/noise_pasto.jpg');
+            superfice.addNoiseTexture(TEXTURES.noisePasto);
             
             return superfice;    
         }

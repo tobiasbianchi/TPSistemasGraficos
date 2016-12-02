@@ -6,9 +6,10 @@ function initWebGL() {
     }
 
     if (gl) {
-        Scene = new ScenePuente(curvaRio);
         setupWebGL();
         initShaders();
+        loadTextures();
+        Scene = new ScenePuente(curvaRio);
         setupBuffers();
         setInterval(drawScene, 10);
     } else {
@@ -16,6 +17,60 @@ function initWebGL() {
     }
 }
 
+function loadTextures(){
+    function handleTextureFunc(texture,key){
+        return function handleLoadedTexture(){
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);        
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+        gl.generateMipmap(gl.TEXTURE_2D);  
+
+        gl.bindTexture(gl.TEXTURE_2D, null); 
+    }
+    }
+    function handleLoadedTexture(texture){
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);        
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+        gl.generateMipmap(gl.TEXTURE_2D);  
+
+        gl.bindTexture(gl.TEXTURE_2D, null); 
+    }
+    TEXTURES_PATHS = {
+        agua:'aguaDeMar.jpg',
+        pasto1:'pasto1.jpg',
+        pasto2:'pasto3.jpg',
+        cielo:'sky_lightblue.jpg',
+        hojas:'hojas.jpg',
+        arena:'arena.jpg',
+        piedras:'rocas1.jpg',
+        piedras2:'rocas2.jpg',
+        vereda:'vereda.jpg',
+        camino: 'tramo-doblemarilla.jpg',
+        oxido: 'oxido.jpg',  
+        veredaNormalMap: "vereda-normalmap.jpg",
+        oxidoNormalMap: "oxido-normal map.jpg",
+        alambres: "alambres.jpg",
+        alambresNormalMap: "alambres-mormalmap.jpg",
+        noisePasto: "noise_pasto.jpg",
+        noiseArena: "noiseArenaPiedra.jpg"
+    }
+    for (var key in TEXTURES_PATHS){
+        var aux_texture = gl.createTexture();
+        aux_texture.image = new Image();
+        aux_texture.image.onload = handleTextureFunc(aux_texture,key);
+        aux_texture.image.src =  'maps/' + TEXTURES_PATHS[key];
+        TEXTURES[key] = aux_texture;
+    }
+}
 function setupWebGL() {
     //set the clear color
     gl.clearColor(0.1, 0.1, 0.2, 1.0);
@@ -123,7 +178,8 @@ function initShaders() {
     shaderProgramTexturedObject.usesTwoTextures = gl.getUniformLocation(shaderProgramTexturedObject,"uUsesTwoTextures");
     shaderProgramTexturedObject.alpha = gl.getUniformLocation(shaderProgramTexturedObject,"uAlpha");
     shaderProgramTexturedObject.blending = gl.getUniformLocation(shaderProgramTexturedObject, "isBlending");
-    //shaderProgram = shaderProgramColoredObject
+    shaderProgramTexturedObject.reflectionMap = gl.getUniformLocation(shaderProgramTexturedObject, "reflectionMap");
+    //shaderProgram = shaderProgramColoredObject   reflectionMap
 }
 
 // SHADERS FUNCTION
@@ -190,6 +246,7 @@ CAMARA_GLOBAL =new CameraGlobal(),
 actualCamara = CAMARA_GLOBAL;
 actualCamara.init();
 var Scene = Scene || new Object3D();
+var TEXTURES = {};
 
 var vMatrix = mat4.create();
 var modelMatrix = mat4.create();

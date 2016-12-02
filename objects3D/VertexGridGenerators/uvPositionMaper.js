@@ -91,39 +91,71 @@ function uvShape(shape){
 inheritPrototype(uvPuente, uvPositionMaper);
 
 
-function uvArenaMaper(){
+function uvArenaMaper(curvePozo,niveles,curveRio){
 	uvPositionMaper.call(this);
+
+	var maxU = curveRio.definition();
+	var maxV = niveles + 1;
+	var pasos = curvePozo.totalCurves() / niveles;
+	var maxLengthV = curvePozo.getTotalLength();
+	var maxLengthU = curveRio.getTotalLength();
+	var u = 0;
+	var v = 0;
+	var buffV;
+	
+	var updateU = function(){
+		u++;
+		if ( u >= maxU){
+			u = 0;
+			v++;
+		}
+	}
+
 	this.calculateU = function(vec3){
-		return vec3[Z]
-			
+		//return vec3[Z]
+		var buffU = u;
+		updateU();
+		var UCalc = curveRio.lengthAtIndex(buffU)/maxLengthU;
+		return UCalc;
 	}
 
 	this.calculateV = function(vec3){
-		return vec3[X];
+		//return vec3[X];
+		var VCalc = curvePozo.lengthAt(v*pasos)/maxLengthV;	
+		return VCalc;
+	}
+
+	this.calculateTexture = function(vec3){
+		var halfV = maxV/2 
+		var value = 1 - v/halfV; 
+		if (v <= maxV/2){
+			return value;
+		} else {
+			return -value;
+		}
 	}
 }
 inheritPrototype(uvArenaMaper, uvPositionMaper);
 
-function revolutionMaper(curve, angle){
+function revolutionMaper(curve, angle=Math.PI * 2){
 	uvPositionMaper.call(this);
 	var uIndex = 0;
 	var vIndex = 0;
+	var maxLength = curve.getTotalLength();
 
 	function updateV(){
 		vIndex ++;
 		if (vIndex >= curve.definition()){
-			vIndex = 1;
+			vIndex = 0;
 		}
 
 	}
 
 	function getV(){
-		//PARAMETRO de LA CURVA QUE GENERA ESE INDICE
-		return vIndex/(curve.definition() - 1);
+		return curve.lengthAtIndex(vIndex)/maxLength;
 	}
 
 	this.calculateU = function(vec3){
-		//calcular angulo entre el del V sin rotar y el rotado 
 		var originalPoint = curve.point(vIndex);
 		var dot = originalPoint[Z]*vec3[Z] + originalPoint[Y]*vec3[Y]
 		var det = originalPoint[Y]*vec3[Z] - vec3[Y]*originalPoint[Z]
@@ -140,5 +172,5 @@ function revolutionMaper(curve, angle){
 		return value;
 	}
 }
-inheritPrototype(uvXYPlane, uvPositionMaper);
+inheritPrototype(revolutionMaper, uvPositionMaper);
 

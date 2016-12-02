@@ -15,7 +15,7 @@ function Arbol(index) {
     var tronco = new troncoConstructor();
     var copa = new copaConstructor();
     copa.translate([-tronco.getHeight(), 0, 0]);
-    copa.addTexture('maps/hojas.jpg');
+    copa.addTexture(TEXTURES.hojas);
     
     this.addChild(copa);
     this.addChild(tronco);

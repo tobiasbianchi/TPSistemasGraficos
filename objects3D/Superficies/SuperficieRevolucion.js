@@ -54,9 +54,9 @@ var SuperficieRevolucion = (function (curve, angle, pasos) {
 
                 var u = angulo/angle;
                 
-                var v = j/(curve.definition() - 1);
+                var uV = this.uvMaper.mapPosition([vecRotated[X],vecRotated[Y],vecRotated[Z]]);;
                 this.texture_coord_buffer.push(u*this.scaleU)
-                this.texture_coord_buffer.push(v*this.scaleV)
+                this.texture_coord_buffer.push(uV[Y]*this.scaleV)
                 this.texture_coord_buffer.push(0)
             }
         }

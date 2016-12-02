@@ -35,6 +35,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
     this.usesDifferentTextures = false;
     this.blend = false;
     this.alpha = 1.0;
+    this.reflectionMap = false;
 
     function isOdd(num) {
         return (num % 2 == 1);
@@ -83,30 +84,32 @@ function VertexGrid(_rows, _cols, formGenerator) {
         return data;
     }
 
-    this.addTexture = function(path, mipmap = true) {
-        var aux_texture = gl.createTexture();
+    this.addTexture = function(image, mipmap = true) {
+        /*var aux_texture = gl.createTexture();
         this.texture = aux_texture;
         this.texture.image = new Image();
         var texture = this.texture;
         this.texture.image.onload = function () {
             handleLoadedTexture(texture)
         }
-        this.texture.image.src = path;
+        this.texture.image.src = path;*/
         this.isTextured = true;
+        this.texture = image;
     }
-    this.addOtherTexture = function(path){        
-        var aux_texture = gl.createTexture();
+    this.addOtherTexture = function(image){        
+        /*var aux_texture = gl.createTexture();
         this.secondTexture = aux_texture;
         this.secondTexture.image = new Image();
         var texture = this.secondTexture;
         this.secondTexture.image.onload = function () {
             handleLoadedTexture(texture)
         }
-        this.secondTexture.image.src = path;
+        this.secondTexture.image.src = path;*/
         this.isTextured = true;
+        this.secondTexture = image;
     }
-    this.addNoiseTexture = function(path, mipmap = true) {
-        var aux_texture = gl.createTexture();
+    this.addNoiseTexture = function(image, mipmap = true) {
+        /*var aux_texture = gl.createTexture();
         this.noiseTexture = aux_texture;
         this.noiseTexture.image = new Image();
         var texture = this.noiseTexture;
@@ -114,19 +117,21 @@ function VertexGrid(_rows, _cols, formGenerator) {
             handleLoadedTexture(texture)
         }
         this.noiseTexture.image.src = path;
-        this.isTextured = true;
+        this.isTextured = true;*/
+        this.noiseTexture = image;
     }
 
-    this.addNormalMap = function(path) {
-        var aux_texture = gl.createTexture();
+    this.addNormalMap = function(image) {
+        /*var aux_texture = gl.createTexture();
         this.normalMap = aux_texture;
         this.normalMap.image = new Image();
         var texture = this.normalMap;
         this.normalMap.image.onload = function () {
             handleLoadedTexture(texture)
         }
-        this.normalMap.image.src = path;
+        this.normalMap.image.src = path;*/
         this.isTextured = true;
+        this.normalMap = image;
     }
 
     function handleLoadedTexture(texture){
@@ -254,6 +259,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.uniform1i(shaderProgramTexturedObject.samplerUniform, 0);
             gl.uniform1i(shaderProgramTexturedObject.usesTwoTextures, this.usesDifferentTextures);
+            gl.uniform1i(shaderProgramTexturedObject.reflectionMap, this.reflectionMap);
             if (this.secondTexture != null){
                 gl.activeTexture(gl.TEXTURE1);
                 gl.bindTexture(gl.TEXTURE_2D, this.secondTexture);
@@ -284,7 +290,7 @@ function VertexGrid(_rows, _cols, formGenerator) {
         
         gl.uniform1i(shaderProgramTexturedObject.blending,this.blend);
         if (this.blend){
-            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            gl.blendFunc(gl.SRC_ALPHA, gl.SRC_COLOR);
             gl.enable(gl.BLEND);
             gl.uniform1f(shaderProgramTexturedObject.alpha,this.alpha);
         } else{

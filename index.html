@@ -101,17 +101,22 @@
             uniform float uAlpha;
 
             uniform float glossiness;
+            uniform bool reflectionMap;
 
             void main(void) {
                 vec4 textureColor;
-                if (vTextureCoord.z == 1.0){
-                    textureColor = texture2D(uSamplerSecond, vec2(vTextureCoord.s, vTextureCoord.t));    
-                } else if (uMixTextures){
+                if (uMixTextures){
+                    vec3 noiseCoords = vTextureCoord;
+                    if (uUsesTwoTextures){
+                        noiseCoords = vec3(vTextureCoord.x,vTextureCoord.z,vTextureCoord.z);
+                    }
                     vec4 texture1Color = texture2D(uSamplerSecond, vec2(vTextureCoord.s, vTextureCoord.t));    
                     vec4 texture2Color = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-                    vec4 noiseColor = texture2D(uSamplerMix, vec2(vTextureCoord.s, vTextureCoord.t));    
+                    vec4 noiseColor = texture2D(uSamplerMix, vec2(noiseCoords.s, noiseCoords.t));    
                     vec4 contraryNoiseColor = vec4(1,1,1,1) - noiseColor;
                     textureColor =  texture1Color*contraryNoiseColor + texture2Color*noiseColor;
+                } else if (vTextureCoord.z == 1.0 && uUsesTwoTextures){
+                    textureColor = texture2D(uSamplerSecond, vec2(vTextureCoord.s, vTextureCoord.t));    
                 } else {
                     textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));    
                 }
@@ -121,7 +126,7 @@
                 vec3 normalTransformed = vNormal;
                 if (uUseLighting) 
                 {
-                    if (uNormalMap && (!uUsesTwoTextures || (uUsesTwoTextures && vTextureCoord.z == 1.0)) ){
+                    if (uNormalMap && (!uUsesTwoTextures || (uUsesTwoTextures && vTextureCoord.z == 1.0)) && !uMixTextures ){
                         vec4 normalRGB = texture2D(uSamplerMix, vec2(vTextureCoord.s,vTextureCoord.t));
                         float xT = (normalRGB.x*2.0)-1.0;
                         float yT = (2.0*normalRGB.y)-1.0;
@@ -133,9 +138,19 @@
                     //aca falta tambien la especular
                     float directionalLightWeighting = max(dot(normalTransformed, light_dir), 0.0);
                     vec3 reflectionVector = reflect(-light_dir,normalTransformed);
+                    vec3 reflectionVector2 = reflect(light_dir,normalTransformed);
                     //vec3 viewVector = normalize( uCameraPosition - aVertexPosition);
                     float specular = max(dot(vViewVec,reflectionVector),0.0);
                     float specularWeight = pow(specular,glossiness);
+
+                    if (reflectionMap){
+                        float m = 2.0 * sqrt( pow( reflectionVector2.x, 2.0 ) + pow( reflectionVector2.y, 2.0 ) + pow( reflectionVector2.z + 1.0, 2.0 ) );
+                        vec2 coordinates = reflectionVector2.xy / m + 0.1;
+                        vec4 mixTextureColor = texture2D(uSamplerSecond, coordinates);
+                        vec4 mixtureColors = vec4(0.5,0.5,0.5,1.0);
+                        textureColor = mixTextureColor*(vec4(1.0,1.0,1.0,1.0) - mixtureColors) + textureColor*mixtureColors;
+                    }
+
                     lightWeighting = uAmbientColor*ambientW + uDirectionalColor * directionalLightWeighting * diffuseW + uSpecularColor * specularWeight * specularW;
                 }
         if (isBlending){

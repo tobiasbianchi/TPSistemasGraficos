@@ -11,6 +11,7 @@ function CopaArbol3() {
     this.setColorer(new SameColor(GREEN))
     this.rotate(90, ZAxis);
     this.translate([2, 0, 0]);
-    this.textureScale(2,-1);
+    this.textureScale(1,1);
+    this.setMaper(new revolutionMaper(curve));
 }
 inheritPrototype(CopaArbol3, SuperficieRevolucion);
