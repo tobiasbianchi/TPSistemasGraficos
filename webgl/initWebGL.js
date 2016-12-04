@@ -61,7 +61,8 @@ function loadTextures(){
         alambres: "alambres.jpg",
         alambresNormalMap: "alambres-mormalmap.jpg",
         noisePasto: "noise_pasto.jpg",
-        noiseArena: "noiseArenaPiedra.jpg"
+        noiseArena: "noiseArenaPiedra.jpg",
+        cieloInverted: 'sky_lightblueInverted.jpg' 
     }
     for (var key in TEXTURES_PATHS){
         var aux_texture = gl.createTexture();

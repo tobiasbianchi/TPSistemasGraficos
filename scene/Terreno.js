@@ -55,7 +55,7 @@ function Terreno(curvaRio) {
         
         water.addTexture(TEXTURES.agua);
         //water.addOtherTexture('maps/sky_lightblue.jpg');
-        water.addOtherTexture(TEXTURES.cielo);
+        water.addOtherTexture(TEXTURES.cieloInverted);
         water.reflectionMap = true;
         water.textureScale(0.01,0.01);
         water.setColorer(new SameColor(BLUE));

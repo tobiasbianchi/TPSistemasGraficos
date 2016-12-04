@@ -34,8 +34,8 @@ function PuenteSide(curvePuente) {
         var linea = new SuperficieBarrido(new CurveCircular(Math.PI*2,0.05),bezier,3);
         linea.translate([xValue,bottomPoint.y,0]);
         linea.setColorer(new SameColor(BLACK))
-        linea.specularW = 0.0;
-        linea.glossiness = 0.8;
+        linea.specularW = 1.0;
+        linea.glossiness = 1.0;
         //linea.addOtherTexture(TEXTURES.cielo);
         //linea.reflectionMap = true;
         this.addChild(linea);
@@ -59,8 +59,8 @@ function PuenteSide(curvePuente) {
     }
 
     this.addTubo = function (controlPoints) {
-        var spline = new CurvesGroupBspline(controlPoints, CurveBspline3, 10);
-        var tubo = new SuperficieBarrido(new CurveCircular(Math.PI * 2, 0.2), spline, 10);
+        var spline = new CurvesGroupBspline(controlPoints, CurveBspline3, 20);
+        var tubo = new SuperficieBarrido(new CurveCircular(Math.PI * 2, 0.2), spline, 30);
         tubo.setColorer(new SameColor(DARK_RED))
         tubo.addTexture(TEXTURES.alambres)
         tubo.addNormalMap(TEXTURES.alambresNormalMap)
@@ -68,7 +68,7 @@ function PuenteSide(curvePuente) {
         tubo.reflectionMap = true;
         tubo.specularW = 0.7;
         tubo.glossiness = 80.0;
-        tubo.diffuseW = 0.5;
+        tubo.diffuseW = 0.8;
         this.makeAlambres(spline);
         this.addChild(tubo);
     }
